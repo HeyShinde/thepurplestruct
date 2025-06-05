@@ -1,0 +1,607 @@
+"use client";
+
+import React from 'react';
+import Image from 'next/image';
+import Link from "next/link";
+import { urlFor } from '@/sanity/lib/image';
+import { PortableText, PortableTextComponents } from '@portabletext/react';
+import { NavBar } from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import { format } from 'date-fns';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import KatexBlockComponent from '@/components/KatexBlockComponent';
+import TableOfContents from "@/components/TableOfContents";
+import ShareButtons from '@/components/ShareButtons';
+import SubscribeForm from "@/components/SubscribeForm";
+import { motion } from 'framer-motion';
+import type { BlogPost } from '@/types/blog';
+import { FaXTwitter } from 'react-icons/fa6';
+import { FaLinkedin, FaGithub, FaKaggle } from 'react-icons/fa';
+import { SiCodersrank } from 'react-icons/si';
+import { IoGlobeOutline } from 'react-icons/io5';
+
+interface SidebarPromo {
+    promoType?: "image" | "code";
+    image?: SanityImage;
+    imageLink?: string;
+    altText?: string;
+    code?: string;
+}
+
+interface SanityImage {
+    asset: {
+        _ref: string;
+        _type: 'reference';
+    };
+    alt?: string;
+}
+
+interface SocialLink {
+    platform: string;
+    url: string;
+}
+
+interface Author {
+    name: string;
+    image: SanityImage | null;
+    bio?: string;
+    socialLinks?: SocialLink[];
+}
+
+const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
+    if (!promo) return null;
+
+    return (
+        <div className="relative group">
+            <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-6 w-full">
+                <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                        backgroundSize: '200% 100%',
+                        animation: 'gradientMove 3s linear infinite',
+                        mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                        maskComposite: 'exclude',
+                        padding: '1px',
+                    }} />
+                <div className="relative z-10">
+                    <span className="text-center font-semibold text-purple-400">Advertisement</span>
+                    {promo.promoType === "image" && promo.image && (
+                        <a href={promo.imageLink || "#"} target="_blank" rel="noopener noreferrer">
+                            <Image
+                                src={urlFor(promo.image).url()}
+                                alt="Promotional content"
+                                width={300}
+                                height={200}
+                                className="w-full h-auto rounded-lg shadow-lg mt-3.5"
+                            />
+                        </a>
+                    )}
+
+                    {promo.promoType === "code" && promo.code && (
+                        <div id="banner-ad" className="w-full flex items-center justify-center bg-black/40 mt-3.5 rounded-lg">
+                            <div dangerouslySetInnerHTML={{ __html: promo.code }} />
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+function extractHeadings(body: BlogPost['body']) {
+    return body?.map(block => {
+        if (block._type === 'block' && (block.style === 'h2' || block.style === 'h3')) {
+            const level = block.style === 'h2' ? 2 : 3;
+            const text = block.children.map((child: { text: string }) => child.text).join('');
+            const id = text.toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .replace(/-+/g, '-');
+            return { level, text, id };
+        }
+    }).filter(Boolean) as { level: number; text: string; id: string }[];
+}
+
+function renderAuthorCard(author: Author) {
+    const getSocialIcon = (platform: string) => {
+        switch (platform.toLowerCase()) {
+            case 'linkedin':
+                return <FaLinkedin className="w-5 h-5 text-purple-400" />;
+            case 'github':
+                return <FaGithub className="w-5 h-5 text-purple-400" />;
+            case 'kaggle':
+                return <FaKaggle className="w-5 h-5 text-purple-400" />;
+            case 'codersrank':
+                return <SiCodersrank className="w-5 h-5 text-purple-400" />;
+            case 'x':
+                return <FaXTwitter className="w-5 h-5 text-purple-400" />;
+            default:
+                return <IoGlobeOutline className="w-5 h-5 text-purple-400" />;
+        }
+    };
+
+    return (
+        <div className="relative">
+            <div className="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/20">
+                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0"
+                    style={{
+                        backgroundSize: '200% 100%',
+                        animation: 'gradientMove 3s linear infinite',
+                        mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                        maskComposite: 'exclude',
+                        padding: '1px',
+                    }} />
+                <div className="relative z-10">
+                    <div className="flex flex-col items-center text-center mb-6">
+                        {author.image ? (
+                            <div className="relative mb-4">
+                                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
+                                <Image
+                                    src={urlFor(author.image).url()}
+                                    alt={author.name}
+                                    width={96}
+                                    height={96}
+                                    className="w-24 h-24 rounded-full object-cover relative z-10"
+                                />
+                            </div>
+                        ) : (
+                            <div className="relative mb-4">
+                                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center relative z-10">
+                                    <span className="text-white text-2xl font-semibold">
+                                        {author.name?.charAt(0) || '?'}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                        <h2 className="text-2xl font-semibold text-purple-400 mb-2">{author.name}</h2>
+                        {author.bio && (
+                            <p className="text-sm text-neutral-300 max-w-sm">{author.bio}</p>
+                        )}
+                    </div>
+                    {author.socialLinks && author.socialLinks.length > 0 && (
+                        <div className="flex justify-center gap-4">
+                            {author.socialLinks.map((link: SocialLink, index: number) => (
+                                <a
+                                    key={index}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2.5 rounded-xl bg-black/40 hover:bg-black/60 transition-colors border border-purple-400/20"
+                                    title={link.platform}
+                                >
+                                    {getSocialIcon(link.platform)}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default function BlogPostContent({ post }: { post: BlogPost | null }) {
+    if (!post) {
+        return (
+            <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-950 via-black to-black">
+                <NavBar />
+                <div className="flex-1 flex flex-col justify-center items-center w-full px-[12%]">
+                    <h4 className="text-center mb-2 text-lg font-Ovo text-purple-400">Blog</h4>
+                    <h2 className="text-center text-5xl font-Ovo text-white">Post not found</h2>
+                    <p className="text-center mt-5 text-neutral-300">The requested post could not be found.</p>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+    // Dummy author data for testing
+    const dummyAuthor: Author = {
+        name: "Shinde",
+        image: null,
+        bio: "Full-stack developer passionate about AI, web development, and creating innovative solutions.",
+        socialLinks: [
+            {
+                platform: "linkedin",
+                url: "https://linkedin.com/in/heyshinde"
+            },
+            {
+                platform: "github",
+                url: "https://github.com/heyshinde"
+            },
+            {
+                platform: "kaggle",
+                url: "https://kaggle.com/heyshinde"
+            },
+            {
+                platform: "codersrank",
+                url: "https://profile.codersrank.io/user/heyshinde"
+            },
+            {
+                platform: "x",
+                url: "https://x.com/heyshinde"
+            }
+        ]
+    };
+
+    const headings = extractHeadings(post.body);
+
+    const components: PortableTextComponents = {
+        types: {
+            subscribeForm: ({ value }) => (
+                <div className="my-8">
+                    <SubscribeForm title={value.title} description={value.description} />
+                </div>
+            ),
+            codeBlock: ({ value }) => (
+                <div className="relative my-6">
+                    <div className="relative bg-black/80 backdrop-blur-sm rounded-xl p-4 w-full">
+                        <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0"
+                            style={{
+                                backgroundSize: '200% 100%',
+                                animation: 'gradientMove 3s linear infinite',
+                                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                maskComposite: 'exclude',
+                                padding: '1px',
+                            }} />
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                {value.showCopyButton && (
+                                    <button
+                                        className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
+                                        onClick={(e) => {
+                                            navigator.clipboard.writeText(value.code).catch(() => {});
+                                            const button = e.currentTarget;
+                                            button.textContent = "Copied!";
+                                            setTimeout(() => (button.textContent = "Copy"), 1500);
+                                        }}
+                                    >
+                                        Copy
+                                    </button>
+                                )}
+                            </div>
+                            <pre className="overflow-x-auto">
+                                <code className="text-sm text-purple-400 font-mono">{value.code}</code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            ),
+            advertisement: ({ value }) => (
+                <div className="my-8 px-4 py-6 max-w-max mx-auto bg-black/80 backdrop-blur-sm rounded-lg border border-purple-400/20">
+                    <span className="text-center font-semibold text-purple-400">Advertisement</span>
+                    <div className="mt-3.5" dangerouslySetInnerHTML={{ __html: value.code }} />
+                </div>
+            ),
+            image: ({ value }) => (
+                <div className="my-6 flex justify-center">
+                    <div className="relative group">
+                        <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-2 w-full">
+                            <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{
+                                    backgroundSize: '200% 100%',
+                                    animation: 'gradientMove 3s linear infinite',
+                                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                    maskComposite: 'exclude',
+                                    padding: '1px',
+                                }} />
+                            <Image
+                                src={urlFor(value).url()}
+                                alt={value.alt || 'Blog content image'}
+                                width={800}
+                                height={600}
+                                className="rounded-lg shadow-md max-w-full h-auto relative z-10"
+                                loading="lazy"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ),
+            katexBlock: ({ value, index }) => (
+                <div className="my-6 flex justify-center">
+                    <div className="relative group">
+                        <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 w-full">
+                            <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{
+                                    backgroundSize: '200% 100%',
+                                    animation: 'gradientMove 3s linear infinite',
+                                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                    maskComposite: 'exclude',
+                                    padding: '1px',
+                                }} />
+                            <div className="relative z-10">
+                                <KatexBlockComponent expression={value.expression} index={index} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        marks: {
+            link: ({ children, value }) => {
+                const rel = value.linkRel || 'follow';
+                return (
+                    <a
+                        href={value.href}
+                        target="_blank"
+                        rel={`${rel} noopener noreferrer`}
+                        className="text-purple-400 hover:text-purple-300 transition-colors"
+                    >
+                        {children}
+                    </a>
+                );
+            },
+            strong: ({ children }) => (
+                <strong className="font-semibold text-purple-400">{children}</strong>
+            ),
+            em: ({ children }) => (
+                <em className="italic text-purple-300">{children}</em>
+            ),
+            code: ({ children }) => (
+                <strong className="text-sm text-purple-400">{children}</strong>
+            ),
+        },
+        block: {
+            h1: ({ children }) => (
+                <motion.h1 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-3xl font-bold mt-6 text-white"
+                >
+                    {children}
+                </motion.h1>
+            ),
+            h2: ({ children }) => {
+                const text = children?.toString() || '';
+                const id = text.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .replace(/-+/g, '-');
+                return (
+                    <motion.h2 
+                        id={id} 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
+                    >
+                        {children}
+                    </motion.h2>
+                );
+            },
+            h3: ({ children }) => {
+                const text = children?.toString() || '';
+                const id = text.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .replace(/-+/g, '-');
+                return (
+                    <motion.h3 
+                        id={id} 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
+                    >
+                        {children}
+                    </motion.h3>
+                );
+            },
+            normal: ({ children }) => {
+                return (
+                    <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-lg mt-3 text-neutral-300"
+                    >
+                        {children}
+                    </motion.p>
+                );
+            },
+            blockquote: ({ children }) => (
+                <motion.blockquote 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="border-l-4 border-purple-400 pl-4 italic text-purple-300 mt-6"
+                >
+                    <p>{children}</p>
+                </motion.blockquote>
+            ),
+        },
+        list: {
+            bullet: ({ children }) => <ul className="list-disc pl-5 mb-4 text-neutral-300">{children}</ul>,
+            number: ({ children }) => <ol className="list-decimal pl-5 mb-4 text-neutral-300">{children}</ol>,
+        },
+        listItem: {
+            bullet: ({ children }) => <li className="mb-2">{children}</li>,
+            number: ({ children }) => <li className="mb-2">{children}</li>,
+        },
+    };
+
+    return (
+        <div className="min-h-screen bg-gradient-to-b via-black to-black">
+            <NavBar />
+            <div className="w-full px-4 md:px-8 lg:px-12 py-10 pb-32">
+                <div className="max-w-[2000px] mx-auto">
+                    {/* Hero Section */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative mb-16"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-purple-700/20 blur-3xl -z-10" />
+                        <div className="max-w-4xl mx-auto text-center">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-Ovo mt-16 lg:mt-20 text-white leading-tight">
+                                {post.title}
+                            </h1>
+                            <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
+                                {(post.updatedAt || post.publishedAt) && (
+                                    <time
+                                        dateTime={new Date(post.updatedAt || post.publishedAt).toISOString()}
+                                        className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg shadow-lg"
+                                    >
+                                        Last updated on {format(new Date(post.updatedAt || post.publishedAt), 'dd MMMM yyyy')}
+                                    </time>
+                                )}
+                                {post.categories?.map((category) => (
+                                    <span
+                                        key={category._id}
+                                        className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg shadow-lg"
+                                    >
+                                        {category.title}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Main Content */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        {/* Left Sidebar - Share Buttons */}
+                        <div className="hidden lg:block lg:col-span-1">
+                            <div className="sticky top-48">
+                                <ShareButtons url={`https://developer.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                            </div>
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="lg:col-span-7">
+                            <article className="relative">
+                                {/* Featured Image */}
+                                <figure className="mb-6 md:mb-12">
+                                    <div className="relative group">
+                                        <div className="relative bg-black/80 backdrop-blur-sm rounded-2xl p-2 w-full">
+                                            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                                style={{
+                                                    backgroundSize: '200% 100%',
+                                                    animation: 'gradientMove 3s linear infinite',
+                                                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                                    maskComposite: 'exclude',
+                                                    padding: '1px',
+                                                }} />
+                                            <Image
+                                                src={urlFor(post.mainImage).url()}
+                                                alt={post.title}
+                                                width={1200}
+                                                height={630}
+                                                className="w-full h-auto rounded-xl shadow-lg relative z-10"
+                                                priority
+                                            />
+                                        </div>
+                                    </div>
+                                </figure>
+
+                                {/* Mobile Share Buttons and Table of Contents */}
+                                <div className="block lg:hidden mb-8">
+                                    <div className="flex flex-col gap-4">
+                                        <ShareButtons url={`https://developer.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                                        <TableOfContents headings={headings} />
+                                    </div>
+                                </div>
+
+                                {/* Article Content */}
+                                <div className="prose prose-lg prose-invert max-w-none">
+                                    <PortableText value={post.body} components={{
+                                        ...components,
+                                        block: {
+                                            h1: ({ children }) => (
+                                                <h1 className="text-2xl md:text-3xl font-bold mt-8 mb-6 text-white">
+                                                    {children}
+                                                </h1>
+                                            ),
+                                            h2: ({ children }) => {
+                                                const text = children?.toString() || '';
+                                                const id = text.toLowerCase()
+                                                    .replace(/[^a-z0-9]+/g, '-')
+                                                    .replace(/^-+|-+$/g, '')
+                                                    .replace(/-+/g, '-');
+                                                return (
+                                                    <h2 
+                                                        id={id} 
+                                                        className="text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
+                                                    >
+                                                        {children}
+                                                    </h2>
+                                                );
+                                            },
+                                            h3: ({ children }) => {
+                                                const text = children?.toString() || '';
+                                                const id = text.toLowerCase()
+                                                    .replace(/[^a-z0-9]+/g, '-')
+                                                    .replace(/^-+|-+$/g, '')
+                                                    .replace(/-+/g, '-');
+                                                return (
+                                                    <h3 
+                                                        id={id} 
+                                                        className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
+                                                    >
+                                                        {children}
+                                                    </h3>
+                                                );
+                                            },
+                                            normal: ({ children }) => (
+                                                <p className="text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
+                                                    {children}
+                                                </p>
+                                            ),
+                                            blockquote: ({ children }) => (
+                                                <blockquote className="border-l-4 border-purple-400 pl-4 py-2 my-6 italic text-purple-300">
+                                                    <p className="text-base md:text-lg">{children}</p>
+                                                </blockquote>
+                                            ),
+                                        },
+                                        list: {
+                                            bullet: ({ children }) => <ul className="list-disc pl-6 mb-6 text-neutral-300 space-y-2">{children}</ul>,
+                                            number: ({ children }) => <ol className="list-decimal pl-6 mb-6 text-neutral-300 space-y-2">{children}</ol>,
+                                        },
+                                        listItem: {
+                                            bullet: ({ children }) => <li className="text-base md:text-lg">{children}</li>,
+                                            number: ({ children }) => <li className="text-base md:text-lg">{children}</li>,
+                                        },
+                                    }} />
+                                </div>
+
+                                {/* Subscribe Form */}
+                                <section className="mt-12 md:mt-16">
+                                    <SubscribeForm />
+                                </section>
+                            </article>
+                        </div>
+
+                        {/* Right Sidebar */}
+                        <div className="lg:col-span-4">
+                            <div className="sticky top-36 space-y-8">
+                                {/* Table of Contents - Desktop Only */}
+                                <div className="hidden lg:block">
+                                    <TableOfContents headings={headings} />
+                                </div>
+
+                                {/* Author Card */}
+                                {renderAuthorCard(dummyAuthor)}
+
+                                {/* Sidebar Promo */}
+                                {post.sidebarPromo && (
+                                    <div>
+                                        <SidebarPromo promo={post.sidebarPromo} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+            <GoogleAnalytics gaId="G-FJVPQ93W3W" />
+            <GoogleTagManager gtmId="AW-16574029012" />
+        </div>
+    );
+} 
