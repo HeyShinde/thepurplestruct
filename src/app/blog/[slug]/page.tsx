@@ -21,17 +21,16 @@ interface SanityImage {
     alt?: string;
 }
 
-interface SocialIcon {
+interface SocialLink {
     platform: string;
     url: string;
-    icon: SanityImage;
 }
 
 interface Author {
     name: string;
     image: SanityImage | null;
     bio?: string;
-    socialIcons?: SocialIcon[];
+    socialLinks?: SocialLink[];
 }
 
 async function getPost(slug: string) {
@@ -44,10 +43,9 @@ async function getPost(slug: string) {
             name,
             image,
             bio,
-            socialIcons[]{
+            socialLinks[]{
                 platform,
-                url,
-                icon
+                url
             }
         },
         categories[]->{

@@ -12,11 +12,16 @@ export interface SocialIcon {
     icon: SanityImage;
 }
 
+export interface SocialLink {
+    platform: string;
+    url: string;
+}
+
 export interface Author {
     name: string;
     image: SanityImage | null;
     bio?: string;
-    socialIcons?: SocialIcon[];
+    socialLinks?: SocialLink[];
 }
 
 export interface BlogPost {

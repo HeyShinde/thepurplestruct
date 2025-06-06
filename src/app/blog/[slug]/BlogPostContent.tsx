@@ -195,35 +195,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
         );
     }
 
-    // Dummy author data for testing
-    const dummyAuthor: Author = {
-        name: "Shinde",
-        image: null,
-        bio: "Full-stack developer passionate about AI, web development, and creating innovative solutions.",
-        socialLinks: [
-            {
-                platform: "linkedin",
-                url: "https://linkedin.com/in/heyshinde"
-            },
-            {
-                platform: "github",
-                url: "https://github.com/heyshinde"
-            },
-            {
-                platform: "kaggle",
-                url: "https://kaggle.com/heyshinde"
-            },
-            {
-                platform: "codersrank",
-                url: "https://profile.codersrank.io/user/heyshinde"
-            },
-            {
-                platform: "x",
-                url: "https://x.com/heyshinde"
-            }
-        ]
-    };
-
     const headings = extractHeadings(post.body);
 
     const components: PortableTextComponents = {
@@ -586,7 +557,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 </div>
 
                                 {/* Author Card */}
-                                {renderAuthorCard(dummyAuthor)}
+                                {post.author && renderAuthorCard(post.author)}
 
                                 {/* Sidebar Promo */}
                                 {post.sidebarPromo && (

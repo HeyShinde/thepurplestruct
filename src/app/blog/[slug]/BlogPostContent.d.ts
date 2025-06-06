@@ -14,11 +14,16 @@ interface SocialIcon {
     icon: SanityImage;
 }
 
+interface SocialLink {
+    platform: string;
+    url: string;
+}
+
 interface Author {
     name: string;
     image: SanityImage | null;
     bio?: string;
-    socialIcons?: SocialIcon[];
+    socialLinks?: SocialLink[];
 }
 
 interface BlogPost {

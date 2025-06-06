@@ -7,9 +7,9 @@ export default function ExperiencePage() {
   return (
     <div>
       <NavBar/>
-    <main className="min-h-screen bg-gradient-to-b from-black to-purple-950">
-      <Experience />
-    </main>
+      <main className="min-h-screen bg-gradient-to-b from-purple-950 to-black">
+    <Experience />
+  </main>
     <Footer/>
     </div>
   );

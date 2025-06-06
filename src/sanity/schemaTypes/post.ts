@@ -176,7 +176,7 @@ const blogSchema = {
                     title: "Newsletter Subscribe Form",
                     fields: [
                         { name: "title", type: "string", title: "Title", initialValue: "Stay Updated" },
-                        { name: "description", type: "string", title: "Description", initialValue: "Subscribe to our newsletter for the latest updates." }
+                        { name: "description", type: "string", title: "Description", initialValue: "By submitting your email, you'll be the first to know about upcoming updates. You can unsubscribe at any time." }
                     ]
                 },
                 {

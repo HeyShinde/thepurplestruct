@@ -277,37 +277,40 @@ export function BlogGrid({ displayLimit }: BlogGridProps) {
     <div className="space-y-8">
       <BentoGrid className="">
         {posts.slice(0, visibleItems).map((post, i) => (
-          <Link href={`/blog/${post.slug.current}`} key={post._id} className="contents">
-            <BentoGridItem
-              title={<span className="text-purple-400 font-bold">{post.title}</span>}
-              description={<div className="hidden md:block text-purple-300">{truncateText(post.excerpt)}</div>}
-              header={
-                <div className="w-full h-full relative rounded-lg overflow-hidden">
-                  {post.mainImage ? (
-                    <Image
-                      src={urlFor(post.mainImage).url()}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-neutral-900 flex items-center justify-center text-purple-400">
-                      No Image
-                    </div>
-                  )}
-                </div>
-              }
-              icon={
-                <div className="text-purple-300 text-sm">
-                  {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'No date'}
-                </div>
-              }
-              className={
-                `${i % 7 === 3 || i % 7 === 6 ? "md:col-span-2" : ""} bg-black/80 border border-purple-400/20 shadow-none`
-              }
-              layoutType={i % 7 === 3 ? 'header-left' : i % 7 === 6 ? 'header-right' : 'default'}
-            />
-          </Link>
+          <BentoGridItem
+            key={post._id}
+            title={<Link href={`/blog/${post.slug.current}`}><span className="text-purple-400 font-bold">{post.title}</span></Link>}
+            description={<Link href={`/blog/${post.slug.current}`}><div className="hidden md:block text-white">{truncateText(post.excerpt)}</div></Link>}
+            header={
+              <div className="w-full h-full relative rounded-lg overflow-hidden">
+                <Link href={`/blog/${post.slug.current}`}>
+                {post.mainImage ? (
+                  <Image
+                    src={urlFor(post.mainImage).url()}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-neutral-900 flex items-center justify-center text-purple-400">
+                    No Image
+                  </div>
+                )}
+                </Link>
+              </div>
+            }
+            icon={
+              <div className="text-white text-sm">
+                <Link href={`/blog/${post.slug.current}`}>
+                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'No date'}
+                </Link>
+              </div>
+            }
+            className={
+              `${i % 7 === 3 || i % 7 === 6 ? "md:col-span-2" : ""} bg-black/80 border border-purple-400/20 shadow-none`
+            }
+            layoutType={i % 7 === 3 ? 'header-left' : i % 7 === 6 ? 'header-right' : 'default'}
+          />
         ))}
       </BentoGrid>
       

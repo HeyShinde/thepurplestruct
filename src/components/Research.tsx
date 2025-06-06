@@ -8,6 +8,7 @@ import { FaGripfire } from "react-icons/fa";
 import { IoChevronDown } from "react-icons/io5";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { CloseIcon } from "@/components/Projects"; // Reusing CloseIcon from Projects
+import { client } from '@/sanity/lib/client';
 
 // Define the type for research papers
 interface ResearchPaper {
@@ -21,40 +22,6 @@ interface ResearchPaper {
   longDescription?: string; // Added long description field
   bulletPoints?: string[]; // Added bullet points field
 }
-
-// Example research papers data (replace with your actual data and add long descriptions/bullet points)
-const researchPapers: ResearchPaper[] = [
-  {
-    title: "Revisiting the CMB homogeneity scale: low multipole alignments and effective field theory in string gas cosmology",
-    url: "https://arxiv.org/abs/2306.00219",
-    doi: "10.1016/j.jlist.2024.101135",
-    authors: "Your Name, Co-author 1, Co-author 2",
-    year: 2024,
-    venue: "Conference/Journal Name",
-    abstract: "A brief description of the research paper and its key findings...",
-    longDescription: "This research paper delves into the cosmic microwave background (CMB) homogeneity scale... [Insert detailed long description here]",
-    bulletPoints: [
-      "Investigates low multipole alignments in CMB data.",
-      "Applies effective field theory methods.",
-      "Examines implications for string gas cosmology models.",
-    ],
-  },
-  {
-    title: "Another Example Research Paper",
-    url: "https://example.com/another-paper",
-    doi: "10.1234/example.2023.123",
-    authors: "Your Name, Co-author A",
-    year: 2023,
-    venue: "Another Conference/Journal",
-    abstract: "Abstract for the second paper...",
-    longDescription: "Detailed long description for the second paper... [Insert detailed long description here]",
-    bulletPoints: [
-      "Key finding 1 of the second paper.",
-      "Key finding 2 of the second paper.",
-    ],
-  },
-  // Add more research papers here
-];
 
 // Component to display a single research paper card
 const ResearchCard = ({ paper }: { paper: ResearchPaper }) => {
@@ -169,8 +136,27 @@ const ResearchCard = ({ paper }: { paper: ResearchPaper }) => {
 
 export function Research() {
   const [activePaper, setActivePaper] = useState<ResearchPaper | null>(null);
+  const [researchPapers, setResearchPapers] = useState<ResearchPaper[]>([]);
   const id = useId();
   const overlayRef = useRef<HTMLDivElement>(null!);
+
+  useEffect(() => {
+    async function fetchResearchPapers() {
+      const data = await client.fetch(`*[_type == "research"] | order(year desc) {
+        title,
+        url,
+        doi,
+        authors,
+        year,
+        venue,
+        abstract,
+        longDescription,
+        bulletPoints
+      }`);
+      setResearchPapers(data);
+    }
+    fetchResearchPapers();
+  }, []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

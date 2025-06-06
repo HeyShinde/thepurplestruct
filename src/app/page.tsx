@@ -14,7 +14,9 @@ export default function Home() {
       <main>
         <Hero />
         <AboutMe />
-        <Experience displayLimit={2}/>
+        <section className="bg-gradient-to-b from-black to-purple-950">
+    <Experience displayLimit={2} />
+  </section>
         <Projects displayLimit={4}/>
         <Research />
         <BlogGrid displayLimit={3} />

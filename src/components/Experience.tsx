@@ -438,7 +438,7 @@ export function Experience({ displayLimit }: { displayLimit?: number } = {}) {
   const showFullButton = displayLimit && experiences.length > displayLimit;
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-b from-black to-purple-950 overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden">
       <BackgroundEffect />
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-20">
         <motion.div
