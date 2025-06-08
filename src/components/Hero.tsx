@@ -15,7 +15,8 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-white text-xl md:text-2xl font-bold uppercase"
+              className="font-heading uppercase"
+              style={{ fontSize: 'var(--font-size-xl)' }}
             >
               Between code and chaos,
             </motion.p>
@@ -23,18 +24,20 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-white text-6xl md:text-8xl font-bold leading-tight uppercase"
+              className="font-glitch glitch-effect uppercase"
+              style={{ fontSize: 'var(--font-size-5xl)' }}
             >
-              there’s clarity.
+              there's clarity.
             </motion.h1>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-white text-2xl md:text-3xl font-semibold uppercase"
+              className="font-heading uppercase"
+              style={{ fontSize: 'var(--font-size-2xl)' }}
             >
-              I’m Aditya
-              <span className="block text-yellow-400">and I engineer it with machine learning.</span>
+              I'm Aditya
+              <span className="block text-yellow-400 font-semibold">and I engineer it with machine learning.</span>
             </motion.h2>
           </div>
 

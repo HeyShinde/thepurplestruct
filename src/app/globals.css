@@ -6,12 +6,15 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-heading: var(--font-chakra-petch);
+  --font-body: var(--font-ibm-plex-mono);
+  --font-code: var(--font-fira-code);
+  --font-glitch: var(--font-rubik-glitch);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: "Inter", "sans-serif";
   --color-primary-500: oklch(0.84 0.18 117.33);
-  --spacing: 0.25rem
-;
+  --spacing: 0.25rem;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -44,7 +47,18 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px)}
+  --radius-xl: calc(var(--radius) + 4px);
+  /* Responsive Font Sizes */
+  --font-size-xs: clamp(0.75rem, 0.9vw + 0.5rem, 0.875rem); /* 12px -> 14px */
+  --font-size-sm: clamp(0.875rem, 1vw + 0.6rem, 1rem); /* 14px -> 16px */
+  --font-size-base: clamp(1rem, 1.2vw + 0.7rem, 1.125rem); /* 16px -> 18px */
+  --font-size-lg: clamp(1.125rem, 1.5vw + 0.75rem, 1.25rem); /* 18px -> 20px */
+  --font-size-xl: clamp(1.25rem, 2vw + 0.8rem, 1.5rem); /* 20px -> 24px */
+  --font-size-2xl: clamp(1.5rem, 2.5vw + 1rem, 2rem); /* 24px -> 32px */
+  --font-size-3xl: clamp(1.875rem, 3.5vw + 1.2rem, 3rem); /* 30px -> 48px */
+  --font-size-4xl: clamp(2.25rem, 5vw + 1.5rem, 4rem); /* 36px -> 64px */
+  --font-size-5xl: clamp(3rem, 7vw + 2rem, 5.5rem); /* 48px -> 88px */
+}
 
 :root {
   --radius: 0.625rem;
@@ -123,53 +137,76 @@
 }  
 @layer base {
   * {
-    @apply border-border outline-ring/50;}
+    @apply border-border outline-ring/50;
+  }
   body {
-    @apply bg-background text-foreground;}}
+    @apply bg-background text-foreground font-body;
+    font-size: var(--font-size-base);
+  }
 
-/* Glitch effect for 404 page */
-.glitch {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-semibold;
+  }
+
+  h1 {
+    font-size: var(--font-size-4xl);
+  }
+  h2 {
+    font-size: var(--font-size-3xl);
+  }
+  h3 {
+    font-size: var(--font-size-2xl);
+  }
+
+  code {
+    @apply font-code;
+  }
+
+  pre {
+    @apply font-code;
+    /* Enable ligatures for Fira Code */
+    font-feature-settings: "calt" 1;
+  }
+}
+
+/* Glitch effect */
+.glitch-effect {
   position: relative;
-  color: #fff;
-  font-family: 'Inter', 'sans-serif';
-  letter-spacing: 2px;
+  text-shadow: 0.05em 0 0 #00fffc, -0.05em 0 0 #ff00ff;
+  animation: glitch 500ms infinite;
 }
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  color: #fff;
-  background: transparent;
-  clip-path: inset(0 0 0 0);
+
+.glitch-effect-font {
+  font-family: var(--font-glitch);
 }
-.glitch::before {
-  animation: glitchTop 2s infinite linear alternate-reverse;
-  color: #000000; 
-  z-index: 1;
-}
-.glitch::after {
-  animation: glitchBottom 2s infinite linear alternate-reverse;
-  color: #a854e8;
-  z-index: 2;
-}
-@keyframes glitchTop {
-  0% { transform: translate(0, 0); clip-path: inset(0 0 80% 0); }
-  20% { transform: translate(-2px, -2px); clip-path: inset(0 0 60% 0); }
-  40% { transform: translate(-5px, 2px); clip-path: inset(0 0 40% 0); }
-  60% { transform: translate(2px, -1px); clip-path: inset(0 0 60% 0); }
-  80% { transform: translate(1px, 1px); clip-path: inset(0 0 80% 0); }
-  100% { transform: translate(0, 0); clip-path: inset(0 0 80% 0); }
-}
-@keyframes glitchBottom {
-  0% { transform: translate(0, 0); clip-path: inset(80% 0 0 0); }
-  20% { transform: translate(2px, 2px); clip-path: inset(60% 0 0 0); }
-  40% { transform: translate(5px, -2px); clip-path: inset(40% 0 0 0); }
-  60% { transform: translate(-2px, 1px); clip-path: inset(60% 0 0 0); }
-  80% { transform: translate(-1px, -1px); clip-path: inset(80% 0 0 0); }
-  100% { transform: translate(0, 0); clip-path: inset(80% 0 0 0); }
+
+@keyframes glitch {
+  0% {
+    text-shadow: 0.05em 0 0 #00fffc, -0.05em 0 0 #ff00ff;
+  }
+  15% {
+    text-shadow: 0.05em 0 0 #00fffc, -0.05em 0 0 #ff00ff;
+  }
+  16% {
+    text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #ff00ff;
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #ff00ff;
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 #00fffc, 0.05em 0 0 #ff00ff;
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 #00fffc, 0.05em 0 0 #ff00ff;
+  }
+  100% {
+    text-shadow: -0.025em 0 0 #00fffc, -0.025em -0.025em 0 #ff00ff;
+  }
 }
 
 

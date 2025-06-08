@@ -489,7 +489,7 @@ export function Experience({ displayLimit }: { displayLimit?: number } = {}) {
                   boxShadow: '0 4px 32px 0 rgba(168,85,247,0.25), 0 1.5px 0 0 #fff inset',
                 }}
               >
-                <span className="text-white font-bold text-lg drop-shadow-lg tracking-wide pr-2">
+                <span className="text-white text-center font-bold text-lg drop-shadow-lg tracking-wide pr-2">
                   Show Full Experience
                 </span>
                 <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-1 text-purple-200 group-hover:text-white transition-colors duration-200">

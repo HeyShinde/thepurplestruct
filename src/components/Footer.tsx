@@ -106,7 +106,7 @@ const Footer = () => {
       {/* Bottom Section */}
       <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-end md:justify-between mt-8">
         {/* Crafted with Code, Driven by Data.: full width and center on mobile, right on desktop */}
-        <div className="w-full md:w-auto order-1 md:order-2 text-[clamp(2.5rem,8vw,5.5rem)] font-bold leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-sans tracking-tight text-center md:text-right select-none mb-2 md:mb-0">
+        <div className="w-full md:w-auto order-1 md:order-2 text-[clamp(1.5rem,8vw,4.5rem)] font-bold leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-sans tracking-tight text-center md:text-right select-none mb-2 md:mb-0">
         Crafted with Code, Driven by Data.
         </div>
         {/* Bottom row: left on desktop, full width on mobile */}

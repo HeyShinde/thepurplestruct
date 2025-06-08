@@ -170,8 +170,8 @@ export function NavBar() {
                             </motion.div>
                             </Link>
                             <Link href="/" className="z-50">
-                                <span className="text-base md:text-lg text-black" style={{ fontFamily: 'var(--font-silkscreen)' }}>
-                                    <span style={{ fontWeight: 700 }}>Hey</span>Shinde
+                                <span className="font-heading glitch-effect text-base md:text-lg text-black">
+                                    Hey<span style={{ fontWeight: 700 }}>Shinde</span>
                                 </span>
                             </Link>
                         </div>

@@ -1,18 +1,37 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Chakra_Petch,
+  Fira_Code,
+  IBM_Plex_Mono,
+  Rubik_Glitch,
+} from "next/font/google"
 
 import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "@/components/providers"
 
-const geistSans = Geist({
+const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-chakra-petch",
+})
 
-const geistMono = Geist_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
+  weight: ["400", "500"],
+  variable: "--font-ibm-plex-mono",
+})
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-fira-code",
+})
+
+const rubikGlitch = Rubik_Glitch({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-rubik-glitch",
+})
 
 export const metadata: Metadata = {
   title: "HeyShinde",
@@ -25,7 +44,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${chakraPetch.variable} ${ibmPlexMono.variable} ${firaCode.variable} ${rubikGlitch.variable}`}
+    >
       <body className="antialiased bg-zinc-900 text-white" suppressHydrationWarning>
         <Providers>
           {children}

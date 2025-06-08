@@ -181,8 +181,8 @@ export function AboutMe() {
           <ContainerScroll
             titleComponent={
               <>
-                <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                  About Me
+                <span className="font-heading text-4xl md:text-[6rem] font-bold mt-1 leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                About Me
                 </span>
               </>
             }
@@ -214,13 +214,13 @@ export function AboutMe() {
                   <div className="w-3 h-3 rounded-full bg-green-400/80" />
                 </div>
                 <FaTerminal className="w-4 h-4 text-purple-400 ml-2" />
-                <span className="text-purple-400 text-sm font-mono">terminal@ml-engineer</span>
+                <span className="text-purple-400 text-sm font-code">terminal@ml-engineer</span>
               </div>
 
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <FaHandSparkles className="w-6 h-6 text-purple-400" />
-                  <h2 className="text-4xl md:text-[2rem] font-bold leading-tight bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-mono">
+                  <h2 className="font-code text-4xl md:text-[2rem] font-bold leading-tight bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-mono">
                     ML Engineer & AI Researcher
                   </h2>
                 </div>
@@ -228,7 +228,7 @@ export function AboutMe() {
                 <div className="space-y-6">
                   <div className="relative">
                     <div className="absolute -left-4 top-0 bottom-0 w-1 bg-purple-400/20 rounded-full" />
-                    <p className="text-lg md:text-xl font-medium text-purple-400 pl-4 italic font-mono">
+                    <p className="font-body text-lg md:text-xl font-medium text-purple-400 pl-4 italic font-mono">
                       Building the future of AI, one model at a time.
                     </p>
                   </div>
@@ -236,14 +236,14 @@ export function AboutMe() {
                   <div className="space-y-4 text-gray-300 font-mono">
                     <div className="flex items-start gap-2">
                       <span className="text-purple-400">&gt;</span>
-                      <p className="text-base md:text-lg leading-relaxed">
+                      <p className="font-body text-base md:text-lg leading-relaxed">
                         As an aspiring Machine Learning Engineer, I specialize in developing and deploying Large Language Models (LLMs) and building agentic AI systems. My expertise spans across ML Ops, CI/CD pipelines, and scalable model deployment architectures.
                       </p>
                     </div>
                     
                     <div className="flex items-start gap-2">
                       <span className="text-purple-400">&gt;</span>
-                      <p className="text-base md:text-lg leading-relaxed">
+                      <p className="font-body text-base md:text-lg leading-relaxed">
                         My technical toolkit includes deep learning frameworks, vector databases, and modern ML infrastructure. I'm particularly interested in fine-tuning LLMs, implementing RAG systems, and developing autonomous AI agents that can solve complex tasks.
                       </p>
                     </div>
@@ -251,22 +251,22 @@ export function AboutMe() {
 
                   <div className="flex flex-col space-y-6 pt-4">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaMicrochip className="w-3 h-3" /> LLMs
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaServer className="w-3 h-3" /> MLOps
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaCode className="w-3 h-3" /> Deep Learning
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaCodeBranch className="w-3 h-3" /> CI/CD
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaDatabase className="w-3 h-3" /> Vector DB
                       </Badge>
-                      <Badge variant="outline" className="bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
+                      <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 font-mono flex items-center gap-2">
                         <FaMicrochip className="w-3 h-3" /> RAG
                       </Badge>
                     </div>
