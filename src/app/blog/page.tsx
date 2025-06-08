@@ -7,7 +7,7 @@ export default function BlogPage() {
     <div>
       <NavBar/>
       <main>
-      <BlogGrid />
+        <BlogGrid paddingTop="10rem" />
       </main>
       <Footer />  
     </div>

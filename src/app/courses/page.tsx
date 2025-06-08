@@ -11,10 +11,7 @@ const query = groq`
     description,
     price,
     "imageUrl": image.asset->url,
-    "sections": *[_type == "section" && references(^._id)]{
-      _id,
-      "lessons": lessons[]->{_id, title}
-    }
+    "lessons": count(sections[]->lessons[]),
   }
 `
 

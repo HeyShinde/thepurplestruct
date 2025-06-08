@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { FaGithub } from "react-icons/fa"
+import { FaGithub, FaSpinner } from "react-icons/fa"
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -25,6 +25,17 @@ const GoogleIcon = () => (
   </svg>
 );
 
+const ServiceIcon = ({ provider }: { provider: string }) => {
+  switch (provider) {
+    case 'google':
+      return <GoogleIcon />;
+    case 'github':
+      return <FaGithub className="w-5 h-5 text-white" />;
+    default:
+      return null;
+  }
+};
+
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center space-x-2">
     <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
@@ -39,6 +50,28 @@ export default function SettingsPage() {
   const [message, setMessage] = useState("")
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteConfirmation, setDeleteConfirmation] = useState("")
+  const [connectedProviders, setConnectedProviders] = useState<string[]>([])
+  const [isFetchingProviders, setIsFetchingProviders] = useState(true)
+
+  useEffect(() => {
+    const fetchConnectedAccounts = async () => {
+      if (status === 'authenticated') {
+        try {
+          setIsFetchingProviders(true)
+          const response = await fetch('/api/user/connected-accounts')
+          if (response.ok) {
+            const data = await response.json()
+            setConnectedProviders(data.connectedProviders)
+          }
+        } catch (error) {
+          console.error('Failed to fetch connected accounts', error)
+        } finally {
+          setIsFetchingProviders(false)
+        }
+      }
+    }
+    fetchConnectedAccounts()
+  }, [status])
 
   const handleDeleteAccount = async () => {
     if (!showDeleteConfirm) {
@@ -57,9 +90,6 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/user/delete", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
       })
 
       if (!response.ok) {
@@ -67,11 +97,9 @@ export default function SettingsPage() {
         throw new Error(data.error || "Failed to delete account")
       }
 
-      // Sign out the user and redirect to home page
-      await signOut({ redirect: false })
-      window.location.href = "/"
+      await signOut({ callbackUrl: '/' })
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "An error occurred while deleting your account. Please try again.")
+      setMessage(error instanceof Error ? error.message : "An error occurred while deleting your account.")
       setShowDeleteConfirm(false)
       setDeleteConfirmation("")
     } finally {
@@ -79,18 +107,7 @@ export default function SettingsPage() {
     }
   }
 
-  const connectedServices = [
-    ...(session?.user?.email?.includes('@gmail.com') || session?.user?.email?.includes('@google.com') ? [{
-      name: 'Google',
-      icon: <GoogleIcon />
-    }] : []),
-    ...(session?.user?.image?.includes('githubusercontent.com') ? [{
-      name: 'GitHub',
-      icon: <FaGithub className="w-5 h-5 text-white" />
-    }] : [])
-  ]
-
-  if (status === "loading") {
+  if (status === "loading" || isFetchingProviders) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-950 via-black to-black text-white flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -134,15 +151,15 @@ export default function SettingsPage() {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {connectedServices.length > 0 ? (
-                  connectedServices.map((service, index) => (
-                    <div key={index} className="flex items-center p-4 bg-black/40 rounded-xl border border-purple-400/10">
+                {connectedProviders.length > 0 ? (
+                  connectedProviders.map((provider) => (
+                    <div key={provider} className="flex items-center p-4 bg-black/40 rounded-xl border border-purple-400/10">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-purple-400/20">
-                          {service.icon}
+                          <ServiceIcon provider={provider} />
                         </div>
                         <div>
-                          <h3 className="font-medium text-white">{service.name}</h3>
+                          <h3 className="font-medium text-white capitalize">{provider}</h3>
                           <p className="text-sm text-neutral-400">Connected</p>
                         </div>
                       </div>
@@ -185,11 +202,13 @@ export default function SettingsPage() {
                     : "bg-black/40 hover:bg-black/60 text-white border border-purple-400/20 hover:border-purple-400/30"
                 } disabled:opacity-50`}
               >
-                {isLoading
-                  ? "Deleting..."
-                  : showDeleteConfirm
-                  ? "Confirm Deletion"
-                  : "Delete Account"}
+                {isLoading ? (
+                  <FaSpinner className="animate-spin" />
+                ) : showDeleteConfirm ? (
+                  "Confirm Deletion"
+                ) : (
+                  "Delete Account"
+                )}
               </button>
             </div>
           </div>

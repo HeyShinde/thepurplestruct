@@ -1,10 +1,9 @@
-import NextAuth, { DefaultSession, Session } from 'next-auth'
+import NextAuth, { DefaultSession, Session, User, Account, Profile } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
-import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
-import { compare } from 'bcryptjs'
+import { cookies } from 'next/headers'
 
 declare module 'next-auth' {
   interface Session {
@@ -20,28 +19,41 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    }),
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } })
-        if (!user || !user.hashedPassword) return null
-        const isValid = await compare(credentials.password, user.hashedPassword)
-        if (!isValid) return null
-        return user
-      },
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile }: { user: User, account: Account | null, profile?: Profile }) {
+      const cookieStore = await cookies()
+      const isLoginAttempt = cookieStore.get('next-auth.login-attempt')
+
+      if (isLoginAttempt) {
+        // This is a sign-in attempt, so the user must exist.
+        // Clean up cookie immediately
+        cookieStore.delete('next-auth.login-attempt')
+
+        if (!user.email) {
+            // Can't check for user if email is not provided
+            return false
+        }
+        const userExists = await prisma.user.findUnique({
+          where: { email: user.email },
+        })
+
+        if (!userExists) {
+          // Block sign-in if user does not exist
+          return '/auth/signin?error=AccessDenied'
+        }
+      }
+      // If it's not a login attempt (i.e., from the signup page),
+      // we allow new user creation by returning true.
+      return true
+    },
     async session({ session, token }: { session: any; token: any }) {
       if (session?.user && token?.id) {
         session.user.id = token.id;

@@ -32,6 +32,7 @@ interface BlogPost {
 
 interface BlogGridProps {
   displayLimit?: number;
+  paddingTop?: string;
 }
 
 const blogIcons = [
@@ -196,7 +197,7 @@ function MotifLayer() {
   );
 }
 
-export function BlogGrid({ displayLimit }: BlogGridProps) {
+export function BlogGrid({ displayLimit, paddingTop }: BlogGridProps) {
   const [visibleItems, setVisibleItems] = useState(displayLimit ?? 7);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -256,7 +257,7 @@ export function BlogGrid({ displayLimit }: BlogGridProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-950 to-black py-24 relative overflow-hidden">
+    <div className={`min-h-screen ${displayLimit !== undefined ? 'bg-gradient-to-b from-black via-purple-950 to-black' : 'bg-gradient-to-b from-purple-950 to-black'} relative overflow-hidden`} style={{ paddingTop: paddingTop }}>
       <MotifLayer />
 
       <div className="relative z-10">
@@ -266,7 +267,7 @@ export function BlogGrid({ displayLimit }: BlogGridProps) {
           transition={{ duration: 0.5 }}
           className="text-center pb-12 md:pb-20 px-4"
         >
-          <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-8 md:mb-12">
+          <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
             Blog Posts
           </h2>
           <p className="text-neutral-300 text-base md:text-lg">

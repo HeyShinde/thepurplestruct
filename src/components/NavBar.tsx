@@ -4,17 +4,13 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { FaExternalLinkAlt, FaUserCircle } from "react-icons/fa"
+import { FaExternalLinkAlt, FaUserCircle, FaSignInAlt, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
 import { ContactModal } from "./ContactModal"
 import { useSession, signOut } from "next-auth/react"
-
-const navItems = [
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "Contact", href: "/contact" },
-]
+import { useMediaQuery } from 'react-responsive'
+import { client } from "@/sanity/lib/client"
+import { groq } from "next-sanity"
 
 const socialLinks = [
     { name: "Linkedin", href: "https://www.linkedin.com/in/heyshinde" },
@@ -30,6 +26,25 @@ export function NavBar() {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement>(null);
     const { data: session, status } = useSession();
+    const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
+    const [navItems, setNavItems] = useState<any[]>([]);
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    useEffect(() => {
+        async function fetchNavItems() {
+            const data = await client.fetch(groq`
+                *[_type == "navigation" && slug.current == "main-menu"][0]{
+                    items
+                }
+            `);
+            setNavItems(data.items);
+        }
+        fetchNavItems();
+    }, []);
 
     useEffect(() => {
         let ticking = false;
@@ -92,6 +107,10 @@ export function NavBar() {
                 ease: [0.4, 0, 0.2, 1],
             },
         },
+    }
+
+    if (!hasMounted) {
+        return null;
     }
 
     return (
@@ -218,20 +237,35 @@ export function NavBar() {
                             >
                                 {/* Navigation Links */}
                                 <nav className="space-y-4 md:space-y-6 mb-6 md:mb-8 mt-4 md:mt-6">
-                                    {navItems.map((item) => (
-                                        <Link
-                                            key={item.name}
-                                            href={item.href}
-                                            className="block text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    ))}
+                                    {navItems && navItems.filter(item => isDesktop ? item.show === 'both' || item.show === 'desktop' : item.show === 'both' || item.show === 'mobile').map((item) => {
+                                        if (item.title === 'Contact' && !isDesktop) {
+                                            return (
+                                                <button
+                                                    key={item.title}
+                                                    className="block text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors text-left w-full"
+                                                    onClick={() => {
+                                                        setIsContactOpen(true);
+                                                        setIsMenuOpen(false);
+                                                    }}
+                                                >
+                                                    {item.title}
+                                                </button>
+                                            )
+                                        }
+                                        return (
+                                            <Link
+                                                key={item.title}
+                                                href={item.href}
+                                                className="block text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        )
+                                    })}
                                 </nav>
                                 {/* Divider */}
                                 <div className="h-px bg-gray-200 mb-6" />
-
                                 {/* Social Links */}
                                 <div className="flex gap-4 md:gap-8 mb-6 md:mb-8">
                                     {socialLinks.map((social) => (
@@ -247,11 +281,42 @@ export function NavBar() {
                                         </a>
                                     ))}
                                 </div>
+                                {/* User Actions for Mobile */}
+                                <div className="h-px bg-gray-200 mb-6" />
+                                <div className="flex gap-4 md:gap-8 mb-6 md:mb-8">
+                                    {status === "authenticated" ? (
+                                        <>
+                                            <Link href="/dashboard" className="flex items-center gap-2 text-base font-medium text-gray-900 hover:text-gray-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
+                                                <FaTachometerAlt className="w-4 h-4" />
+                                                Dashboard
+                                            </Link>
+                                            <button
+                                                className="flex items-center gap-2 w-full text-left text-base font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                                                onClick={() => { signOut(); setIsMenuOpen(false); }}
+                                            >
+                                                <FaSignOutAlt className="w-4 h-4" />
+                                                Logout
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                        <Link href="/auth/signin" className="flex items-center gap-2 text-base font-medium text-gray-900 hover:text-gray-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
+                                            <FaSignInAlt className="w-4 h-4" />
+                                            Login
+                                        </Link>
+                                        <Link href="/auth/signup" className="flex items-center gap-2 text-base font-medium text-gray-900 hover:text-gray-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
+                                            <FaSignInAlt className="w-4 h-4" />
+                                            Signup
+                                        </Link>
+                                        </>
+                                    )}
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </motion.div>
-                {/* Contact button - Hidden on mobile */}
+                {/* Contact button & desktop nav */}
+                {isDesktop && (
                 <div className="hidden md:flex items-center gap-4 absolute top-14 right-24">
                     <motion.div
                         whileHover={{ scale: 1.02 }}
@@ -318,15 +383,21 @@ export function NavBar() {
                                         </button>
                                     </>
                                 ) : (
+                                    <>
                                     <Link href="/auth/signin" className="block px-4 py-2 text-gray-800 hover:bg-gray-100" onClick={() => setUserMenuOpen(false)}>
                                         Login
                                     </Link>
+                                    <Link href="/auth/signup" className="block px-4 py-2 text-gray-800 hover:bg-gray-100" onClick={() => setUserMenuOpen(false)}>
+                                        Signup
+                                    </Link>
+                                    </>
                                 )}
                             </motion.div>
                         )}
                         </AnimatePresence>
                     </div>
                 </div>
+                )}
             </motion.header>
         </>
     )

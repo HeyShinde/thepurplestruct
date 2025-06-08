@@ -21,22 +21,17 @@ export async function GET(req: NextRequest) {
   const courses = await Promise.all(
     enrollments.map(async (enrollment) => {
       const course = enrollment.course
-      // Count completed lessons
-      const completedLessons = await prisma.courseProgress.count({
+      
+      const courseProgress = await prisma.courseProgress.findMany({
         where: {
           userId: session.user.id,
           courseId: course.id,
-          completed: true,
         },
       })
-      // Count total lessons
-      const totalLessons = await prisma.lesson.count({
-        where: {
-          section: {
-            courseId: course.id,
-          },
-        },
-      })
+      
+      const completedLessons = courseProgress.filter((p) => p.completed).length
+      const totalLessons = courseProgress.length
+      
       return {
         id: course.id,
         title: course.title,

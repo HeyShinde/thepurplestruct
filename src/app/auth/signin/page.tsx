@@ -6,6 +6,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { FaGithub } from "react-icons/fa"
 import { useState, useEffect, ReactNode } from "react"
+import Cookies from 'js-cookie'
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -242,16 +243,19 @@ export default function SignInPage() {
   }, [searchParams])
 
   if (status === "authenticated") {
-    router.replace("/dashboard")
+    router.replace(callbackUrl)
   }
 
   const handleSignIn = async (provider: string) => {
     setIsLoading(provider)
     setError(null)
     try {
+      // Set a cookie to indicate this is a login attempt
+      Cookies.set('next-auth.login-attempt', '1', { path: '/' })
       await signIn(provider, { callbackUrl })
     } catch (error) {
       setError("An unexpected error occurred. Please try again.")
+    } finally {
       setIsLoading(null)
     }
   }
@@ -259,27 +263,24 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
       <BackgroundMotif />
-      
       <div className="relative z-10 max-w-md w-full space-y-8 px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text">
             Welcome Back
-          </h2>
-          <p className="mt-4 text-gray-400">
-            Sign in to continue your journey
-          </p>
+          </h1>
+          <p className="mt-2 text-neutral-400">Sign in to continue your journey</p>
         </motion.div>
 
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 bg-red-900/50 text-red-300 border border-red-500/30 rounded-lg text-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-4 text-center text-red-300 bg-red-900/50 rounded-lg border border-red-500/30"
           >
             {error}
           </motion.div>
@@ -288,7 +289,7 @@ export default function SignInPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-4"
         >
           <button
@@ -324,22 +325,15 @@ export default function SignInPage() {
           </button>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center"
-        >
-          <p className="text-gray-400">
-            Don't have an account?{" "}
-            <Link
-              href="/auth/signup"
-              className="text-purple-400 hover:text-purple-300 transition-colors"
-            >
-              Sign up
-            </Link>
-          </p>
-        </motion.div>
+        <p className="mt-8 text-sm text-center text-neutral-400">
+          Don't have an account?{" "}
+          <Link
+            href="/auth/signup"
+            className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
+          >
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   )

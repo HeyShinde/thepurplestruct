@@ -224,8 +224,8 @@ export function Projects({ displayLimit }: { displayLimit?: number }) {
                 transition={{ duration: 0.5 }}
                 className="text-center mb-16"
             >
-                <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-4">
-                    Projects
+                <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mt-16">
+                Projects
                 </h2>
             </motion.div>
 

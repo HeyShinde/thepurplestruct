@@ -1,14 +1,16 @@
-import { type SchemaTypeDefinition } from 'sanity'
-import blogSchema from './post'
-import categorySchema from './category'
-import authorSchema from './author'
-import projectSchema from './project'
-import experienceSchema from './experience'
-import researchSchema from './research'
-import courseSchema from './course'
-import sectionSchema from './section'
-import lessonSchema from './lesson'
+import { SchemaTypeDefinition } from "sanity";
+import course from './course';
+import lesson from './lesson';
+import section from './section';
+import post from "./post";
+import research from "./research";
+import experience from "./experience";
+import project from "./project";
+import katexBlock from "./katexBlock";
+import category from "./category";
+import author from "./author";
+import navigation from "./navigation";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blogSchema, categorySchema, authorSchema, projectSchema, experienceSchema, researchSchema, courseSchema, sectionSchema, lessonSchema],
-}
+  types: [course, lesson, section, post, research, experience, project, katexBlock, category, author, navigation],
+};

@@ -20,15 +20,11 @@ export async function GET() {
 
     const progress = await prisma.courseProgress.findMany({
       where: { userId: session.user.id },
-      include: {
-        lesson: true,
-      },
     })
 
     // Calculate statistics
     const enrolledCourses = enrollments.length
     const completedLessons = progress.filter((p) => p.completed).length
-    const totalLessons = progress.length
 
     // Get recent courses with progress
     const recentCourses = await Promise.all(
@@ -53,7 +49,6 @@ export async function GET() {
     return NextResponse.json({
       enrolledCourses,
       completedLessons,
-      totalLessons,
       recentCourses,
     })
   } catch (error) {

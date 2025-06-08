@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import Link from 'next/link';
 import { LinkPreview } from "@/components/ui/link-preview";
 import { Vortex } from "@/components/ui/vortex";
 import * as Collapsible from '@radix-ui/react-collapsible';
@@ -11,7 +12,7 @@ import { CloseIcon } from "@/components/Projects"; // Reusing CloseIcon from Pro
 import { client } from '@/sanity/lib/client';
 
 // Define the type for research papers
-interface ResearchPaper {
+export interface ResearchPaper {
   title: string;
   url: string;
   doi?: string;
@@ -134,29 +135,18 @@ const ResearchCard = ({ paper }: { paper: ResearchPaper }) => {
   );
 };
 
-export function Research() {
+interface ResearchProps {
+  papers: ResearchPaper[];
+  displayLimit?: number;
+  showTitle?: boolean;
+  paddingTop?: string;
+  reverse?: boolean;
+}
+
+export function Research({ papers, displayLimit, showTitle = true, paddingTop, reverse }: ResearchProps) {
   const [activePaper, setActivePaper] = useState<ResearchPaper | null>(null);
-  const [researchPapers, setResearchPapers] = useState<ResearchPaper[]>([]);
   const id = useId();
   const overlayRef = useRef<HTMLDivElement>(null!);
-
-  useEffect(() => {
-    async function fetchResearchPapers() {
-      const data = await client.fetch(`*[_type == "research"] | order(year desc) {
-        title,
-        url,
-        doi,
-        authors,
-        year,
-        venue,
-        abstract,
-        longDescription,
-        bulletPoints
-      }`);
-      setResearchPapers(data);
-    }
-    fetchResearchPapers();
-  }, []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -176,12 +166,19 @@ export function Research() {
   }, [activePaper]);
 
   useOutsideClick(overlayRef, () => setActivePaper(null));
+  
+  const displayedPapers = displayLimit ? papers.slice(0, displayLimit) : papers;
+
+  const vortexClassName = reverse
+    ? "flex items-center flex-col justify-start min-h-screen bg-gradient-to-b from-purple-950 to-black"
+    : "flex items-center flex-col justify-start min-h-screen bg-gradient-to-b from-black to-purple-950";
 
   return (
     <Vortex
       backgroundColor="black"
-      className="flex items-center flex-col justify-start px-4 md:px-10 pt-16 pb-12 w-full"
-      containerClassName="flex items-center flex-col justify-start min-h-screen bg-gradient-to-b from-black to-purple-950"
+      className="flex items-center flex-col justify-start px-4 md:px-10 pb-12 w-full"
+      containerClassName={vortexClassName}
+      paddingTop={paddingTop}
     >
       {/* Expanded Paper Overlay */}
       <AnimatePresence>
@@ -290,28 +287,52 @@ export function Research() {
       </AnimatePresence>
 
       {/* Main Research Section Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center pb-12 md:pb-20 px-4"
-      >
-        <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-8 md:mb-12">
-          Research Publications
-        </h2>
-        <p className="text-neutral-300 text-base md:text-lg">
-          Exploring the frontiers of AI and Machine Learning
-        </p>
-      </motion.div>
+      {showTitle && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center pb-12 md:pb-20 px-4"
+        >
+          <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-8 md:mb-12">
+            Research Publications
+          </h2>
+          <p className="text-neutral-300 text-base md:text-lg">
+            Exploring the frontiers of AI and Machine Learning
+          </p>
+        </motion.div>
+      )}
 
       {/* Spacer Div */}
-      <div className="h-12 md:h-20"></div>
+      {!showTitle && <div className="h-12 md:h-20"></div>}
 
       {/* Container for research cards */}
       <div className="w-full max-w-4xl mx-auto relative z-10">
-        {researchPapers.map((paper, index) => (
+        {displayedPapers.map((paper, index) => (
           <ResearchCard key={index} paper={paper} />
         ))}
+
+        {displayLimit && papers.length > displayLimit && (
+            <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center mt-12">
+              <div className="w-full h-full rounded-xl relative group flex items-center justify-center">
+                <Link
+                  href="/research"
+                  className="w-[260px] h-[70px] flex items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/60 via-purple-400/40 to-blue-500/40 backdrop-blur-md border-4 border-transparent [background-clip:padding-box] relative shadow-2xl group"
+                  style={{
+                    boxShadow: '0 4px 32px 0 rgba(168,85,247,0.25), 0 1.5px 0 0 #fff inset',
+                  }}
+                >
+                  <span className="text-white font-bold text-lg drop-shadow-lg tracking-wide pr-2">
+                    View All Research
+                  </span>
+                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-1 text-purple-200 group-hover:text-white transition-colors duration-200">
+                    <path d="M7 14h14M15 10l6 4-6 4"/>
+                  </svg>
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none border-4 border-transparent group-hover:border-purple-400 group-hover:shadow-[0_0_24px_4px_rgba(168,85,247,0.5)] transition-all duration-200" />
+                </Link>
+              </div>
+            </div>
+        )}
       </div>
     </Vortex>
   );

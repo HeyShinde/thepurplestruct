@@ -17,7 +17,7 @@ const Hero = () => {
               transition={{ duration: 0.5 }}
               className="text-white text-xl md:text-2xl font-bold uppercase"
             >
-              We are
+              Between code and chaos,
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ const Hero = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-white text-6xl md:text-8xl font-bold leading-tight uppercase"
             >
-              Yellow Panther
+              there’s clarity.
             </motion.h1>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -33,8 +33,8 @@ const Hero = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-white text-2xl md:text-3xl font-semibold uppercase"
             >
-              Scratching out software solutions for
-              <span className="block text-yellow-400">Sports Brands</span>
+              I’m Aditya
+              <span className="block text-yellow-400">and I engineer it with machine learning.</span>
             </motion.h2>
           </div>
 

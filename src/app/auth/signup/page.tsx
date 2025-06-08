@@ -6,6 +6,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { FaGithub } from "react-icons/fa"
 import { useState, useEffect } from "react"
+import Cookies from 'js-cookie'
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -219,6 +220,9 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Clear any login-attempt cookie if the user navigates here
+    Cookies.remove('next-auth.login-attempt', { path: '/' })
+
     const error = searchParams?.get("error")
     if (error === "OAuthAccountNotLinked") {
       setError("This email is already associated with a different account. Please sign in with the original provider.")

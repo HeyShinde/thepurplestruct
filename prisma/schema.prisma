@@ -32,7 +32,6 @@ model Course {
   published   Boolean          @default(false)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
-  progress    CourseProgress[]
   enrollments Enrollment[]
   sections    Section[]
 }
@@ -54,7 +53,6 @@ model Lesson {
   duration  Int?
   order     Int
   sectionId String
-  progress  CourseProgress[]
   section   Section          @relation(fields: [sectionId], references: [id])
 }
 
@@ -70,14 +68,13 @@ model Enrollment {
 }
 
 model CourseProgress {
-  id        String  @id @default(cuid())
-  userId    String
-  courseId  String
-  lessonId  String
-  completed Boolean @default(false)
-  course    Course  @relation(fields: [courseId], references: [id])
-  lesson    Lesson  @relation(fields: [lessonId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+  id           String    @id @default(cuid())
+  userId       String
+  courseId     String
+  lessonId     String
+  completed    Boolean   @default(false)
+  lastViewedAt DateTime?
+  user         User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, lessonId])
 }
