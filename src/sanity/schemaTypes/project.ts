@@ -58,6 +58,13 @@ export default defineType({
       title: 'CTA Link',
       type: 'url',
     }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Keywords for SEO.',
+    }),
   ],
   preview: {
     select: {

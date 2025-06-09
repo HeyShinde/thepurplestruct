@@ -1,31 +1,52 @@
-import { Research, ResearchPaper } from "@/components/Research";
-import { NavBar } from "@/components/NavBar";
+import { Research } from "@/components/Research";
 import Footer from "@/components/Footer";
+import { NavBar } from "@/components/NavBar";
 import { client } from "@/sanity/lib/client";
-import { groq } from "next-sanity";
+import { Metadata } from "next";
 
-const researchQuery = groq`
-  *[_type == "research"] | order(year desc) {
+export async function generateMetadata(): Promise<Metadata> {
+  const papers = await client.fetch(`*[_type == "research"]{
     title,
-    url,
-    doi,
-    authors,
-    year,
-    venue,
     abstract,
-    longDescription,
-    bulletPoints
-  }
-`;
+    "url": url
+  }`);
 
-export default async function ResearchPage() {
-  const papers = await client.fetch<ResearchPaper[]>(researchQuery);
+  const itemListElement = papers.map((paper: any, index: number) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "ScholarlyArticle",
+      "name": paper.title,
+      "description": paper.abstract,
+      "url": paper.url
+    }
+  }));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": itemListElement
+  };
+
+  return {
+    title: "Research",
+    description: "A collection of my research papers.",
+    openGraph: {
+      title: "Research",
+      description: "A collection of my research papers.",
+    },
+    other: {
+      'application-ld+json': JSON.stringify(jsonLd),
+    }
+  };
+}
+
+export default function ResearchPage() {
   return (
     <div>
       <NavBar />
       <main>
-        <Research papers={papers} paddingTop="10rem" reverse={true} />
+        <Research paddingTop="10rem" showTitle={false} reverse={true} />
       </main>
       <Footer />
     </div>

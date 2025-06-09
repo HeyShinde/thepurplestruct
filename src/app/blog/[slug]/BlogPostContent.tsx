@@ -1,24 +1,24 @@
-"use client";
-
 import React from 'react';
 import Image from 'next/image';
-import Link from "next/link";
 import { urlFor } from '@/sanity/lib/image';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
 import { NavBar } from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { format } from 'date-fns';
+
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import KatexBlockComponent from '@/components/KatexBlockComponent';
 import TableOfContents from "@/components/TableOfContents";
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from "@/components/SubscribeForm";
-import { motion } from 'framer-motion';
 import type { BlogPost } from '@/types/blog';
 import { FaXTwitter } from 'react-icons/fa6';
 import { FaLinkedin, FaGithub, FaKaggle } from 'react-icons/fa';
 import { SiCodersrank } from 'react-icons/si';
 import { IoGlobeOutline } from 'react-icons/io5';
+
+import CodeBlock from './CodeBlock';
+
+import PostHero from './PostHero';
 
 interface SidebarPromo {
     promoType?: "image" | "code";
@@ -153,9 +153,9 @@ function renderAuthorCard(author: Author) {
                                 </div>
                             </div>
                         )}
-                        <h2 className="text-2xl font-semibold text-purple-400 mb-2">{author.name}</h2>
+                        <h2 className="font-heading text-2xl font-semibold text-purple-400 mb-2">{author.name}</h2>
                         {author.bio && (
-                            <p className="text-sm text-neutral-300 max-w-sm">{author.bio}</p>
+                            <p className="font-body text-sm text-neutral-300 max-w-sm">{author.bio}</p>
                         )}
                     </div>
                     {author.socialLinks && author.socialLinks.length > 0 && (
@@ -186,8 +186,8 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-950 via-black to-black">
                 <NavBar />
                 <div className="flex-1 flex flex-col justify-center items-center w-full px-[12%]">
-                    <h4 className="text-center mb-2 text-lg font-Ovo text-purple-400">Blog</h4>
-                    <h2 className="text-center text-5xl font-Ovo text-white">Post not found</h2>
+                    <h4 className="text-center mb-2 text-lg font-heading text-purple-400">Blog</h4>
+                    <h2 className="text-center text-5xl font-heading text-white">Post not found</h2>
                     <p className="text-center mt-5 text-neutral-300">The requested post could not be found.</p>
                 </div>
                 <Footer />
@@ -204,45 +204,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     <SubscribeForm title={value.title} description={value.description} />
                 </div>
             ),
-            codeBlock: ({ value }) => (
-                <div className="relative my-6">
-                    <div className="relative bg-black/80 backdrop-blur-sm rounded-xl p-4 w-full">
-                        <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0"
-                            style={{
-                                backgroundSize: '200% 100%',
-                                animation: 'gradientMove 3s linear infinite',
-                                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                                maskComposite: 'exclude',
-                                padding: '1px',
-                            }} />
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                </div>
-                                {value.showCopyButton && (
-                                    <button
-                                        className="px-3 py-1 text-sm bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
-                                        onClick={(e) => {
-                                            navigator.clipboard.writeText(value.code).catch(() => {});
-                                            const button = e.currentTarget;
-                                            button.textContent = "Copied!";
-                                            setTimeout(() => (button.textContent = "Copy"), 1500);
-                                        }}
-                                    >
-                                        Copy
-                                    </button>
-                                )}
-                            </div>
-                            <pre className="overflow-x-auto">
-                                <code className="text-sm text-purple-400 font-mono">{value.code}</code>
-                            </pre>
-                        </div>
-                    </div>
-                </div>
-            ),
+            codeBlock: ({ value }) => <CodeBlock value={value} />,
             advertisement: ({ value }) => (
                 <div className="my-8 px-4 py-6 max-w-max mx-auto bg-black/80 backdrop-blur-sm rounded-lg border border-purple-400/20">
                     <span className="text-center font-semibold text-purple-400">Advertisement</span>
@@ -319,14 +281,9 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
         },
         block: {
             h1: ({ children }) => (
-                <motion.h1 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-3xl font-bold mt-6 text-white"
-                >
+                <h1 className="font-heading text-3xl font-bold mt-6 text-white">
                     {children}
-                </motion.h1>
+                </h1>
             ),
             h2: ({ children }) => {
                 const text = children?.toString() || '';
@@ -335,15 +292,12 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     .replace(/^-+|-+$/g, '')
                     .replace(/-+/g, '-');
                 return (
-                    <motion.h2 
+                    <h2 
                         id={id} 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
+                        className="font-heading text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
                     >
                         {children}
-                    </motion.h2>
+                    </h2>
                 );
             },
             h3: ({ children }) => {
@@ -353,38 +307,25 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     .replace(/^-+|-+$/g, '')
                     .replace(/-+/g, '-');
                 return (
-                    <motion.h3 
+                    <h3 
                         id={id} 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
+                        className="font-heading text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
                     >
                         {children}
-                    </motion.h3>
+                    </h3>
                 );
             },
             normal: ({ children }) => {
                 return (
-                    <motion.p 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-lg mt-3 text-neutral-300"
-                    >
+                    <p className="font-body text-lg mt-3 text-neutral-300">
                         {children}
-                    </motion.p>
+                    </p>
                 );
             },
             blockquote: ({ children }) => (
-                <motion.blockquote 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="border-l-4 border-purple-400 pl-4 italic text-purple-300 mt-6"
-                >
+                <blockquote className="font-body border-l-4 border-purple-400 pl-4 italic text-purple-300 mt-6">
                     <p>{children}</p>
-                </motion.blockquote>
+                </blockquote>
             ),
         },
         list: {
@@ -403,37 +344,12 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             <div className="w-full px-4 md:px-8 lg:px-12 py-10 pb-32">
                 <div className="max-w-[2000px] mx-auto">
                     {/* Hero Section */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="relative mb-16"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-purple-700/20 blur-3xl -z-10" />
-                        <div className="max-w-4xl mx-auto text-center">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-Ovo mt-16 lg:mt-20 text-white leading-tight">
-                                {post.title}
-                            </h1>
-                            <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
-                                {(post.updatedAt || post.publishedAt) && (
-                                    <time
-                                        dateTime={new Date(post.updatedAt || post.publishedAt).toISOString()}
-                                        className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg shadow-lg"
-                                    >
-                                        Last updated on {format(new Date(post.updatedAt || post.publishedAt), 'dd MMMM yyyy')}
-                                    </time>
-                                )}
-                                {post.categories?.map((category) => (
-                                    <span
-                                        key={category._id}
-                                        className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg shadow-lg"
-                                    >
-                                        {category.title}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
+                    <PostHero 
+                        title={post.title}
+                        categories={post.categories}
+                        publishedAt={post.publishedAt}
+                        updatedAt={post.updatedAt}
+                    />
 
                     {/* Main Content */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -485,7 +401,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                         ...components,
                                         block: {
                                             h1: ({ children }) => (
-                                                <h1 className="text-2xl md:text-3xl font-bold mt-8 mb-6 text-white">
+                                                <h1 className="font-heading text-2xl md:text-3xl font-bold mt-8 mb-6 text-white">
                                                     {children}
                                                 </h1>
                                             ),
@@ -498,7 +414,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                                 return (
                                                     <h2 
                                                         id={id} 
-                                                        className="text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
+                                                        className="font-heading text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
                                                     >
                                                         {children}
                                                     </h2>
@@ -513,14 +429,14 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                                 return (
                                                     <h3 
                                                         id={id} 
-                                                        className="text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
+                                                        className="font-heading text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
                                                     >
                                                         {children}
                                                     </h3>
                                                 );
                                             },
                                             normal: ({ children }) => (
-                                                <p className="text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
+                                                <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
                                                     {children}
                                                 </p>
                                             ),

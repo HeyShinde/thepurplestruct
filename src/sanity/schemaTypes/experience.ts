@@ -57,10 +57,17 @@ export default defineType({
           fields: [
             { name: 'title', type: 'string', title: 'Title' },
             { name: 'description', type: 'text', title: 'Description' },
-            { name: 'impact', type: 'string', title: 'Impact' }
+            { name: 'impact', type: 'string', title: 'Impact' },
           ]
         }
       ],
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Keywords for SEO.',
     }),
   ],
   preview: {

@@ -33,6 +33,16 @@ interface Author {
     socialLinks?: SocialLink[];
 }
 
+function portableTextToPlainText(blocks: any[]) {
+    if (!blocks) {
+      return '';
+    }
+    return blocks
+      .filter(block => block._type === 'block' && block.children)
+      .map(block => block.children.map((child: { text: string }) => child.text).join(''))
+      .join('\\n\\n');
+}
+
 async function getPost(slug: string) {
     console.log('Fetching post with slug:', slug);
     
@@ -50,14 +60,17 @@ async function getPost(slug: string) {
         },
         categories[]->{
             _id,
-            title
+            title,
+            "slug": slug.current
         },
         tags,
         mainImage,
         excerpt,
         body,
+        wordCount,
         publishedAt,
         updatedAt,
+        keywords,
         sidebarPromo {
             promoType,
             image,
@@ -92,14 +105,80 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         };
     }
 
+    const postUrl = `https://developer.heyshinde.com/blog/${post.slug.current}`;
+    const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : "";
+    const homePageUrl = "https://developer.heyshinde.com";
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        '@id': `${postUrl}/#blogposting`,
+        'isPartOf': {
+            '@type': 'Blog',
+            '@id': `${homePageUrl}/blog/#blog`,
+            'name': 'HeyShinde Blog',
+            'publisher': {
+                '@id': `${homePageUrl}/#person`
+            }
+        },
+        headline: post.title,
+        description: post.excerpt,
+        articleBody: portableTextToPlainText(post.body),
+        wordCount: post.wordCount,
+        keywords: post.keywords || post.tags || [],
+        about: post.categories?.map(cat => ({ '@type': 'Thing', name: cat.title })) || [],
+        image: {
+            '@type': 'ImageObject',
+            url: imageUrl,
+            width: 1200,
+            height: 630
+        },
+        author: {
+            '@type': 'Person',
+            '@id': `${homePageUrl}/#person`,
+            name: post.author.name,
+        },
+        publisher: {
+            '@id': `${homePageUrl}/#person`
+        },
+        url: postUrl,
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
+    };
+
     return {
         title: post.title,
         description: post.excerpt,
+        keywords: post.keywords || post.tags || [],
+        alternates: {
+            canonical: postUrl,
+        },
         openGraph: {
             title: post.title,
             description: post.excerpt,
-            images: [post.mainImage ? urlFor(post.mainImage).url() : ""],
+            url: postUrl,
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: post.title,
+                },
+            ],
+            type: 'article',
+            publishedTime: post.publishedAt,
+            modifiedTime: post.updatedAt || post.publishedAt,
+            authors: [post.author.name],
         },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+            images: [imageUrl],
+        },
+        other: {
+            "application/ld+json": JSON.stringify(jsonLd),
+        }
     };
 }
 

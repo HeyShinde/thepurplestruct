@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import classNames from "classnames";
 import { motion } from "framer-motion";
@@ -58,7 +59,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                 }} 
             />
             
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-mono">
+            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-heading">
                 Table of Contents
             </h2>
             
@@ -83,7 +84,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                             href={`#${heading.id}`}
                             onClick={(e) => handleClick(e, heading.id)}
                             className={classNames(
-                                "block py-2 px-4 rounded-lg text-purple-400/80 hover:text-purple-400 transition-colors duration-300 font-mono",
+                                "block py-2 px-4 rounded-lg text-purple-400/80 hover:text-purple-400 transition-colors duration-300 font-body",
                                 "hover:bg-purple-400/10",
                                 {
                                     'text-lg': heading.level === 2,

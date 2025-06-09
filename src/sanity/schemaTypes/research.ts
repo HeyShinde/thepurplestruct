@@ -56,6 +56,13 @@ export default defineType({
       type: 'array',
       of: [{ type: 'string' }],
     }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Keywords for SEO.',
+    }),
   ],
   preview: {
     select: {

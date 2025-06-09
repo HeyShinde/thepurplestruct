@@ -1,4 +1,5 @@
 import katexBlock from './katexBlock';
+import { defineField } from 'sanity';
 
 interface SidebarPromoParent {
     promoType?: "image" | "code";
@@ -64,6 +65,13 @@ const blogSchema = {
             type: "text",
             title: "Excerpt",
             description: "A short summary of the blog post.",
+        },
+        {
+            name: "wordCount",
+            type: "number",
+            title: "Word Count",
+            description: "Enter the total word count of the article. You can use an online tool to calculate this from the post body.",
+            validation: (Rule: { positive: () => { (): any; new(): any; integer: { (): any; new(): any; }; }; }) => Rule.positive().integer(),
         },
         {
             name: "body",
@@ -199,48 +207,20 @@ const blogSchema = {
         },
         {
             name: "sidebarPromo",
-            type: "object",
+            type: "reference",
             title: "Sidebar Promo",
-            fields: [
-                {
-                    name: "promoType",
-                    type: "string",
-                    title: "Promo Type",
-                    options: {
-                        list: [
-                            { title: "Image", value: "image" },
-                            { title: "Code", value: "code" },
-                        ],
-                    },
-                },
-                {
-                    name: "image",
-                    type: "image",
-                    title: "Image",
-                    options: { hotspot: true },
-                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
-                },
-                {
-                    name: "imageLink",
-                    type: "url",
-                    title: "Image Link",
-                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
-                },
-                {
-                    name: 'altText',
-                    title: 'Alt Text',
-                    type: 'string',
-                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== 'image'
-                },
-                {
-                    name: "code",
-                    type: "text",
-                    title: "JavaScript Code",
-                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "code",
-                    description: "Enter JavaScript code for an ad or script-based promo.",
-                },
-            ],
+            to: [{ type: "sidebarPromo" }],
         },
+        {
+            name: "keywords",
+            title: "Keywords",
+            type: "array",
+            of: [{ type: "string" }],
+            description: "Keywords for SEO (e.g., \"machine learning\", \"next.js\").",
+        },
+    ],
+    orderings: [
+        // ... existing code ...
     ],
 };
 
