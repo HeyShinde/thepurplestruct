@@ -38,7 +38,7 @@ const researchQuery = groq`
 `;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const pageUrl = "https://developer.heyshinde.com";
+  const pageUrl = "https://www.heyshinde.com";
   const imageUrl = `${pageUrl}/images/profile-img.webp`; // Ensure this is the correct path to your image
   const name = "Shinde Aditya";
   const jobTitle = "Machine Learning Engineer";
@@ -131,6 +131,18 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     ]
   };
+  
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    url: pageUrl,
+    name: 'Shinde Aditya',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${pageUrl}/search?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
 
   return {
     title: `${name} | ${jobTitle}`,
@@ -159,7 +171,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [imageUrl],
     },
     other: {
-      "application/ld+json": JSON.stringify(jsonLd),
+      "application/ld+json": JSON.stringify([jsonLd, websiteJsonLd]),
     }
   };
 }

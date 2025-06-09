@@ -105,11 +105,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         };
     }
 
-    const postUrl = `https://developer.heyshinde.com/blog/${post.slug.current}`;
+    const postUrl = `https://www.heyshinde.com/blog/${post.slug.current}`;
     const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : "";
-    const homePageUrl = "https://developer.heyshinde.com";
+    const homePageUrl = "https://www.heyshinde.com";
 
-    const jsonLd = {
+    const blogPostJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         '@id': `${postUrl}/#blogposting`,
@@ -145,6 +145,31 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         datePublished: post.publishedAt,
         dateModified: post.updatedAt || post.publishedAt,
     };
+    
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: homePageUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Blog',
+          item: `${homePageUrl}/blog`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: post.title,
+          item: postUrl,
+        },
+      ],
+    };
 
     return {
         title: post.title,
@@ -177,7 +202,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             images: [imageUrl],
         },
         other: {
-            "application/ld+json": JSON.stringify(jsonLd),
+            "application/ld+json": JSON.stringify([blogPostJsonLd, breadcrumbJsonLd]),
         }
     };
 }

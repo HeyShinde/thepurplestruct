@@ -11,6 +11,9 @@ import { useSession, signOut } from "next-auth/react"
 import { useMediaQuery } from 'react-responsive'
 import { client } from "@/sanity/lib/client"
 import { groq } from "next-sanity"
+import { CommandPalette } from "./CommandPalette"
+import { SparklesIcon } from "@heroicons/react/24/outline"
+import { SearchBox } from "./SearchBox"
 
 const socialLinks = [
     { name: "Linkedin", href: "https://www.linkedin.com/in/heyshinde" },
@@ -29,6 +32,7 @@ export function NavBar() {
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
     const [navItems, setNavItems] = useState<any[]>([]);
     const [hasMounted, setHasMounted] = useState(false);
+    const [isCommandOpen, setCommandOpen] = useState(false)
 
     useEffect(() => {
         setHasMounted(true);
@@ -90,6 +94,19 @@ export function NavBar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [userMenuOpen]);
 
+    // Toggle the menu when ⌘K is pressed
+    useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                setCommandOpen((open) => !open)
+            }
+        }
+
+        document.addEventListener('keydown', down)
+        return () => document.removeEventListener('keydown', down)
+    }, [])
+
     const menuContentVariants = {
         closed: {
             opacity: 0,
@@ -117,6 +134,7 @@ export function NavBar() {
         <>
             {/* Contact Modal */}
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+            <CommandPalette open={isCommandOpen} setOpen={setCommandOpen} />
             <motion.header
                 initial={{ y: 0 }}
                 animate={{ y: showNav ? 0 : -120 }}
@@ -237,19 +255,22 @@ export function NavBar() {
                             >
                                 {/* Navigation Links */}
                                 <nav className="space-y-4 md:space-y-6 mb-6 md:mb-8 mt-4 md:mt-6">
+                                    {/* <button
+                                        className="flex w-full items-center gap-2 rounded-lg bg-purple-500 px-4 py-3 text-left text-base font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]"
+                                        onClick={() => {
+                                            setCommandOpen(true);
+                                            setIsMenuOpen(false);
+                                        }}
+                                    >
+                                        <SparklesIcon className="h-5 w-5" />
+                                        <span>Command Menu...</span>
+                                    </button> */}
+                                    
+                                    <div className="h-px bg-gray-200" />
                                     {navItems && navItems.filter(item => isDesktop ? item.show === 'both' || item.show === 'desktop' : item.show === 'both' || item.show === 'mobile').map((item) => {
                                         if (item.title === 'Contact' && !isDesktop) {
                                             return (
-                                                <button
-                                                    key={item.title}
-                                                    className="block text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors text-left w-full"
-                                                    onClick={() => {
-                                                        setIsContactOpen(true);
-                                                        setIsMenuOpen(false);
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </button>
+                                                <SearchBox/>
                                             )
                                         }
                                         return (
@@ -318,6 +339,15 @@ export function NavBar() {
                 {/* Contact button & desktop nav */}
                 {isDesktop && (
                 <div className="hidden md:flex items-center gap-4 absolute top-14 right-24">
+                    {/* <button
+                        onClick={() => setCommandOpen(true)}
+                        className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-md transition-colors hover:bg-gray-700/80"
+                        >
+                        <SparklesIcon className="h-5 w-5 text-purple-400" />
+                        <span>Search...</span>
+                        <kbd className="ml-2 rounded border border-gray-600 px-1.5 py-0.5 text-xs">⌘K</kbd>
+                    </button> */}
+                    <SearchBox/>
                     <motion.div
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.2 }}

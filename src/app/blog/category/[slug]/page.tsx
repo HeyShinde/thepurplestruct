@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         };
     }
 
-    const pageUrl = `https://developer.heyshinde.com/blog/category/${params.slug}`;
+    const pageUrl = `https://www.heyshinde.com/blog/category/${params.slug}`;
     const title = `${category.title} | Blog`;
     const description = category.description || `Posts categorized under ${category.title}.`;
 
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         'description': description,
         'isPartOf': {
             '@type': 'Blog',
-            '@id': 'https://developer.heyshinde.com/blog/#blog'
+            '@id': 'https://www.heyshinde.com/blog/#blog'
         }
     };
 

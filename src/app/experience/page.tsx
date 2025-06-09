@@ -28,6 +28,25 @@ export async function generateMetadata(): Promise<Metadata> {
     "itemListElement": itemListElement
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.heyshinde.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Experience',
+        item: 'https://www.heyshinde.com/experience',
+      },
+    ],
+  };
+
   return {
     title: "Experience",
     description: "A timeline of my professional journey.",
@@ -36,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "A timeline of my professional journey.",
     },
     other: {
-      'application-ld+json': JSON.stringify(jsonLd),
+      'application-ld+json': JSON.stringify([jsonLd, breadcrumbJsonLd]),
     }
   };
 }

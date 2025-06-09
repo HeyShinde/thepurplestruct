@@ -1,0 +1,12 @@
+# Allow all friendly crawlers
+User-agent: *
+Allow: /
+
+# Disallow crawling of specific directories
+Disallow: /api/
+Disallow: /adminstudio/
+Disallow: /dashboard/
+Disallow: /auth/
+
+# Point crawlers to the sitemap
+Sitemap: https://www.heyshinde.com/sitemap.xml 

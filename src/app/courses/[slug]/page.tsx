@@ -40,10 +40,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         }
     }
     
-    const pageUrl = `https://developer.heyshinde.com/courses/${course.slug.current}`;
+    const pageUrl = `https://www.heyshinde.com/courses/${course.slug.current}`;
     const imageUrl = course.image ? urlFor(course.image).url() : '';
+    const homePageUrl = "https://www.heyshinde.com";
     
-    const jsonLd = {
+    const courseJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Course',
         name: course.title,
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         educationalCredentialAwarded: course.educationalCredentialAwarded,
         provider: {
             '@type': 'Person',
-            '@id': 'https://developer.heyshinde.com/#person',
+            '@id': 'https://www.heyshinde.com/#person',
             name: course.tutor?.name,
         },
         hasCourseInstance: {
@@ -66,7 +67,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             courseMode: course.courseMode || ['online', 'self-paced'],
             instructor: {
                 '@type': 'Person',
-                '@id': 'https://developer.heyshinde.com/#person',
+                '@id': 'https://www.heyshinde.com/#person',
                 name: course.tutor?.name,
             }
         },
@@ -76,6 +77,31 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             priceCurrency: 'USD',
             category: course.price === 0 ? 'Free' : 'Paid',
         },
+    };
+
+    const breadcrumbJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: homePageUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Courses',
+          item: `${homePageUrl}/courses`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: course.title,
+          item: pageUrl,
+        },
+      ],
     };
 
     return {
@@ -100,7 +126,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             type: 'article', // Using article type for better social sharing
         },
         other: {
-            "application/ld+json": JSON.stringify(jsonLd),
+            "application/ld+json": JSON.stringify([courseJsonLd, breadcrumbJsonLd]),
         }
     };
 }

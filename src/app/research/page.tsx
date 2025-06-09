@@ -28,6 +28,25 @@ export async function generateMetadata(): Promise<Metadata> {
     "itemListElement": itemListElement
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.heyshinde.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Research',
+        item: 'https://www.heyshinde.com/research',
+      },
+    ],
+  };
+
   return {
     title: "Research",
     description: "A collection of my research papers.",
@@ -36,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "A collection of my research papers.",
     },
     other: {
-      'application-ld+json': JSON.stringify(jsonLd),
+      'application-ld+json': JSON.stringify([jsonLd, breadcrumbJsonLd]),
     }
   };
 }

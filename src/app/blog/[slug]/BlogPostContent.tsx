@@ -356,7 +356,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                         {/* Left Sidebar - Share Buttons */}
                         <div className="hidden lg:block lg:col-span-1">
                             <div className="sticky top-48">
-                                <ShareButtons url={`https://developer.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
                             </div>
                         </div>
 
@@ -390,7 +390,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 {/* Mobile Share Buttons and Table of Contents */}
                                 <div className="block lg:hidden mb-8">
                                     <div className="flex flex-col gap-4">
-                                        <ShareButtons url={`https://developer.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
                                         <TableOfContents headings={headings} />
                                     </div>
                                 </div>

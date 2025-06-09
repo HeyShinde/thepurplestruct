@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const pageUrl = "https://developer.heyshinde.com/blog";
+  const pageUrl = "https://www.heyshinde.com/blog";
   const title = "Blog | Shinde Aditya";
   const description = "Explore articles on Machine Learning, MLOps, AI, and modern web development from Shinde Aditya's perspective.";
 
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     'url': pageUrl,
     'publisher': {
       '@type': 'Person',
-      '@id': 'https://developer.heyshinde.com/#person'
+      '@id': 'https://www.heyshinde.com/#person'
     },
     'description': description
   };

@@ -27,7 +27,7 @@ export async function Research({ displayLimit, showTitle = true, paddingTop, rev
       papers={papers} 
       displayLimit={displayLimit} 
       showTitle={showTitle} 
-      paddingTop={paddingTop} 
+      paddingTop={paddingTop}
       reverse={reverse} 
     />
   );
