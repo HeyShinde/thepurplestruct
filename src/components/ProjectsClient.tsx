@@ -218,9 +218,11 @@ export function ProjectsClient({
                                 className="px-3 py-1 rounded-full bg-purple-400/10 text-purple-400/80 text-sm border border-purple-400/20 flex items-center gap-1"
                               >
                                 {tech.icon && (
-                                  <img
+                                  <Image
                                     src={tech.icon}
                                     alt={tech.name}
+                                    width={16}
+                                    height={16}
                                     className="w-4 h-4"
                                   />
                                 )}
@@ -282,7 +284,7 @@ export function ProjectsClient({
                           rotateZ={-10}
                           className="w-full mt-6"
                         >
-                          <img
+                          <Image
                             src={card.src}
                             height="1000"
                             width="1000"

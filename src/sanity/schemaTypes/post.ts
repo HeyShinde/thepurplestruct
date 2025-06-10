@@ -207,9 +207,47 @@ const blogSchema = {
         },
         {
             name: "sidebarPromo",
-            type: "reference",
+            type: "object",
             title: "Sidebar Promo",
-            to: [{ type: "sidebarPromo" }],
+            fields: [
+                {
+                    name: "promoType",
+                    type: "string",
+                    title: "Promo Type",
+                    options: {
+                        list: [
+                            { title: "Image", value: "image" },
+                            { title: "Code", value: "code" },
+                        ],
+                    },
+                },
+                {
+                    name: "image",
+                    type: "image",
+                    title: "Image",
+                    options: { hotspot: true },
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
+                },
+                {
+                    name: "imageLink",
+                    type: "url",
+                    title: "Image Link",
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
+                },
+                {
+                    name: 'altText',
+                    title: 'Alt Text',
+                    type: 'string',
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== 'image'
+                },
+                {
+                    name: "code",
+                    type: "text",
+                    title: "JavaScript Code",
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "code",
+                    description: "Enter JavaScript code for an ad or script-based promo.",
+                },
+            ],
         },
         {
             name: "keywords",
@@ -218,9 +256,6 @@ const blogSchema = {
             of: [{ type: "string" }],
             description: "Keywords for SEO (e.g., \"machine learning\", \"next.js\").",
         },
-    ],
-    orderings: [
-        // ... existing code ...
     ],
 };
 

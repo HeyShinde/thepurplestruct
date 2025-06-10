@@ -13,24 +13,29 @@ const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-chakra-petch",
+  display: "swap",
 })
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-ibm-plex-mono",
+  display: "swap",
+  preload: true,
 })
 
 const firaCode = Fira_Code({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-fira-code",
+  display: "swap",
 })
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-rubik-glitch",
+  display: "swap",
 })
 
 export const metadata: Metadata = {

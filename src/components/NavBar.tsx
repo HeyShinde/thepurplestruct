@@ -12,7 +12,6 @@ import { useMediaQuery } from 'react-responsive'
 import { client } from "@/sanity/lib/client"
 import { groq } from "next-sanity"
 import { CommandPalette } from "./CommandPalette"
-import { SparklesIcon } from "@heroicons/react/24/outline"
 import { SearchBox } from "./SearchBox"
 
 const socialLinks = [
@@ -250,27 +249,34 @@ export function NavBar() {
                                 animate="open"
                                 exit="closed"
                                 variants={menuContentVariants}
-                                className={`overflow-hidden ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+                                className={`${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'} overflow-y-auto max-h-[80vh]`}
                                 style={{ willChange: 'height, opacity' }}
                             >
                                 {/* Navigation Links */}
                                 <nav className="space-y-4 md:space-y-6 mb-6 md:mb-8 mt-4 md:mt-6">
-                                    {/* <button
-                                        className="flex w-full items-center gap-2 rounded-lg bg-purple-500 px-4 py-3 text-left text-base font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]"
-                                        onClick={() => {
-                                            setCommandOpen(true);
-                                            setIsMenuOpen(false);
-                                        }}
-                                    >
-                                        <SparklesIcon className="h-5 w-5" />
-                                        <span>Command Menu...</span>
-                                    </button> */}
+                                    {/* SearchBox for mobile */}
+                                    {!isDesktop && (
+                                        <div className="relative mb-4">
+                                            <SearchBox/>
+                                        </div>
+                                    )}
                                     
                                     <div className="h-px bg-gray-200" />
-                                    {navItems && navItems.filter(item => isDesktop ? item.show === 'both' || item.show === 'desktop' : item.show === 'both' || item.show === 'mobile').map((item) => {
+                                    {navItems && navItems.filter(item =>
+                                        isDesktop ? item.show === 'both' || item.show === 'desktop' : item.show === 'both' || item.show === 'mobile').map((item) => {
                                         if (item.title === 'Contact' && !isDesktop) {
                                             return (
-                                                <SearchBox/>
+                                                <div key={item.title}>
+                                                    <button
+                                                        onClick={() => {
+                                                            setIsContactOpen(true);
+                                                            setIsMenuOpen(false);
+                                                        }}
+                                                        className="block w-full text-left text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                                                    >
+                                                        {item.title}
+                                                    </button>
+                                                </div>
                                             )
                                         }
                                         return (

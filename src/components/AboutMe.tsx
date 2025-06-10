@@ -6,6 +6,7 @@ import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { FaDownload, FaHandSparkles, FaTerminal, FaCode, FaMicrochip, FaDatabase, FaCodeBranch, FaServer } from "react-icons/fa";
+import Image from "next/image";
 
 const BackgroundMotif = () => {
   return (
@@ -187,7 +188,7 @@ export function AboutMe() {
               </>
             }
           >
-            <img
+            <Image
               src={`/images/profile-img.webp`}
               alt="hero"
               height={720}

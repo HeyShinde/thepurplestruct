@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FaGripfire } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 const TimelineDot = () => (
   <div className="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 border-2 border-black" />
@@ -83,7 +84,21 @@ const ExperienceCard = ({ date, title, description, skills, achievements, respon
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill, idx) => (
                     <span key={idx} className="px-3 py-1 rounded-full bg-purple-400/10 text-purple-400/80 text-sm border border-purple-400/20 flex items-center gap-1">
-                      {skill.icon && <img src={skill.icon} alt={skill.name} className="w-4 h-4" />}
+                      {skill.icon && (
+                        <Image 
+                          src={skill.icon} 
+                          alt={skill.name} 
+                          width={16} 
+                          height={16} 
+                          className="w-4 h-4"
+                          unoptimized={true}
+                          onError={(e) => {
+                            // Fallback to a default icon if the image fails to load
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/icons/default-skill.svg';
+                          }}
+                        />
+                      )}
                       {skill.name}
                     </span>
                   ))}

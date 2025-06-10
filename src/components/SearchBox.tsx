@@ -118,8 +118,8 @@ export const SearchBox = () => {
       </form>
 
       {isFocused && query && (
-        <div className="absolute top-full mt-2 w-full md:w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 overflow-hidden right-0 md:right-auto">
-          <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+        <div className="absolute top-full mt-2 w-full md:w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 overflow-hidden right-0 md:right-auto max-h-[60vh]">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-800 max-h-[60vh] overflow-y-auto">
             {isLoading && (
               <li className="px-4 py-3 text-gray-500 dark:text-gray-400">
                 Searching...

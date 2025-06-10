@@ -15,7 +15,16 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
+  },
+  turbopack: {
+    resolveAlias: {
+      '@vercel/turbopack-next/internal/font/google/font': 'next/font/google',
+    },
   },
 };
 
