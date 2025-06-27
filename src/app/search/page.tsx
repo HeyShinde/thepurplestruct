@@ -51,12 +51,16 @@ function getResultDescription(result: SearchResult): string {
   return result.excerpt || result.description || "No description available.";
 }
 
+// Define the searchParams type
+export type SearchParamsType = Promise<{ q: string }>;
+
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q: string };
+  searchParams: SearchParamsType;
 }) {
-  const query = searchParams.q || "";
+  const { q: query = "" } = await searchParams;
+  
   const results: SearchResult[] = await client.fetch(searchQuery, {
     term: `*${query}*`,
   });
@@ -74,7 +78,6 @@ export default async function SearchPage({
             : `No results found for `}
           <span className="font-bold text-purple-400">`{query}`</span>
         </p>
-
         <div className="space-y-6">
           {results.map((result) => (
             <div
@@ -82,15 +85,15 @@ export default async function SearchPage({
               className="p-6 border border-gray-800 rounded-lg hover:bg-gray-900/50 transition-colors duration-200"
             >
               <Link href={getResultLink(result)}>
-                  <span className="text-xs uppercase font-mono tracking-widest text-purple-400">
-                    {result._type}
-                  </span>
-                  <h3 className="text-2xl font-bold font-heading text-white mt-1 group-hover:underline">
-                    {result.title}
-                  </h3>
-                  <p className="text-gray-400 mt-2 line-clamp-2">
-                    {getResultDescription(result)}
-                  </p>
+                <span className="text-xs uppercase font-mono tracking-widest text-purple-400">
+                  {result._type}
+                </span>
+                <h3 className="text-2xl font-bold font-heading text-white mt-1 group-hover:underline">
+                  {result.title}
+                </h3>
+                <p className="text-gray-400 mt-2 line-clamp-2">
+                  {getResultDescription(result)}
+                </p>
               </Link>
             </div>
           ))}

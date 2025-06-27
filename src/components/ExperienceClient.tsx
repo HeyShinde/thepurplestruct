@@ -1,13 +1,24 @@
 "use client"
 import React, { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { FaGripfire } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
-const TimelineDot = () => (
-  <div className="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 border-2 border-black" />
-);
+// Define Experience interface based on Sanity schema
+interface Experience {
+  date?: string;
+  title: string;
+  company: string;
+  description: string;
+  skills: { name: string; icon: string }[];
+  achievements: string[];
+  responsibilities: {
+    title: string;
+    description: string;
+    impact: string;
+  }[];
+}
 
 const TimelineLine = () => (
   <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400/50 to-purple-600/50" />
@@ -339,13 +350,9 @@ const BackgroundEffect = () => {
   );
 };
 
-export function ExperienceClient({ experiences: initialExperiences, displayLimit, showBackground = true }: { experiences: any[], displayLimit?: number, showBackground?: boolean }) {
-  const [experiences, setExperiences] = useState<any[]>([]);
+export function ExperienceClient({ experiences: initialExperiences, displayLimit, showBackground = true }: { experiences: Experience[], displayLimit?: number, showBackground?: boolean }) {
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
   useEffect(() => {
     setExperiences(initialExperiences);
@@ -373,7 +380,7 @@ export function ExperienceClient({ experiences: initialExperiences, displayLimit
         <div ref={containerRef} className="relative">
           <TimelineLine />
           <div className="space-y-16 md:space-y-0">
-            {experiencesToDisplay.map((experience: any, index: number) => (
+            {experiencesToDisplay.map((experience: Experience, index: number) => (
               <ExperienceCard
                 key={index}
                 date={experience.date}

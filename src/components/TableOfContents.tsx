@@ -35,7 +35,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                 top: offsetPosition,
                 behavior: 'smooth'
             });
-            } catch (error) {
+            } catch {
                 // Fallback to instant scroll if smooth scroll fails
                 window.scrollTo(0, offsetPosition);
             }

@@ -17,13 +17,13 @@ interface EnrolledCourse {
 }
 
 export default function EnrolledCoursesPage() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const [courses, setCourses] = useState<EnrolledCourse[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchCourses() {
-      if (status === 'authenticated') {
+      if (session) {
         try {
           const res = await fetch("/api/dashboard/enrolled-courses")
           if (res.ok) {
@@ -38,12 +38,12 @@ export default function EnrolledCoursesPage() {
           setLoading(false)
         }
       }
-      if (status === 'unauthenticated') {
+      if (!session) {
         setLoading(false);
       }
     }
     fetchCourses()
-  }, [status])
+  }, [session])
 
   if (loading) return <div className="text-white text-center p-10">Loading...</div>
 

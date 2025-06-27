@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const form = new formidable.IncomingForm({ multiples: true });
 
-  form.parse(req, async (err: any, fields: Fields, files: Files) => {
+  form.parse(req, async (err: Error | null, fields: Fields, files: Files) => {
     if (err) {
       return res.status(500).json({ error: 'Error parsing form data' });
     }
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         attachments,
       });
       return res.status(200).json({ success: true });
-    } catch (error) {
+    } catch {
       return res.status(500).json({ error: 'Failed to send email' });
     }
   });

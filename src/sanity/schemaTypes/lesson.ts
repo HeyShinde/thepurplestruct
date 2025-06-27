@@ -1,4 +1,4 @@
-export default {
+const lesson = {
   name: 'lesson',
   title: 'Lesson',
   type: 'document',
@@ -32,4 +32,6 @@ export default {
       type: 'number',
     },
   ],
-}; 
+};
+
+export default lesson; 

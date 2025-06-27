@@ -4,43 +4,20 @@ import { urlFor } from '@/sanity/lib/image';
 import { Metadata } from 'next';
 import BlogPostContent from '@/app/blog/[slug]/BlogPostContent';
 import type { BlogPost } from '@/types/blog';
+import type { PortableTextBlock } from '@portabletext/types';
 
-interface SidebarPromo {
-    promoType?: "image" | "code";
-    image?: SanityImage;
-    imageLink?: string;
-    altText?: string;
-    code?: string;
+interface PortableTextChild {
+  text: string;
 }
 
-interface SanityImage {
-    asset: {
-        _ref: string;
-        _type: 'reference';
-    };
-    alt?: string;
-}
-
-interface SocialLink {
-    platform: string;
-    url: string;
-}
-
-interface Author {
-    name: string;
-    image: SanityImage | null;
-    bio?: string;
-    socialLinks?: SocialLink[];
-}
-
-function portableTextToPlainText(blocks: any[]) {
+function portableTextToPlainText(blocks: PortableTextBlock[]) {
     if (!blocks) {
       return '';
     }
     return blocks
       .filter(block => block._type === 'block' && block.children)
-      .map(block => block.children.map((child: { text: string }) => child.text).join(''))
-      .join('\\n\\n');
+      .map(block => (block.children as PortableTextChild[]).map((child) => child.text).join(''))
+      .join('\n\n');
 }
 
 async function getPost(slug: string) {
@@ -96,8 +73,10 @@ async function getPost(slug: string) {
     }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const post = await getPost(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await getPost(slug);
+    
     if (!post) {
         return {
             title: "Post Not Found",
@@ -207,8 +186,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     console.log('BlogPost component params:', params);
-    const post = await getPost(params.slug);
+    const { slug } = await params;
+    const post = await getPost(slug);
     return <BlogPostContent post={post} />;
 }

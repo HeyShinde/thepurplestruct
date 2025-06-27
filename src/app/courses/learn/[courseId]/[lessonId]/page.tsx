@@ -3,18 +3,18 @@
 import { client } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 import { PortableText } from '@portabletext/react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { FaPlay, FaLock, FaCheck, FaClock, FaSpinner, FaBars, FaTimes, FaHome } from 'react-icons/fa'
+import { FaPlay, FaCheck, FaClock, FaSpinner, FaBars, FaTimes, FaHome } from 'react-icons/fa'
 import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { useRouter, useParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import type { TypedObject } from '@portabletext/types'
 
 interface Lesson {
   _id: string
   title: string
-  content: any
+  content: TypedObject | TypedObject[]
   videoUrl?: string
   duration?: number
   order: number

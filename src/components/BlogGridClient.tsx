@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { CardContainer } from "@/components/ui/3d-card";
 import Link from "next/link";
 import { format } from "date-fns";
+import type { BlogPost } from './BlogGrid';
 
 // Helper function to truncate text
 const truncateText = (text: string, maxLength: number = 150) => {
@@ -14,21 +15,6 @@ const truncateText = (text: string, maxLength: number = 150) => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength).trim() + '...';
 };
-
-interface BlogPost {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  author: { _ref: string };
-  categories: { _ref: string }[];
-  tags: string[];
-  mainImage: any;
-  updatedAt: string;
-  excerpt: string;
-  body: any[];
-  publishedAt: string;
-  sidebarPromo: any;
-}
 
 interface BlogGridClientProps {
   posts: BlogPost[];
@@ -240,7 +226,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
               <div className="col-span-1 md:col-span-2 lg:col-span-2 flex items-center justify-center">
                 <CardContainer className="inter-var py-0 w-full h-full">
                   <div className="w-full h-full rounded-xl relative group flex items-center justify-center">
-                    <a
+                    <Link
                       href="/blog"
                       className="w-[260px] h-[70px] flex items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/60 via-purple-400/40 to-blue-500/40 backdrop-blur-md border-4 border-transparent [background-clip:padding-box] relative shadow-2xl group"
                       style={{
@@ -254,7 +240,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
                         <path d="M7 14h14M15 10l6 4-6 4"/>
                       </svg>
                       <span className="absolute inset-0 rounded-2xl pointer-events-none border-4 border-transparent group-hover:border-purple-400 group-hover:shadow-[0_0_24px_4px_rgba(168,85,247,0.5)] transition-all duration-200" />
-                    </a>
+                    </Link>
                   </div>
                 </CardContainer>
               </div>

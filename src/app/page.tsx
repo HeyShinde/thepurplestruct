@@ -23,20 +23,6 @@ const coursesQuery = groq`
   }
 `
 
-const researchQuery = groq`
-  *[_type == "research"] | order(year desc) {
-    title,
-    url,
-    doi,
-    authors,
-    year,
-    venue,
-    abstract,
-    longDescription,
-    bulletPoints
-  }
-`;
-
 export async function generateMetadata(): Promise<Metadata> {
   const pageUrl = "https://www.heyshinde.com";
   const imageUrl = `${pageUrl}/images/profile-img.webp`; // Ensure this is the correct path to your image
@@ -178,7 +164,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const courses = await client.fetch(coursesQuery);
-  const researchPapers = await client.fetch(researchQuery);
 
   return (
     <div>

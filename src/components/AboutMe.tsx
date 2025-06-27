@@ -245,7 +245,7 @@ export function AboutMe() {
                     <div className="flex items-start gap-2">
                       <span className="text-purple-400">&gt;</span>
                       <p className="font-body text-base md:text-lg leading-relaxed">
-                        My technical toolkit includes deep learning frameworks, vector databases, and modern ML infrastructure. I'm particularly interested in fine-tuning LLMs, implementing RAG systems, and developing autonomous AI agents that can solve complex tasks.
+                        My technical toolkit includes deep learning frameworks, vector databases, and modern ML infrastructure. I&apos;m particularly interested in fine-tuning LLMs, implementing RAG systems, and developing autonomous AI agents that can solve complex tasks.
                       </p>
                     </div>
                   </div>

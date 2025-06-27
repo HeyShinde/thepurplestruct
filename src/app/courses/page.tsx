@@ -4,6 +4,18 @@ import { CoursesList } from '@/components/CoursesList'
 import { NavBar } from '@/components/NavBar'
 import { Metadata } from 'next';
 
+type Course = {
+  slug: { current: string };
+  title: string;
+  description: string;
+  tutor: { name: string };
+  educationalLevel?: string;
+  whatYouWillLearn?: string;
+  requirements?: string;
+  isFree?: boolean;
+  price?: number;
+};
+
 const query = groq`
   *[_type == "course"] {
     _id,
@@ -29,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const name = "Courses by Aditya Shinde";
   const description = "Explore a range of courses on Machine Learning, AI, and software development, designed to enhance your skills.";
 
-  const itemListElement = courses.map((course: any, index: number) => ({
+  const itemListElement = courses.map((course: Course, index: number) => ({
     '@type': 'ListItem',
     position: index + 1,
     item: {

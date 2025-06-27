@@ -1,5 +1,5 @@
 // sanity/schemaTypes/katexBlock.ts
-export default {
+const katexBlock = {
     name: 'katexBlock',
     type: 'object',
     title: 'KaTeX Block',
@@ -11,3 +11,5 @@ export default {
         },
     ],
 };
+
+export default katexBlock;

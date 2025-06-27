@@ -30,9 +30,13 @@ const query = groq`
   }
 `;
 
+// Define the params type
+export type ParamsType = Promise<{ slug: string }>;
+
 // --- Generate Metadata ---
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const course = await client.fetch<CourseDetailsType>(query, { slug: params.slug });
+export async function generateMetadata({ params }: { params: ParamsType }): Promise<Metadata> {
+    const { slug } = await params;
+    const course = await client.fetch<CourseDetailsType>(query, { slug });
     
     if (!course) {
         return {
@@ -132,8 +136,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 // --- Page Component ---
-export default async function CoursePage({ params }: { params: { slug: string } }) {
-    const course = await client.fetch<CourseDetailsType>(query, { slug: params.slug });
+export default async function CoursePage({ params }: { params: ParamsType }) {
+    const { slug } = await params;
+    const course = await client.fetch<CourseDetailsType>(query, { slug });
 
     if (!course) {
         return <div className="min-h-screen flex items-center justify-center bg-black text-white">Course not found.</div>;

@@ -45,7 +45,7 @@ const LoadingSpinner = () => (
 );
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -55,7 +55,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const fetchConnectedAccounts = async () => {
-      if (status === 'authenticated') {
+      if (session) {
         try {
           setIsFetchingProviders(true)
           const response = await fetch('/api/user/connected-accounts')
@@ -71,7 +71,7 @@ export default function SettingsPage() {
       }
     }
     fetchConnectedAccounts()
-  }, [status])
+  }, [session])
 
   const handleDeleteAccount = async () => {
     if (!showDeleteConfirm) {

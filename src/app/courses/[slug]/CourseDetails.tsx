@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import * as React from "react"
-import { client } from '@/sanity/lib/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import * as Collapsible from '@radix-ui/react-collapsible'
@@ -12,6 +11,7 @@ import { IoChevronDown } from 'react-icons/io5'
 import { FaCheckCircle, FaClock, FaGlobe, FaMedal, FaTwitter, FaLinkedin, FaFacebook, FaLink } from 'react-icons/fa'
 import { Badge } from '@/components/ui/badge'
 import { urlFor } from '@/sanity/lib/image'
+import type { SanityImage } from '@/types/blog'
 
 // --- Types ---
 interface Lesson {
@@ -30,7 +30,7 @@ interface Section {
 
 interface Tutor {
   name: string
-  image?: any
+  image?: SanityImage
   bio?: string
   socialLinks?: { platform: string; url:string }[]
 }
@@ -41,7 +41,7 @@ export interface CourseDetailsType {
   slug: { current: string }
   description: string
   price: number
-  image?: any
+  image?: SanityImage
   sections: Section[]
   tutor?: Tutor
   whatYouWillLearn?: string[]
@@ -144,7 +144,7 @@ export function CourseDetails({ course }: { course: CourseDetailsType }) {
           <div className="space-y-8">
             {/* What You'll Learn */}
             <div className="bg-white/5 rounded-2xl p-6 border border-purple-400/20 shadow-lg">
-              <h2 className="font-heading text-2xl font-semibold text-purple-400 mb-4 flex items-center gap-2"><FaCheckCircle className="text-green-400" /> What you'll learn</h2>
+              <h2 className="font-heading text-2xl font-semibold text-purple-400 mb-4 flex items-center gap-2"><FaCheckCircle className="text-green-400" /> What you&apos;ll learn</h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {whatYouWillLearn.map((item, i) => (
                   <li key={i} className="font-body flex items-center gap-2 text-neutral-200"><FaCheckCircle className="text-green-400" /> {item}</li>

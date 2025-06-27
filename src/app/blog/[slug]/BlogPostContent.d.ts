@@ -1,4 +1,5 @@
 import React from 'react';
+import type { PortableTextBlock } from '@portabletext/types';
 
 interface SanityImage {
     asset: {
@@ -6,12 +7,6 @@ interface SanityImage {
         _type: 'reference';
     };
     alt?: string;
-}
-
-interface SocialIcon {
-    platform: string;
-    url: string;
-    icon: SanityImage;
 }
 
 interface SocialLink {
@@ -34,7 +29,7 @@ interface BlogPost {
     tags: string[];
     mainImage: SanityImage;
     excerpt: string;
-    body: Array<any>;
+    body: PortableTextBlock[];
     publishedAt: string;
     updatedAt?: string;
     sidebarPromo?: {

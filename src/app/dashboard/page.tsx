@@ -1,6 +1,7 @@
 "use client"
 
 import { useSession } from "next-auth/react"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import { FaSpinner, FaExclamationTriangle } from "react-icons/fa"
 
@@ -88,7 +89,7 @@ export default function DashboardPage() {
           <div className="bg-white/5 p-6 rounded-2xl border border-purple-400/20 shadow-lg hover:border-purple-400/40 transition-colors">
             <h3 className="text-purple-400 text-sm font-medium uppercase tracking-wide">Completed Lessons</h3>
             <p className="text-3xl md:text-4xl font-bold mt-2 text-white">{stats?.completedLessons || 0}</p>
-            <p className="text-sm text-neutral-400 mt-1">Lessons you've mastered</p>
+            <p className="text-sm text-neutral-400 mt-1">Lessons you&apos;ve mastered</p>
           </div>
           <div className="bg-white/5 p-6 rounded-2xl border border-purple-400/20 shadow-lg hover:border-purple-400/40 transition-colors">
             <h3 className="text-purple-400 text-sm font-medium uppercase tracking-wide">Overall Progress</h3>
@@ -137,12 +138,12 @@ export default function DashboardPage() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-neutral-400 mb-4">No courses enrolled yet.</p>
-                <a 
+                <Link 
                   href="/courses" 
                   className="inline-block px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
                 >
                   Browse Courses
-                </a>
+                </Link>
               </div>
             )}
           </div>

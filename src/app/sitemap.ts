@@ -25,12 +25,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // 2. Map dynamic routes to sitemap format
     const createUrls = (slugs: SanitySlug[], route: string, priority: number) => {
-        return slugs.map((doc) => ({
-            url: `${baseUrl}/${route}/${doc.slug.current}`,
-            lastModified: new Date(doc.updatedAt).toISOString(),
-            changeFrequency: 'weekly' as const,
-            priority,
-        }));
+        return slugs
+            .filter(doc => doc.slug && doc.slug.current)
+            .map((doc) => ({
+                url: `${baseUrl}/${route}/${doc.slug.current}`,
+                lastModified: new Date(doc.updatedAt).toISOString(),
+                changeFrequency: 'weekly' as const,
+                priority,
+            }));
     };
     
     const postUrls = createUrls(postSlugs, 'blog', 0.8);
@@ -44,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticUrls: MetadataRoute.Sitemap = [
         { url: baseUrl, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 1.0 },
         { url: `${baseUrl}/about`, lastModified: new Date().toISOString(), changeFrequency: 'yearly', priority: 0.8 },
-        { url: `${baseUrl}/blog`, lastModified: new Date().toISOString(), changeFrequency: 'weekly', priority: 0.9 },
+        { url: `${baseUrl}/blog`, lastModified: new Date().toISOString(), changeFrequency: 'daily', priority: 0.9 },
         { url: `${baseUrl}/projects`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/experience`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.8 },
         { url: `${baseUrl}/research`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.8 },

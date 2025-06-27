@@ -1,4 +1,6 @@
-export default {
+import { Rule } from 'sanity';
+
+const course = {
   name: 'course',
   title: 'Course',
   type: 'document',
@@ -7,7 +9,7 @@ export default {
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule: any) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: 'slug',
@@ -17,7 +19,7 @@ export default {
         source: 'title',
         maxLength: 96,
       },
-      validation: (Rule: any) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: 'description',
@@ -139,7 +141,9 @@ export default {
       description: 'e.g., "Certificate of Completion". Leave blank if none.'
     }
   ],
-}; 
+};
+
+export default course; 
 
 
 

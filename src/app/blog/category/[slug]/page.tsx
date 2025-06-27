@@ -6,77 +6,80 @@ import { Metadata } from 'next';
 import { client } from '@/sanity/lib/client';
 
 async function getCategory(slug: string) {
-    const query = `*[_type == "category" && slug.current == $slug][0] {
-        title,
-        description
-    }`;
-    return client.fetch<{ title: string; description: string }>(query, { slug });
+  const query = `*[_type == "category" && slug.current == $slug][0] {
+    title,
+    description
+  }`;
+  return client.fetch<{ title: string; description: string }>(query, { slug });
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const category = await getCategory(params.slug);
-
-    if (!category) {
-        return {
-            title: "Category Not Found",
-        };
-    }
-
-    const pageUrl = `https://www.heyshinde.com/blog/category/${params.slug}`;
-    const title = `${category.title} | Blog`;
-    const description = category.description || `Posts categorized under ${category.title}.`;
-
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        'name': `${category.title} Category`,
-        'url': pageUrl,
-        'description': description,
-        'isPartOf': {
-            '@type': 'Blog',
-            '@id': 'https://www.heyshinde.com/blog/#blog'
-        }
-    };
-
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const category = await getCategory(slug);
+  
+  if (!category) {
     return {
-        title: title,
-        description: description,
-        alternates: {
-            canonical: pageUrl,
-        },
-        openGraph: {
-            title: title,
-            description: description,
-            url: pageUrl,
-            type: 'website',
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: title,
-            description: description,
-        },
-        other: {
-            "application/ld+json": JSON.stringify(jsonLd),
-        }
+      title: "Category Not Found",
     };
+  }
+
+  const pageUrl = `https://www.heyshinde.com/blog/category/${slug}`;
+  const title = `${category.title} | Blog`;
+  const description = category.description || `Posts categorized under ${category.title}.`;
+  
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': `${category.title} Category`,
+    'url': pageUrl,
+    'description': description,
+    'isPartOf': {
+      '@type': 'Blog',
+      '@id': 'https://www.heyshinde.com/blog/#blog'
+    }
+  };
+
+  return {
+    title: title,
+    description: description,
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      url: pageUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: title,
+      description: description,
+    },
+    other: {
+      "application/ld+json": JSON.stringify(jsonLd),
+    }
+  };
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const category = await getCategory(params.slug);
-
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const category = await getCategory(slug);
+  
   return (
     <div>
       <NavBar/>
       <main>
         <Suspense fallback={<div>Loading...</div>}>
-          <BlogGrid paddingTop="10rem"
-            categorySlug={params.slug} 
+          <BlogGrid 
+            paddingTop="10rem"
+            categorySlug={slug}
             title={`Category: ${category?.title || 'Posts'}`}
             description={category?.description}
           />
         </Suspense>
       </main>
-      <Footer />  
+      <Footer />
     </div>
   );
-} 
+}

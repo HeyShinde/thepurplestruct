@@ -4,6 +4,12 @@ import { NavBar } from "@/components/NavBar";
 import { client } from "@/sanity/lib/client";
 import { Metadata } from "next";
 
+type ResearchPaper = {
+  title: string;
+  abstract: string;
+  url: string;
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const papers = await client.fetch(`*[_type == "research"]{
     title,
@@ -11,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     "url": url
   }`);
 
-  const itemListElement = papers.map((paper: any, index: number) => ({
+  const itemListElement = papers.map((paper: ResearchPaper, index: number) => ({
     "@type": "ListItem",
     "position": index + 1,
     "item": {

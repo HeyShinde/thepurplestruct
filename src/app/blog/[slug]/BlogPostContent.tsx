@@ -20,6 +20,8 @@ import CodeBlock from './CodeBlock';
 
 import PostHero from './PostHero';
 
+import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
+
 interface SidebarPromo {
     promoType?: "image" | "code";
     image?: SanityImage;
@@ -91,7 +93,11 @@ function extractHeadings(body: BlogPost['body']) {
     return body?.map(block => {
         if (block._type === 'block' && (block.style === 'h2' || block.style === 'h3')) {
             const level = block.style === 'h2' ? 2 : 3;
-            const text = block.children.map((child: { text: string }) => child.text).join('');
+            const text = block.children
+                .map((child: ArbitraryTypedObject | PortableTextSpan) =>
+                    typeof (child as PortableTextSpan).text === 'string' ? (child as PortableTextSpan).text : ''
+                )
+                .join('');
             const id = text.toLowerCase()
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/^-+|-+$/g, '')

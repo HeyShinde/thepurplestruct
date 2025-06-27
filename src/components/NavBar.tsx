@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { FaExternalLinkAlt, FaUserCircle, FaSignInAlt, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa"
+import { FaExternalLinkAlt, FaSignInAlt, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa"
 import { useEffect, useRef, useState } from "react"
 import { ContactModal } from "./ContactModal"
 import { useSession, signOut } from "next-auth/react"
@@ -19,17 +19,22 @@ const socialLinks = [
     { name: "Github", href: "https://github.com/heyshinde" },
 ]
 
+interface NavItem {
+    title: string;
+    href: string;
+    show: 'both' | 'desktop' | 'mobile';
+}
+
 export function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
     const [showNav, setShowNav] = useState(true);
     const lastScrollY = useRef(0);
-    const [direction, setDirection] = useState(1);
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement>(null);
     const { data: session, status } = useSession();
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
-    const [navItems, setNavItems] = useState<any[]>([]);
+    const [navItems, setNavItems] = useState<NavItem[]>([]);
     const [hasMounted, setHasMounted] = useState(false);
     const [isCommandOpen, setCommandOpen] = useState(false)
 
@@ -73,11 +78,6 @@ export function NavBar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => setDirection((d) => -d), 2000);
-        return () => clearInterval(interval);
-    }, []);
-
     // Close user menu on click outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -112,7 +112,6 @@ export function NavBar() {
             height: 0,
             transition: {
                 duration: 0.8,
-                ease: [0.4, 0, 0.2, 1],
             },
         },
         open: {
@@ -120,7 +119,6 @@ export function NavBar() {
             height: 'auto',
             transition: {
                 duration: 0.8,
-                ease: [0.4, 0, 0.2, 1],
             },
         },
     }
@@ -267,15 +265,15 @@ export function NavBar() {
                                         if (item.title === 'Contact' && !isDesktop) {
                                             return (
                                                 <div key={item.title}>
-                                                    <button
+                                                <button
                                                         onClick={() => {
                                                             setIsContactOpen(true);
                                                             setIsMenuOpen(false);
                                                         }}
                                                         className="block w-full text-left text-base md:text-lg font-medium text-gray-900 hover:text-gray-600 transition-colors"
-                                                    >
-                                                        {item.title}
-                                                    </button>
+                                                >
+                                                    {item.title}
+                                                </button>
                                                 </div>
                                             )
                                         }

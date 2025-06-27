@@ -4,6 +4,12 @@ import  Footer  from '@/components/Footer'
 import { client } from "@/sanity/lib/client";
 import { Metadata } from "next";
 
+type Project = {
+  title: string;
+  description: string;
+  url: string;
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const projects = await client.fetch(`*[_type == "project"]{
     title,
@@ -11,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     "url": ctaLink
   }`);
 
-  const itemListElement = projects.map((project: any, index: number) => ({
+  const itemListElement = projects.map((project: Project, index: number) => ({
     "@type": "ListItem",
     "position": index + 1,
     "item": {

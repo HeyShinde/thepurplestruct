@@ -58,13 +58,11 @@ export const CommandPalette = ({
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (debouncedQuery) {
-      setIsLoading(true);
       fetch(`/api/search?term=${encodeURIComponent(debouncedQuery)}`)
         .then((res) => {
           if (!res.ok) {
@@ -78,13 +76,9 @@ export const CommandPalette = ({
         .catch((err) => {
           console.error(err);
           setSearchResults([]);
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
     } else {
       setSearchResults([]);
-      setIsLoading(false);
     }
   }, [debouncedQuery]);
 

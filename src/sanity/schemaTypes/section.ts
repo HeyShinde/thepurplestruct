@@ -1,4 +1,4 @@
-export default {
+const section = {
   name: 'section',
   title: 'Section',
   type: 'document',
@@ -20,4 +20,6 @@ export default {
       of: [{ type: 'reference', to: [{ type: 'lesson' }] }],
     },
   ],
-}; 
+};
+
+export default section; 

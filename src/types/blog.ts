@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from '@portabletext/types';
+
 export interface SanityImage {
     asset: {
         _ref: string;
@@ -33,7 +35,7 @@ export interface BlogPost {
     keywords?: string[];
     mainImage: SanityImage;
     excerpt: string;
-    body: Array<any>;
+    body: PortableTextBlock[];
     wordCount?: number;
     publishedAt: string;
     updatedAt?: string;

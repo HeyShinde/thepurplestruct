@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    dangerouslyAllowSVG: true,
   },
   turbopack: {
     resolveAlias: {

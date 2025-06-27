@@ -34,7 +34,7 @@ const Footer = () => {
         setStatus('error');
         setMessage(`❌ ${data.error || 'Something went wrong. Please try again.'}`);
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
       setMessage('❌ An error occurred. Please try again later.');
     }
@@ -45,7 +45,7 @@ const Footer = () => {
       {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-start gap-12 border-b border-purple-400/20 pb-12">
         <div className="flex-1 min-w-[300px]">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">Never miss what's next</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">Never miss what&apos;s next</h2>
           <form onSubmit={handleSubmit} className="flex flex-row items-center gap-2 w-full max-w-xl">
             <input
               type="email"
@@ -69,7 +69,7 @@ const Footer = () => {
             </p>
           )}
           <p className="text-purple-400/80 text-sm mt-4 max-w-lg font-mono">
-            By submitting your email, you'll be the first to know about upcoming updates for Made With Gsap. You can unsubscribe at any time.
+            By submitting your email, you&apos;ll be the first to know about upcoming updates for Made With Gsap. You can unsubscribe at any time.
           </p>
         </div>
         {/* Links Section */}

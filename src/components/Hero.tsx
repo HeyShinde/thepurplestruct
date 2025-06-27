@@ -27,7 +27,7 @@ const Hero = () => {
               className="font-glitch glitch-effect uppercase"
               style={{ fontSize: 'var(--font-size-5xl)' }}
             >
-              there's clarity.
+              there&apos;s clarity.
             </motion.h1>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -36,7 +36,7 @@ const Hero = () => {
               className="font-heading uppercase"
               style={{ fontSize: 'var(--font-size-2xl)' }}
             >
-              I'm Aditya
+              I am Aditya
               <span className="block text-yellow-400 font-semibold">and I engineer it with machine learning.</span>
             </motion.h2>
           </div>

@@ -4,6 +4,12 @@ import { NavBar } from "@/components/NavBar";
 import { client } from "@/sanity/lib/client";
 import { Metadata } from "next";
 
+interface Experience {
+  title: string;
+  description: string;
+  url: string;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const experiences = await client.fetch(`*[_type == "experience"]{
     title,
@@ -11,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     "url": "/experience"
   }`);
 
-  const itemListElement = experiences.map((exp: any, index: number) => ({
+  const itemListElement = experiences.map((exp: Experience, index: number) => ({
     "@type": "ListItem",
     "position": index + 1,
     "item": {

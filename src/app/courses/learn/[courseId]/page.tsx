@@ -1,11 +1,8 @@
 import { client } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 import { redirect } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import { FaPlay, FaClock, FaBook, FaGraduationCap, FaCheck } from 'react-icons/fa'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/api/auth/authOptions'
 import { prisma } from '@/lib/prisma'
 
 interface LessonIdentifier {
@@ -22,8 +19,11 @@ interface CourseWithLessons {
   sections: SectionWithLessons[];
 }
 
-export default async function CourseLearningRedirectPage({ params }: { params: { courseId: string } }) {
-  const { courseId } = params;
+// Define the params type
+export type ParamsType = Promise<{ courseId: string }>;
+
+export default async function CourseLearningRedirectPage({ params }: { params: ParamsType }) {
+  const { courseId } = await params;
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 
@@ -46,14 +46,14 @@ export default async function CourseLearningRedirectPage({ params }: { params: {
 
   const allLessons = course.sections
     .sort((a, b) => a.order - b.order)
-    .flatMap(section => 
-        (section.lessons || []).sort((a, b) => a.order - b.order)
+    .flatMap(section =>
+      (section.lessons || []).sort((a, b) => a.order - b.order)
     );
 
   if (allLessons.length === 0) {
     return <div>This course has no lessons yet.</div>;
   }
-  
+
   if (!userId) {
     redirect(`/courses/learn/${courseId}/${allLessons[0]._id}`);
     return;
@@ -69,10 +69,10 @@ export default async function CourseLearningRedirectPage({ params }: { params: {
       lessonId: true,
     },
   });
+
   const completedLessonIds = new Set(userProgress.map(p => p.lessonId));
 
   let nextLessonId = allLessons[0]._id;
-  
   const lastCompletedIndex = allLessons.findLastIndex(lesson => completedLessonIds.has(lesson._id));
 
   if (lastCompletedIndex !== -1) {
@@ -84,4 +84,4 @@ export default async function CourseLearningRedirectPage({ params }: { params: {
   }
 
   redirect(`/courses/learn/${courseId}/${nextLessonId}`);
-} 
+}

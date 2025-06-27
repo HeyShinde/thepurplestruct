@@ -34,7 +34,7 @@ const SubscribeForm = ({ title = "Never miss what's next", description = "Subscr
                 setStatus('error');
                 setMessage(`❌ ${data.error || 'Something went wrong. Please try again.'}`);
             }
-        } catch (error) {
+        } catch {
             setStatus('error');
             setMessage('❌ An error occurred. Please try again later.');
         }

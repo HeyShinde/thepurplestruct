@@ -1,5 +1,5 @@
 import katexBlock from './katexBlock';
-import { defineField } from 'sanity';
+import type { Rule } from 'sanity';
 
 interface SidebarPromoParent {
     promoType?: "image" | "code";
@@ -71,7 +71,7 @@ const blogSchema = {
             type: "number",
             title: "Word Count",
             description: "Enter the total word count of the article. You can use an online tool to calculate this from the post body.",
-            validation: (Rule: { positive: () => { (): any; new(): any; integer: { (): any; new(): any; }; }; }) => Rule.positive().integer(),
+            validation: (Rule: Rule) => Rule.positive().integer(),
         },
         {
             name: "body",

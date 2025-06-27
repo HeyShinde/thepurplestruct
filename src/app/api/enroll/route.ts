@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]/route"
+import { authOptions } from "@/app/api/auth/authOptions"
 import { prisma } from "@/lib/prisma"
 import { client as sanityClient } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'

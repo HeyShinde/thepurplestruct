@@ -14,7 +14,7 @@ const inputVariants = {
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
-    transition: { delay: 0.12 * i, type: "spring", stiffness: 80, damping: 18 },
+    transition: { delay: 0.12 * i, type: "spring" as const, stiffness: 80, damping: 18 },
   }),
 };
 
@@ -111,7 +111,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
       } else {
         alert('Failed to send message. Please try again.');
       }
-    } catch (err) {
+    } catch {
       alert('Failed to send message. Please try again.');
     } finally {
       setSubmitting(false);

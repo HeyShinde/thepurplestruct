@@ -9,21 +9,44 @@ import { urlFor } from "@/sanity/lib/image";
 import { FaGripfire } from "react-icons/fa";
 import Image from "next/image";
 
+// Type definitions
+interface TechStackItem {
+  name: string;
+  icon: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  src?: string;
+  ctaLink: string;
+  ctaText: string;
+  longDescription?: string;
+  bulletPoints?: string[];
+  techStack?: TechStackItem[];
+}
+
+interface ProjectCard extends Project {
+  src: string; // Required after processing
+}
+
+interface ProjectsClientProps {
+  projects: Project[];
+  displayLimit?: number;
+}
+
 export function ProjectsClient({
   projects: initialProjects,
   displayLimit,
-}: {
-  projects: any[];
-  displayLimit?: number;
-}) {
-  const [cards, setCards] = useState<any[]>([]);
-  const [active, setActive] = useState<any | boolean | null>(null);
+}: ProjectsClientProps) {
+  const [cards, setCards] = useState<ProjectCard[]>([]);
+  const [active, setActive] = useState<ProjectCard | null>(null);
   const id = useId();
   const ref = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     setCards(
-      initialProjects.map((item: any) => ({
+      initialProjects.map((item: Project) => ({
         ...item,
         src: item.src ? urlFor(item.src).width(1000).height(1000).url() : "",
       }))
@@ -33,11 +56,11 @@ export function ProjectsClient({
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setActive(false);
+        setActive(null);
       }
     }
 
-    if (active && typeof active === "object") {
+    if (active) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -60,7 +83,7 @@ export function ProjectsClient({
       ></div>
 
       <AnimatePresence>
-        {active && typeof active === "object" && (
+        {active && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -71,9 +94,9 @@ export function ProjectsClient({
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {active && typeof active === "object" ? (
+        {active ? (
           <div className="fixed inset-0 flex items-center justify-center z-[100] p-4">
-            {active && typeof active === "object" && (
+            {active && (
               <motion.button
                 key={`button-${active.title}-${id}`}
                 layout
@@ -88,7 +111,7 @@ export function ProjectsClient({
                 <CloseIcon />
               </motion.button>
             )}
-            {active && typeof active === "object" && (
+            {active && (
               <motion.div
                 layoutId={`card-${active.title}-${id}`}
                 ref={ref}
@@ -103,7 +126,7 @@ export function ProjectsClient({
                   duration: 0.3,
                 }}
               >
-                {active && typeof active === "object" && (
+                {active && (
                   <motion.div
                     layoutId={`image-${active.title}-${id}`}
                     className="h-80 lg:h-80 flex-shrink-0 z-0"
@@ -124,7 +147,7 @@ export function ProjectsClient({
 
                 <div className="flex flex-col flex-grow overflow-hidden">
                   {/* Header area with title, description, and CTA button */}
-                  {active && typeof active === "object" && (
+                  {active && (
                     <motion.div
                       className="flex justify-between items-start p-4 flex-shrink-0"
                       initial={{ opacity: 0, y: 20 }}
@@ -133,7 +156,7 @@ export function ProjectsClient({
                       transition={{ duration: 0.3, delay: 0.2 }}
                     >
                       <div className="">
-                        {active && typeof active === "object" && (
+                        {active && (
                           <motion.h3
                             layoutId={`title-${active.title}-${id}`}
                             className="font-medium text-purple-400 text-base"
@@ -141,7 +164,7 @@ export function ProjectsClient({
                             {active.title}
                           </motion.h3>
                         )}
-                        {active && typeof active === "object" && (
+                        {active && (
                           <motion.p
                             layoutId={`description-${active.description}-${id}`}
                             className="text-purple-400/80 text-base"
@@ -151,7 +174,7 @@ export function ProjectsClient({
                         )}
                       </div>
 
-                      {active && typeof active === "object" && (
+                      {active && (
                         <motion.a
                           layout
                           initial={{ opacity: 0, scale: 0.9 }}
@@ -209,10 +232,7 @@ export function ProjectsClient({
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {active.techStack.map(
-                            (
-                              tech: { name: string; icon: string },
-                              idx: number
-                            ) => (
+                            (tech: TechStackItem, idx: number) => (
                               <span
                                 key={idx}
                                 className="px-3 py-1 rounded-full bg-purple-400/10 text-purple-400/80 text-sm border border-purple-400/20 flex items-center gap-1"
@@ -254,7 +274,7 @@ export function ProjectsClient({
 
       <div className="max-w-5xl mx-auto w-full px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {cards.slice(0, displayLimit).map((card, index) => {
+          {cards.slice(0, displayLimit).map((card) => {
             return (
               <div
                 key={card.title}

@@ -38,7 +38,7 @@ export default function ProfilePage() {
         const data = await response.json()
         setMessage(data.error || "Failed to update profile")
       }
-    } catch (error) {
+    } catch {
       setMessage("An error occurred. Please try again.")
     } finally {
       setIsLoading(false)
