@@ -5,6 +5,7 @@ export async function Experience({ displayLimit, showBackground = true }: { disp
   const experiences = await client.fetch(`*[_type == "experience"]|order(date desc){
     _id,
     title,
+    company,
     description,
     date,
     skills,

@@ -13,9 +13,10 @@ const TimelineLine = () => (
   <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400/50 to-purple-600/50" />
 );
 
-const ExperienceCard = ({ date, title, description, skills, achievements, responsibilities }: {
+const ExperienceCard = ({ date, title, company, description, skills, achievements, responsibilities }: {
   date?: string;
   title: string;
+  company: string;
   description: string;
   skills: { name: string; icon: string }[];
   achievements: string[];
@@ -43,6 +44,7 @@ const ExperienceCard = ({ date, title, description, skills, achievements, respon
           </h3>
           <h4 className="text-2xl font-bold text-purple-400/80">
             {title}
+            <span className="block text-lg font-medium text-purple-300">{company}</span>
           </h4>
         </div>
       </div>
@@ -54,6 +56,7 @@ const ExperienceCard = ({ date, title, description, skills, achievements, respon
           </h3>
           <h4 className="text-xl font-bold text-purple-400/80">
             {title}
+            <span className="block text-base font-medium text-purple-300">{company}</span>
           </h4>
         </div>
         <div className="relative group -mx-4 md:mx-0">
@@ -375,6 +378,7 @@ export function ExperienceClient({ experiences: initialExperiences, displayLimit
                 key={index}
                 date={experience.date}
                 title={experience.title}
+                company={experience.company}
                 description={experience.description}
                 skills={experience.skills}
                 achievements={experience.achievements}
