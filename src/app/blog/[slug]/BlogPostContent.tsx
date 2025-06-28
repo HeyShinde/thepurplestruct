@@ -6,7 +6,7 @@ import { NavBar } from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import KatexBlockComponent from '@/components/KatexBlockComponent';
+import ProcessedText from '@/components/ProcessedText';
 import TableOfContents from "@/components/TableOfContents";
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from "@/components/SubscribeForm";
@@ -17,7 +17,6 @@ import { SiCodersrank } from 'react-icons/si';
 import { IoGlobeOutline } from 'react-icons/io5';
 
 import CodeBlock from './CodeBlock';
-
 import PostHero from './PostHero';
 
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
@@ -241,25 +240,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     </div>
                 </div>
             ),
-            katexBlock: ({ value, index }) => (
-                <div className="my-6 flex justify-center">
-                    <div className="relative group">
-                        <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 w-full">
-                            <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                                style={{
-                                    backgroundSize: '200% 100%',
-                                    animation: 'gradientMove 3s linear infinite',
-                                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                                    maskComposite: 'exclude',
-                                    padding: '1px',
-                                }} />
-                            <div className="relative z-10">
-                                <KatexBlockComponent expression={value.expression} index={index} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ),
         },
         marks: {
             link: ({ children, value }) => {
@@ -322,6 +302,20 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 );
             },
             normal: ({ children }) => {
+                // Check if any child contains math expressions
+                const hasMatch = React.Children.toArray(children).some(child => 
+                    typeof child === 'string' && (child.includes('$') || child.includes('$$'))
+                );
+
+                if (hasMatch) {
+                    const textContent = React.Children.toArray(children).join('');
+                    return (
+                        <p className="font-body text-lg mt-3 text-neutral-300">
+                            <ProcessedText text={textContent} />
+                        </p>
+                    );
+                }
+
                 return (
                     <p className="font-body text-lg mt-3 text-neutral-300">
                         {children}
@@ -339,8 +333,36 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             number: ({ children }) => <ol className="list-decimal pl-5 mb-4 text-neutral-300">{children}</ol>,
         },
         listItem: {
-            bullet: ({ children }) => <li className="mb-2">{children}</li>,
-            number: ({ children }) => <li className="mb-2">{children}</li>,
+            bullet: ({ children }) => {
+                // Process list items for math as well
+                const textContent = React.Children.toArray(children).join('');
+                const hasMatch = textContent.includes('$');
+                
+                if (hasMatch) {
+                    return (
+                        <li className="mb-2">
+                            <ProcessedText text={textContent} />
+                        </li>
+                    );
+                }
+                
+                return <li className="mb-2">{children}</li>;
+            },
+            number: ({ children }) => {
+                // Process list items for math as well
+                const textContent = React.Children.toArray(children).join('');
+                const hasMatch = textContent.includes('$');
+                
+                if (hasMatch) {
+                    return (
+                        <li className="mb-2">
+                            <ProcessedText text={textContent} />
+                        </li>
+                    );
+                }
+                
+                return <li className="mb-2">{children}</li>;
+            },
         },
     };
 
@@ -441,11 +463,27 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                                     </h3>
                                                 );
                                             },
-                                            normal: ({ children }) => (
-                                                <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
-                                                    {children}
-                                                </p>
-                                            ),
+                                            normal: ({ children }) => {
+                                                // Check if any child contains math expressions
+                                                const hasMatch = React.Children.toArray(children).some(child => 
+                                                    typeof child === 'string' && (child.includes('$') || child.includes('$$'))
+                                                );
+
+                                                if (hasMatch) {
+                                                    const textContent = React.Children.toArray(children).join('');
+                                                    return (
+                                                        <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
+                                                            <ProcessedText text={textContent} />
+                                                        </p>
+                                                    );
+                                                }
+
+                                                return (
+                                                    <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
+                                                        {children}
+                                                    </p>
+                                                );
+                                            },
                                             blockquote: ({ children }) => (
                                                 <blockquote className="border-l-4 border-purple-400 pl-4 py-2 my-6 italic text-purple-300">
                                                     <p className="text-base md:text-lg">{children}</p>
@@ -457,8 +495,34 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                             number: ({ children }) => <ol className="list-decimal pl-6 mb-6 text-neutral-300 space-y-2">{children}</ol>,
                                         },
                                         listItem: {
-                                            bullet: ({ children }) => <li className="text-base md:text-lg">{children}</li>,
-                                            number: ({ children }) => <li className="text-base md:text-lg">{children}</li>,
+                                            bullet: ({ children }) => {
+                                                const textContent = React.Children.toArray(children).join('');
+                                                const hasMatch = textContent.includes('$');
+                                        
+                                                if (hasMatch) {
+                                                    return (
+                                                        <li className="mb-2">
+                                                            <ProcessedText text={textContent} />
+                                                        </li>
+                                                    );
+                                                }
+                                        
+                                                return <li className="mb-2">{children}</li>;
+                                            },
+                                            number: ({ children }) => {
+                                                const textContent = React.Children.toArray(children).join('');
+                                                const hasMatch = textContent.includes('$');
+                                        
+                                                if (hasMatch) {
+                                                    return (
+                                                        <li className="mb-2">
+                                                            <ProcessedText text={textContent} />
+                                                        </li>
+                                                    );
+                                                }
+                                        
+                                                return <li className="mb-2">{children}</li>;
+                                            },
                                         },
                                     }} />
                                 </div>

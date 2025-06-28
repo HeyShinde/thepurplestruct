@@ -1,4 +1,3 @@
-import katexBlock from './katexBlock';
 import type { Rule } from 'sanity';
 
 interface SidebarPromoParent {
@@ -131,7 +130,6 @@ const blogSchema = {
                         ],
                     },
                 },
-                katexBlock,
                 {
                     name: "codeBlock",
                     type: "object", // Fix: Use an object instead of 'code'
