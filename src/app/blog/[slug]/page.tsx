@@ -50,7 +50,9 @@ async function getPost(slug: string) {
         keywords,
         sidebarPromo {
             promoType,
+            imageSource,
             image,
+            imageUrl,
             imageLink,
             altText,
             code

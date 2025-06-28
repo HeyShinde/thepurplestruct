@@ -2,6 +2,7 @@ import type { Rule } from 'sanity';
 
 interface SidebarPromoParent {
     promoType?: "image" | "code";
+    imageSource?: "upload" | "link";
 }
 
 // Assign schema to a variable before export
@@ -196,6 +197,46 @@ const blogSchema = {
                         },
                     ],
                 },
+                {
+                    name: "table",
+                    type: "object",
+                    title: "Table",
+                    fields: [
+                        {
+                            name: "headers",
+                            type: "array",
+                            title: "Table Headers",
+                            of: [{ type: "string" }],
+                            description: "Enter the column headers for your table.",
+                        },
+                        {
+                            name: "rows",
+                            type: "array",
+                            title: "Table Rows",
+                            of: [
+                                {
+                                    type: "object",
+                                    fields: [
+                                        {
+                                            name: "cells",
+                                            type: "array",
+                                            title: "Row Cells",
+                                            of: [{ type: "string" }],
+                                            description: "Enter the cell values for this row.",
+                                        },
+                                    ],
+                                },
+                            ],
+                            description: "Add rows to your table. Each row should have the same number of cells as headers.",
+                        },
+                        {
+                            name: "caption",
+                            type: "string",
+                            title: "Table Caption",
+                            description: "Optional caption for the table.",
+                        },
+                    ],
+                },
             ],
         },
         {
@@ -220,11 +261,30 @@ const blogSchema = {
                     },
                 },
                 {
+                    name: "imageSource",
+                    type: "string",
+                    title: "Image Source",
+                    options: {
+                        list: [
+                            { title: "Upload Image", value: "upload" },
+                            { title: "External Link", value: "link" },
+                        ],
+                    },
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
+                },
+                {
                     name: "image",
                     type: "image",
-                    title: "Image",
+                    title: "Upload Image",
                     options: { hotspot: true },
-                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image" || parent?.imageSource !== "upload",
+                },
+                {
+                    name: "imageUrl",
+                    type: "url",
+                    title: "Image URL",
+                    description: "Enter the URL of the external image",
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image" || parent?.imageSource !== "link",
                 },
                 {
                     name: "imageLink",

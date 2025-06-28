@@ -18,8 +18,19 @@ import { IoGlobeOutline } from 'react-icons/io5';
 
 import CodeBlock from './CodeBlock';
 import PostHero from './PostHero';
+import ScriptExecutor from '@/components/ScriptExecutor';
 
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
+
+interface TableRow {
+    cells: string[];
+}
+
+interface TableValue {
+    headers: string[];
+    rows: TableRow[];
+    caption?: string;
+}
 
 interface SidebarPromo {
     promoType?: "image" | "code";
@@ -27,6 +38,8 @@ interface SidebarPromo {
     imageLink?: string;
     altText?: string;
     code?: string;
+    imageSource?: string;
+    imageUrl?: string;
 }
 
 interface SanityImage {
@@ -49,6 +62,31 @@ interface Author {
     socialLinks?: SocialLink[];
 }
 
+// Helper function to check if a string contains LaTeX
+const containsLatex = (text: string): boolean => {
+    return /\$\$?[^$]*\$\$?/.test(text);
+};
+
+// Helper function to process content recursively and preserve formatting
+const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
+    return React.Children.map(children, (child) => {
+        if (typeof child === 'string') {
+            if (containsLatex(child)) {
+                return <ProcessedText text={child} className={additionalClasses} />;
+            }
+            return child;
+        }
+        
+        if (React.isValidElement(child)) {
+            // Recursively process children while preserving the element structure
+            const processedChildren = processContentWithLatex((child.props as { children?: React.ReactNode }).children, additionalClasses);
+            return React.cloneElement(child, {}, processedChildren);
+        }
+        
+        return child;
+    });
+};
+
 const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
     if (!promo) return null;
 
@@ -65,21 +103,52 @@ const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
                     }} />
                 <div className="relative z-10">
                     <span className="text-center font-semibold text-purple-400">Advertisement</span>
-                    {promo.promoType === "image" && promo.image && (
+                    {promo.promoType === "image" && (
                         <a href={promo.imageLink || "#"} target="_blank" rel="noopener noreferrer">
-                            <Image
-                                src={urlFor(promo.image).url()}
-                                alt="Promotional content"
-                                width={300}
-                                height={200}
-                                className="w-full h-auto rounded-lg shadow-lg mt-3.5"
-                            />
+                            {(promo.imageSource === "link" && promo.imageUrl) ? (
+                                <Image
+                                    src={promo.imageUrl}
+                                    alt={promo.altText || "Promotional content"}
+                                    width={300}
+                                    height={200}
+                                    className="w-full h-auto rounded-lg shadow-lg mt-3.5"
+                                />
+                            ) : (promo.imageSource === "upload" && promo.image) ? (
+                                <Image
+                                    src={urlFor(promo.image).url()}
+                                    alt={promo.altText || "Promotional content"}
+                                    width={300}
+                                    height={200}
+                                    className="w-full h-auto rounded-lg shadow-lg mt-3.5"
+                                />
+                            ) : promo.imageUrl ? (
+                                // Fallback: if imageUrl exists but imageSource is not set, use it
+                                <Image
+                                    src={promo.imageUrl}
+                                    alt={promo.altText || "Promotional content"}
+                                    width={300}
+                                    height={200}
+                                    className="w-full h-auto rounded-lg shadow-lg mt-3.5"
+                                />
+                            ) : (
+                                <div className="w-full h-48 bg-gray-800 rounded-lg shadow-lg mt-3.5 flex items-center justify-center">
+                                    <span className="text-gray-400">
+                                        {!promo.imageSource ? "Please select image source and provide image URL" :
+                                         promo.imageSource === "link" ? "No image URL provided" : 
+                                         promo.imageSource === "upload" ? "No image uploaded" : 
+                                         "Please select image source"}
+                                    </span>
+                                </div>
+                            )}
                         </a>
                     )}
 
                     {promo.promoType === "code" && promo.code && (
-                        <div id="banner-ad" className="w-full flex items-center justify-center bg-black/40 mt-3.5 rounded-lg">
-                            <div dangerouslySetInnerHTML={{ __html: promo.code }} />
+                        <div id="banner-ad" className="w-full flex items-center justify-center bg-black/40 mt-3.5 rounded-lg p-4">
+                            <ScriptExecutor 
+                                htmlContent={promo.code}
+                                className="w-full"
+                            />
                         </div>
                     )}
                 </div>
@@ -185,6 +254,68 @@ function renderAuthorCard(author: Author) {
     );
 }
 
+// Table component for rendering Sanity tables
+const TableComponent: React.FC<{ value: TableValue }> = ({ value }) => {
+    const { headers = [], rows = [], caption } = value;
+    
+    return (
+        <div className="my-8 overflow-x-auto">
+            <div className="relative group">
+                <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-2 w-full">
+                    <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{
+                            backgroundSize: '200% 100%',
+                            animation: 'gradientMove 3s linear infinite',
+                            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                            maskComposite: 'exclude',
+                            padding: '1px',
+                        }} />
+                    <div className="relative z-10">
+                        <table className="w-full border-collapse border border-purple-400/30 rounded-lg overflow-hidden">
+                            {headers.length > 0 && (
+                                <thead>
+                                    <tr className="bg-purple-400/10">
+                                        {headers.map((header: string, index: number) => (
+                                            <th 
+                                                key={index}
+                                                className="border border-purple-400/30 px-4 py-3 text-left font-semibold text-purple-400"
+                                            >
+                                                {header}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                            )}
+                            <tbody>
+                                {rows.map((row: TableRow, rowIndex: number) => (
+                                    <tr 
+                                        key={rowIndex}
+                                        className={rowIndex % 2 === 0 ? 'bg-black/40' : 'bg-black/20'}
+                                    >
+                                        {row.cells?.map((cell: string, cellIndex: number) => (
+                                            <td 
+                                                key={cellIndex}
+                                                className="border border-purple-400/30 px-4 py-3 text-neutral-300"
+                                            >
+                                                {cell}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {caption && (
+                            <div className="text-center text-sm text-purple-400/70 mt-2 italic">
+                                {caption}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function BlogPostContent({ post }: { post: BlogPost | null }) {
     if (!post) {
         return (
@@ -210,6 +341,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 </div>
             ),
             codeBlock: ({ value }) => <CodeBlock value={value} />,
+            table: ({ value }) => <TableComponent value={value} />,
             advertisement: ({ value }) => (
                 <div className="my-8 px-4 py-6 max-w-max mx-auto bg-black/80 backdrop-blur-sm rounded-lg border border-purple-400/20">
                     <span className="text-center font-semibold text-purple-400">Advertisement</span>
@@ -244,6 +376,9 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
         marks: {
             link: ({ children, value }) => {
                 const rel = value.linkRel || 'follow';
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
                 return (
                     <a
                         href={value.href}
@@ -251,117 +386,149 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                         rel={`${rel} noopener noreferrer`}
                         className="text-purple-400 hover:text-purple-300 transition-colors"
                     >
-                        {children}
+                        {hasLatex ? processContentWithLatex(children, "text-purple-400 hover:text-purple-300") : children}
                     </a>
                 );
             },
-            strong: ({ children }) => (
-                <strong className="font-semibold text-purple-400">{children}</strong>
-            ),
-            em: ({ children }) => (
-                <em className="italic text-purple-300">{children}</em>
-            ),
-            code: ({ children }) => (
-                <strong className="text-sm text-purple-400">{children}</strong>
-            ),
+            strong: ({ children }) => {
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
+                if (hasLatex) {
+                    return (
+                        <span className="font-semibold text-purple-400">
+                            {processContentWithLatex(children, "font-semibold text-purple-400")}
+                        </span>
+                    );
+                }
+                
+                return <strong className="font-semibold text-purple-400">{children}</strong>;
+            },
+            em: ({ children }) => {
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
+                if (hasLatex) {
+                    return (
+                        <span className="italic text-purple-300">
+                            {processContentWithLatex(children, "italic text-purple-300")}
+                        </span>
+                    );
+                }
+                
+                return <em className="italic text-purple-300">{children}</em>;
+            },
+            code: ({ children }) => {
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
+                if (hasLatex) {
+                    return (
+                        <span className="text-sm text-purple-400 font-mono bg-gray-800 px-1 py-0.5 rounded">
+                            {processContentWithLatex(children, "text-sm text-purple-400")}
+                        </span>
+                    );
+                }
+                
+                return <code className="text-sm text-purple-400 font-mono bg-gray-800 px-1 py-0.5 rounded">{children}</code>;
+            },
         },
         block: {
-            h1: ({ children }) => (
-                <h1 className="font-heading text-3xl font-bold mt-6 text-white">
-                    {children}
-                </h1>
-            ),
-            h2: ({ children }) => {
-                const text = children?.toString() || '';
-                const id = text.toLowerCase()
+            h1: ({ children }) => {
+                const text = React.Children.toArray(children).join('');
+                const id = text.replace(/\$.*?\$/g, '').toLowerCase()
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-+|-+$/g, '')
                     .replace(/-+/g, '-');
+                const hasLatex = containsLatex(text);
+                
+                return (
+                    <h1 id={id} className="font-heading text-2xl md:text-3xl font-bold mt-8 mb-6 text-white scroll-mt-24">
+                        {hasLatex ? processContentWithLatex(children, "font-heading text-2xl md:text-3xl font-bold text-white") : children}
+                </h1>
+                );
+            },
+            h2: ({ children }) => {
+                const text = React.Children.toArray(children).join('');
+                const id = text.replace(/\$.*?\$/g, '').toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .replace(/-+/g, '-');
+                const hasLatex = containsLatex(text);
+                
                 return (
                     <h2 
                         id={id} 
                         className="font-heading text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
                     >
-                        {children}
+                        {hasLatex ? processContentWithLatex(children, "font-heading text-xl md:text-2xl font-semibold text-purple-400") : children}
                     </h2>
                 );
             },
             h3: ({ children }) => {
-                const text = children?.toString() || '';
-                const id = text.toLowerCase()
+                const text = React.Children.toArray(children).join('');
+                const id = text.replace(/\$.*?\$/g, '').toLowerCase()
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-+|-+$/g, '')
                     .replace(/-+/g, '-');
+                const hasLatex = containsLatex(text);
+                
                 return (
                     <h3 
                         id={id} 
                         className="font-heading text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
                     >
-                        {children}
+                        {hasLatex ? processContentWithLatex(children, "font-heading text-lg md:text-xl font-semibold text-purple-300") : children}
                     </h3>
                 );
             },
             normal: ({ children }) => {
-                // Check if any child contains math expressions
-                const hasMatch = React.Children.toArray(children).some(child => 
-                    typeof child === 'string' && (child.includes('$') || child.includes('$$'))
-                );
-
-                if (hasMatch) {
-                    const textContent = React.Children.toArray(children).join('');
-                    return (
-                        <p className="font-body text-lg mt-3 text-neutral-300">
-                            <ProcessedText text={textContent} />
-                        </p>
-                    );
-                }
-
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
                 return (
-                    <p className="font-body text-lg mt-3 text-neutral-300">
-                        {children}
+                    <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
+                        {hasLatex ? processContentWithLatex(children, "font-body text-base md:text-lg leading-relaxed text-neutral-300") : children}
                     </p>
                 );
             },
-            blockquote: ({ children }) => (
-                <blockquote className="font-body border-l-4 border-purple-400 pl-4 italic text-purple-300 mt-6">
-                    <p>{children}</p>
+            blockquote: ({ children }) => {
+                const textContent = React.Children.toArray(children).join('');
+                const hasLatex = containsLatex(textContent);
+                
+                return (
+                    <blockquote className="border-l-4 border-purple-400 pl-4 py-2 my-6 italic text-purple-300">
+                        <p className="text-base md:text-lg">
+                            {hasLatex ? processContentWithLatex(children, "text-base md:text-lg italic text-purple-300") : children}
+                        </p>
                 </blockquote>
-            ),
+                );
+            },
         },
         list: {
-            bullet: ({ children }) => <ul className="list-disc pl-5 mb-4 text-neutral-300">{children}</ul>,
-            number: ({ children }) => <ol className="list-decimal pl-5 mb-4 text-neutral-300">{children}</ol>,
+            bullet: ({ children }) => <ul className="list-disc pl-6 mb-6 text-neutral-300 space-y-2">{children}</ul>,
+            number: ({ children }) => <ol className="list-decimal pl-6 mb-6 text-neutral-300 space-y-2">{children}</ol>,
         },
         listItem: {
             bullet: ({ children }) => {
-                // Process list items for math as well
                 const textContent = React.Children.toArray(children).join('');
-                const hasMatch = textContent.includes('$');
+                const hasLatex = containsLatex(textContent);
                 
-                if (hasMatch) {
-                    return (
-                        <li className="mb-2">
-                            <ProcessedText text={textContent} />
-                        </li>
-                    );
-                }
-                
-                return <li className="mb-2">{children}</li>;
+                return (
+                    <li className="mb-2 text-neutral-300">
+                        {hasLatex ? processContentWithLatex(children, "text-neutral-300") : children}
+                </li>
+                );
             },
             number: ({ children }) => {
-                // Process list items for math as well
                 const textContent = React.Children.toArray(children).join('');
-                const hasMatch = textContent.includes('$');
+                const hasLatex = containsLatex(textContent);
                 
-                if (hasMatch) {
-                    return (
-                        <li className="mb-2">
-                            <ProcessedText text={textContent} />
-                        </li>
-                    );
-                }
-                
-                return <li className="mb-2">{children}</li>;
+                return (
+                    <li className="mb-2 text-neutral-300">
+                        {hasLatex ? processContentWithLatex(children, "text-neutral-300") : children}
+                </li>
+                );
             },
         },
     };
@@ -425,106 +592,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
 
                                 {/* Article Content */}
                                 <div className="prose prose-lg prose-invert max-w-none">
-                                    <PortableText value={post.body} components={{
-                                        ...components,
-                                        block: {
-                                            h1: ({ children }) => (
-                                                <h1 className="font-heading text-2xl md:text-3xl font-bold mt-8 mb-6 text-white">
-                                                    {children}
-                                                </h1>
-                                            ),
-                                            h2: ({ children }) => {
-                                                const text = children?.toString() || '';
-                                                const id = text.toLowerCase()
-                                                    .replace(/[^a-z0-9]+/g, '-')
-                                                    .replace(/^-+|-+$/g, '')
-                                                    .replace(/-+/g, '-');
-                                                return (
-                                                    <h2 
-                                                        id={id} 
-                                                        className="font-heading text-xl md:text-2xl font-semibold mt-8 mb-4 scroll-mt-24 text-purple-400"
-                                                    >
-                                                        {children}
-                                                    </h2>
-                                                );
-                                            },
-                                            h3: ({ children }) => {
-                                                const text = children?.toString() || '';
-                                                const id = text.toLowerCase()
-                                                    .replace(/[^a-z0-9]+/g, '-')
-                                                    .replace(/^-+|-+$/g, '')
-                                                    .replace(/-+/g, '-');
-                                                return (
-                                                    <h3 
-                                                        id={id} 
-                                                        className="font-heading text-lg md:text-xl font-semibold mt-6 mb-3 scroll-mt-24 text-purple-300"
-                                                    >
-                                                        {children}
-                                                    </h3>
-                                                );
-                                            },
-                                            normal: ({ children }) => {
-                                                // Check if any child contains math expressions
-                                                const hasMatch = React.Children.toArray(children).some(child => 
-                                                    typeof child === 'string' && (child.includes('$') || child.includes('$$'))
-                                                );
-
-                                                if (hasMatch) {
-                                                    const textContent = React.Children.toArray(children).join('');
-                                                    return (
-                                                        <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
-                                                            <ProcessedText text={textContent} />
-                                                        </p>
-                                                    );
-                                                }
-
-                                                return (
-                                                    <p className="font-body text-base md:text-lg mt-4 mb-4 leading-relaxed text-neutral-300">
-                                                        {children}
-                                                    </p>
-                                                );
-                                            },
-                                            blockquote: ({ children }) => (
-                                                <blockquote className="border-l-4 border-purple-400 pl-4 py-2 my-6 italic text-purple-300">
-                                                    <p className="text-base md:text-lg">{children}</p>
-                                                </blockquote>
-                                            ),
-                                        },
-                                        list: {
-                                            bullet: ({ children }) => <ul className="list-disc pl-6 mb-6 text-neutral-300 space-y-2">{children}</ul>,
-                                            number: ({ children }) => <ol className="list-decimal pl-6 mb-6 text-neutral-300 space-y-2">{children}</ol>,
-                                        },
-                                        listItem: {
-                                            bullet: ({ children }) => {
-                                                const textContent = React.Children.toArray(children).join('');
-                                                const hasMatch = textContent.includes('$');
-                                        
-                                                if (hasMatch) {
-                                                    return (
-                                                        <li className="mb-2">
-                                                            <ProcessedText text={textContent} />
-                                                        </li>
-                                                    );
-                                                }
-                                        
-                                                return <li className="mb-2">{children}</li>;
-                                            },
-                                            number: ({ children }) => {
-                                                const textContent = React.Children.toArray(children).join('');
-                                                const hasMatch = textContent.includes('$');
-                                        
-                                                if (hasMatch) {
-                                                    return (
-                                                        <li className="mb-2">
-                                                            <ProcessedText text={textContent} />
-                                                        </li>
-                                                    );
-                                                }
-                                        
-                                                return <li className="mb-2">{children}</li>;
-                                            },
-                                        },
-                                    }} />
+                                    <PortableText value={post.body} components={components} />
                                 </div>
                             </article>
                         </div>
@@ -556,4 +624,4 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             <GoogleTagManager gtmId="AW-16574029012" />
         </div>
     );
-} 
+}
