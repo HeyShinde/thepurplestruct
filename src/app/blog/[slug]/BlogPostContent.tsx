@@ -526,11 +526,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                         },
                                     }} />
                                 </div>
-
-                                {/* Subscribe Form */}
-                                <section className="mt-12 md:mt-16">
-                                    <SubscribeForm />
-                                </section>
                             </article>
                         </div>
 
