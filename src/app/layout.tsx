@@ -40,8 +40,8 @@ const rubikGlitch = Rubik_Glitch({
 })
 
 export const metadata: Metadata = {
-  title: "HeyShinde",
-  description: "Learn from the best",
+  title: "HeyShinde | Shinde Aditya",
+  description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer, AI Researcher, and Author. Learn from the best.",
 };
 
 export default function RootLayout({

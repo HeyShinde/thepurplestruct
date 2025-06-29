@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   const pageUrl = "https://www.heyshinde.com/blog";
-  const title = "Blog | Shinde Aditya";
+  const title = "Blog | HeyShinde";
   const description = "Explore articles on Machine Learning, MLOps, AI, and modern web development from Shinde Aditya's perspective.";
 
   const jsonLd = {
@@ -51,7 +51,7 @@ export default function BlogPage() {
       <NavBar/>
       <main>
         <Suspense fallback={<div>Loading...</div>}>
-          <BlogGrid paddingTop="10rem" />
+          <BlogGrid paddingTop="10rem" isMainPage={true} />
         </Suspense>
       </main>
       <Footer />  

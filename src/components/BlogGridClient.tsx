@@ -22,6 +22,7 @@ interface BlogGridClientProps {
   paddingTop?: string;
   title?: string;
   description?: string;
+  isMainPage?: boolean;
 }
 
 const MotifSpeechBubble = () => (
@@ -155,7 +156,7 @@ function MotifLayer() {
   );
 }
 
-export function BlogGridClient({ posts, displayLimit, paddingTop, title, description }: BlogGridClientProps) {
+export function BlogGridClient({ posts, displayLimit, paddingTop, title, description, isMainPage = false }: BlogGridClientProps) {
   const [visibleItems, setVisibleItems] = useState(displayLimit ?? 7);
 
   const loadMore = () => {
@@ -173,9 +174,15 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
           transition={{ duration: 0.5 }}
           className="text-center pb-12 md:pb-20 px-4"
         >
-          <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
-            {title || 'Blog Posts'}
-          </h2>
+          {isMainPage ? (
+            <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
+              {title || 'Blog Posts'}
+            </h1>
+          ) : (
+            <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
+              {title || 'Blog Posts'}
+            </h2>
+          )}
           <p className="text-neutral-300 text-base md:text-lg">
             {description || 'Exploring ideas and sharing knowledge'}
           </p>

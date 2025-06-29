@@ -54,11 +54,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   return {
-    title: "Projects",
-    description: "A collection of my projects.",
+    title: "Projects | HeyShinde - Shinde Aditya's Portfolio",
+    description: "Explore a curated collection of projects by Shinde Aditya (HeyShinde) in machine learning, AI, and software engineering.",
     openGraph: {
-      title: "Projects",
-      description: "A collection of my projects.",
+      title: "Projects | HeyShinde - Shinde Aditya's Portfolio",
+      description: "Explore a curated collection of projects by Shinde Aditya (HeyShinde) in machine learning, AI, and software engineering.",
     },
     other: {
       'application-ld+json': JSON.stringify([jsonLd, breadcrumbJsonLd]),
@@ -78,7 +78,7 @@ export default function ProjectsPage() {
     <div>
       <NavBar />
       <main>
-        <Projects />
+        <Projects isMainPage={true} />
       </main>
       <Footer />
     </div>

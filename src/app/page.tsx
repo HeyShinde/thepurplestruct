@@ -122,7 +122,7 @@ export async function generateMetadata(): Promise<Metadata> {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     url: pageUrl,
-    name: 'Shinde Aditya',
+    name: 'HeyShinde',
     potentialAction: {
       '@type': 'SearchAction',
       target: `${pageUrl}/search?q={search_term_string}`,
@@ -131,29 +131,29 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   return {
-    title: `${name} | ${jobTitle}`,
-    description: "The personal portfolio and blog of Shinde Aditya, a Machine Learning Engineer specializing in LLMs, MLOps, and AI.",
+    title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
+    description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer, AI Researcher, and Author. Specializing in LLMs, MLOps, and AI development.",
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
-      title: `${name} | ${jobTitle}`,
-      description: "Explore the work and thoughts of a dedicated ML Engineer.",
+      title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
+      description: "HeyShinde (Shinde Aditya) - Explore the work and thoughts of a dedicated ML Engineer and AI researcher.",
       url: pageUrl,
       images: [
         {
           url: imageUrl,
           width: 800,
           height: 600,
-          alt: name,
+          alt: "HeyShinde - Shinde Aditya",
         },
       ],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${name} | ${jobTitle}`,
-      description: "The personal portfolio and blog of Aditya Shinde, a Machine Learning Engineer.",
+      title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
+      description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer and AI Researcher.",
       images: [imageUrl],
     },
     other: {
@@ -178,7 +178,7 @@ export default async function Home() {
         </section>
         <Projects displayLimit={4}/>
         <Research displayLimit={3} showTitle={true} />
-        <CoursesList courses={courses} displayLimit={3} />
+        <CoursesList courses={courses} displayLimit={3} isHomePage={true} />
         <BlogGrid displayLimit={3} />
       </main>
       <Footer/>

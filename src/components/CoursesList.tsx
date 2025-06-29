@@ -17,9 +17,10 @@ interface CoursesListProps {
   courses: Course[];
   displayLimit?: number;
   showTitle?: boolean;
+  isHomePage?: boolean;
 }
 
-export function CoursesList({ courses, displayLimit, showTitle = true }: CoursesListProps) {
+export function CoursesList({ courses, displayLimit, showTitle = true, isHomePage = false }: CoursesListProps) {
     const displayedCourses = displayLimit ? courses.slice(0, displayLimit) : courses;
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-950 to-black py-24 relative overflow-hidden">
@@ -34,9 +35,15 @@ export function CoursesList({ courses, displayLimit, showTitle = true }: Courses
                     <div
             className="text-center mb-16"
           >
-                        <h1 className="font-heading text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-4">
-              Courses
-            </h1>
+                        {isHomePage ? (
+                          <h2 className="font-heading text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-4">
+                            Courses
+                          </h2>
+                        ) : (
+                          <h1 className="font-heading text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-4">
+                            Courses
+                          </h1>
+                        )}
                     </div>
         )}
 

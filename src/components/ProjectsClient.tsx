@@ -33,11 +33,13 @@ interface ProjectCard extends Project {
 interface ProjectsClientProps {
   projects: Project[];
   displayLimit?: number;
+  isMainPage?: boolean;
 }
 
 export function ProjectsClient({
   projects: initialProjects,
   displayLimit,
+  isMainPage = false,
 }: ProjectsClientProps) {
   const [cards, setCards] = useState<ProjectCard[]>([]);
   const [active, setActive] = useState<ProjectCard | null>(null);
@@ -267,9 +269,15 @@ export function ProjectsClient({
         transition={{ duration: 0.5 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mt-16">
-          Projects
-        </h2>
+        {isMainPage ? (
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mt-16">
+            Projects
+          </h1>
+        ) : (
+          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mt-16">
+            Projects
+          </h2>
+        )}
       </motion.div>
 
       <div className="max-w-5xl mx-auto w-full px-4 py-16">

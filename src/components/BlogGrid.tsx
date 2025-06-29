@@ -31,6 +31,7 @@ interface BlogGridProps {
   categorySlug?: string;
   title?: string;
   description?: string;
+  isMainPage?: boolean;
 }
 
 const baseQuery = `| order(publishedAt desc) {
@@ -48,7 +49,7 @@ const baseQuery = `| order(publishedAt desc) {
           sidebarPromo
         }`;
         
-export async function BlogGrid({ displayLimit, paddingTop, categorySlug, title, description }: BlogGridProps) {
+export async function BlogGrid({ displayLimit, paddingTop, categorySlug, title, description, isMainPage = false }: BlogGridProps) {
   let query;
   const params: { categorySlug?: string } = {};
 
@@ -68,6 +69,7 @@ export async function BlogGrid({ displayLimit, paddingTop, categorySlug, title, 
       paddingTop={paddingTop} 
       title={title}
       description={description}
+      isMainPage={isMainPage}
     />
   );
 } 

@@ -350,7 +350,7 @@ const BackgroundEffect = () => {
   );
 };
 
-export function ExperienceClient({ experiences: initialExperiences, displayLimit, showBackground = true }: { experiences: Experience[], displayLimit?: number, showBackground?: boolean }) {
+export function ExperienceClient({ experiences: initialExperiences, displayLimit, showBackground = true, isMainPage = false }: { experiences: Experience[], displayLimit?: number, showBackground?: boolean, isMainPage?: boolean }) {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -370,9 +370,15 @@ export function ExperienceClient({ experiences: initialExperiences, displayLimit
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            Work Experience
-          </h2>
+          {isMainPage ? (
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              Work Experience
+            </h1>
+          ) : (
+            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              Work Experience
+            </h2>
+          )}
           <p className="text-neutral-300 text-base md:text-lg mt-4">
             A timeline of my professional journey
           </p>
