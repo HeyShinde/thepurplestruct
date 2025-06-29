@@ -18,18 +18,10 @@ import { IoGlobeOutline } from 'react-icons/io5';
 import CodeBlock from './CodeBlock';
 import PostHero from './PostHero';
 import ScriptExecutor from '@/components/ScriptExecutor';
+import { processLatexSSR, containsLatex } from '@/utils/latexProcessor'; // Import the SSR processor
 
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
-
-interface TableRow {
-    cells: string[];
-}
-
-interface TableValue {
-    headers: string[];
-    rows: TableRow[];
-    caption?: string;
-}
+import TableComponent from "@/components/TableComponent";
 
 interface SidebarPromo {
     promoType?: "image" | "code";
@@ -60,11 +52,6 @@ interface Author {
     bio?: string;
     socialLinks?: SocialLink[];
 }
-
-// Helper function to check if a string contains LaTeX
-const containsLatex = (text: string): boolean => {
-    return /\$\$?[^$]*\$\$?/.test(text);
-};
 
 // Helper function to process content recursively and preserve formatting
 const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
@@ -121,7 +108,6 @@ const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
                                     className="w-full h-auto rounded-lg shadow-lg mt-3.5"
                                 />
                             ) : promo.imageUrl ? (
-                                // Fallback: if imageUrl exists but imageSource is not set, use it
                                 <Image
                                     src={promo.imageUrl}
                                     alt={promo.altText || "Promotional content"}
@@ -253,68 +239,6 @@ function renderAuthorCard(author: Author) {
     );
 }
 
-// Table component for rendering Sanity tables
-const TableComponent: React.FC<{ value: TableValue }> = ({ value }) => {
-    const { headers = [], rows = [], caption } = value;
-    
-    return (
-        <div className="my-8 overflow-x-auto">
-            <div className="relative group">
-                <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-2 w-full">
-                    <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                        style={{
-                            backgroundSize: '200% 100%',
-                            animation: 'gradientMove 3s linear infinite',
-                            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                            maskComposite: 'exclude',
-                            padding: '1px',
-                        }} />
-                    <div className="relative z-10">
-                        <table className="w-full border-collapse border border-purple-400/30 rounded-lg overflow-hidden">
-                            {headers.length > 0 && (
-                                <thead>
-                                    <tr className="bg-purple-400/10">
-                                        {headers.map((header: string, index: number) => (
-                                            <th 
-                                                key={index}
-                                                className="border border-purple-400/30 px-4 py-3 text-left font-semibold text-purple-400"
-                                            >
-                                                {header}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                            )}
-                            <tbody>
-                                {rows.map((row: TableRow, rowIndex: number) => (
-                                    <tr 
-                                        key={rowIndex}
-                                        className={rowIndex % 2 === 0 ? 'bg-black/40' : 'bg-black/20'}
-                                    >
-                                        {row.cells?.map((cell: string, cellIndex: number) => (
-                                            <td 
-                                                key={cellIndex}
-                                                className="border border-purple-400/30 px-4 py-3 text-neutral-300"
-                                            >
-                                                {cell}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {caption && (
-                            <div className="text-center text-sm text-purple-400/70 mt-2 italic">
-                                {caption}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
 export default function BlogPostContent({ post }: { post: BlogPost | null }) {
     if (!post) {
         return (
@@ -329,6 +253,12 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             </div>
         );
     }
+
+    // Process LaTeX in title on server-side for immediate rendering
+    const processedTitle = containsLatex(post.title) ? processLatexSSR(post.title) : null;
+    
+    // Create SEO-friendly title for sharing (remove LaTeX syntax)
+    const seoFriendlyTitle = post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim();
 
     const headings = extractHeadings(post.body);
 
@@ -391,7 +321,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             },
             strong: ({ children }) => {
                 const textContent = React.Children.toArray(children).join('');
-                // Don't render empty strong tags
                 if (!textContent.trim()) {
                     return null;
                 }
@@ -506,7 +435,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 return (
                     <li className="mb-2 text-neutral-300">
                         {hasLatex ? processContentWithLatex(children, "text-neutral-300") : children}
-                </li>
+                    </li>
                 );
             },
             number: ({ children }) => {
@@ -516,7 +445,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 return (
                     <li className="mb-2 text-neutral-300">
                         {hasLatex ? processContentWithLatex(children, "text-neutral-300") : children}
-                </li>
+                    </li>
                 );
             },
         },
@@ -527,9 +456,10 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             <NavBar />
             <div className="w-full px-4 md:px-8 lg:px-12 py-10 pb-32">
                 <div className="max-w-[2000px] mx-auto">
-                    {/* Hero Section */}
+                    {/* Hero Section - Title loads immediately with SSR LaTeX */}
                     <PostHero 
                         title={post.title}
+                        processedTitle={processedTitle ?? undefined}
                         categories={post.categories}
                         publishedAt={post.publishedAt}
                         updatedAt={post.updatedAt}
@@ -540,7 +470,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                         {/* Left Sidebar - Share Buttons */}
                         <div className="hidden lg:block lg:col-span-1">
                             <div className="sticky top-48">
-                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} />
                             </div>
                         </div>
 
@@ -561,7 +491,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                                 }} />
                                             <Image
                                                 src={urlFor(post.mainImage).url()}
-                                                alt={post.title}
+                                                alt={seoFriendlyTitle}
                                                 width={1200}
                                                 height={630}
                                                 className="w-full h-auto rounded-xl shadow-lg relative z-10"
@@ -574,7 +504,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 {/* Mobile Share Buttons and Table of Contents */}
                                 <div className="block lg:hidden mb-8">
                                     <div className="flex flex-col gap-4">
-                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={post.title} />
+                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} />
                                         <TableOfContents headings={headings} />
                                     </div>
                                 </div>
@@ -585,7 +515,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 </div>
                             </article>
                         </div>
-
                         {/* Right Sidebar */}
                         <div className="lg:col-span-4">
                             <div className="sticky top-36 space-y-8">

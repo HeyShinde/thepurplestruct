@@ -45,6 +45,7 @@ const Footer = () => {
 
   return (
     <>
+      <div className="fixed inset-0 w-full h-full bg-gradient-to-b from-black to-purple-950 -z-10" />
       {/* Contact Modal */}
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       <footer className="w-full pt-16 pb-4 px-4 md:px-12 lg:px-24 bg-gradient-to-b from-black to-purple-950 text-white font-sans  shadow-[0_0_40px_0_rgba(168,85,247,0.10)] relative overflow-hidden">

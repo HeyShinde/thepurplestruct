@@ -12,7 +12,7 @@ const CodeBlock = ({ value }: { value: { code: string; showCopyButton?: boolean 
 
     return (
         <div className="relative my-6">
-            <div className="relative bg-black/80 backdrop-blur-sm rounded-xl p-4 w-full">
+            <div className="relative bg-black/80 backdrop-blur-sm rounded-xl p-4">
                 <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0"
                     style={{
                         backgroundSize: '200% 100%',

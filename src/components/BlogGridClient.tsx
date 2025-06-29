@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { CardContainer } from "@/components/ui/3d-card";
 import Link from "next/link";
 import { format } from "date-fns";
+import ProcessedText from "@/components/ProcessedText";
 import type { BlogPost } from './BlogGrid';
 
 // Helper function to truncate text
@@ -193,7 +194,14 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
         {posts.slice(0, visibleItems).map((post, i) => (
           <BentoGridItem
             key={post._id}
-            title={<Link href={`/blog/${post.slug.current}`}><span className="text-purple-400 font-bold">{post.title}</span></Link>}
+            title={
+              <Link href={`/blog/${post.slug.current}`}>
+                <ProcessedText 
+                  text={post.title} 
+                  className="text-purple-400 font-bold" 
+                />
+              </Link>
+            }
             description={<Link href={`/blog/${post.slug.current}`}><div className="hidden md:block text-white">{truncateText(post.excerpt)}</div></Link>}
             header={
               <div className="w-full h-full relative rounded-lg overflow-hidden">
@@ -201,7 +209,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
                 {post.mainImage ? (
                   <Image
                     src={urlFor(post.mainImage).url()}
-                    alt={post.title}
+                    alt={post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}
                     fill
                     className="object-cover"
                   />

@@ -219,5 +219,48 @@
     background-position: 0% 50%;
   }
 }
+/* Animated gradient border for KaTeX block math */
+.animated-gradient-border {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 0.75rem; /* match rounded-lg */
+  border-image: linear-gradient(90deg, #a78bfa00 0%, #a78bfa 50%, #a78bfa00 100%) 1;
+  animation: rotate-gradient-border 3s linear infinite;
+}
 
+@keyframes rotate-gradient-border {
+  0% {
+    border-image-source: linear-gradient(90deg, #a78bfa00 0%, #a78bfa 50%, #a78bfa00 100%);
+  }
+  100% {
+    border-image-source: linear-gradient(450deg, #a78bfa00 0%, #a78bfa 50%, #a78bfa00 100%);
+  }
+}
 
+/* Scrollable content area */
+.katex-scroll-area {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  /* Add scrollbar styling for better UX */
+  scrollbar-width: thin;
+  scrollbar-color: #a78bfa #1f2937;
+}
+
+.katex-scroll-area::-webkit-scrollbar {
+  height: 6px;
+}
+
+.katex-scroll-area::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 3px;
+}
+
+.katex-scroll-area::-webkit-scrollbar-thumb {
+  background: #a78bfa;
+  border-radius: 3px;
+}
+
+.katex-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}

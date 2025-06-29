@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import classNames from "classnames";
-import { motion } from "framer-motion";
 import '@/app/globals.css';
 
 interface Heading {
@@ -43,10 +42,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
     };
 
     return (
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+        <div 
             className="relative group bg-black/40 backdrop-blur-sm rounded-lg border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 p-6 max-h-[50vh] overflow-y-auto"
         >
             <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -65,11 +61,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
             
             <ul className="space-y-3">
                 {headings.map((heading, index) => (
-                    <motion.li
+                    <li
                         key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
                         className={classNames(
                             "group relative",
                             {
@@ -95,10 +88,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                         >
                             {heading.text}
                         </a>
-                    </motion.li>
+                    </li>
                 ))}
             </ul>
-        </motion.div>
+        </div>
     );
 };
 

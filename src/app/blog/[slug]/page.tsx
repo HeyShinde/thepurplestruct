@@ -192,7 +192,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-    console.log('BlogPost component params:', params);
     const { slug } = await params;
     const post = await getPost(slug);
     return <BlogPostContent post={post} />;
