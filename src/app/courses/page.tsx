@@ -97,7 +97,7 @@ export default async function CoursesPage() {
   return (
     <>
       <NavBar />
-      <CoursesList courses={courses} showTitle={true} />
+      <CoursesList courses={courses} showTitle={true} isMainPage={true} />
     </>
   )
 } 

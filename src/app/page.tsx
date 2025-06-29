@@ -178,7 +178,7 @@ export default async function Home() {
         </section>
         <Projects displayLimit={4}/>
         <Research displayLimit={3} showTitle={true} />
-        <CoursesList courses={courses} displayLimit={3} isHomePage={true} />
+        <CoursesList courses={courses} displayLimit={3} />
         <BlogGrid displayLimit={3} />
       </main>
       <Footer/>

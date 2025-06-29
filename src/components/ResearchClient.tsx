@@ -140,9 +140,10 @@ interface ResearchClientProps {
   showTitle?: boolean;
   paddingTop?: string;
   reverse?: boolean;
+  isMainPage?: boolean; // New prop to determine if this is the main research page
 }
 
-export function ResearchClient({ papers, displayLimit, showTitle = true, paddingTop, reverse }: ResearchClientProps) {
+export function ResearchClient({ papers, displayLimit, showTitle = true, paddingTop, reverse, isMainPage = false }: ResearchClientProps) {
   const [activePaper, setActivePaper] = useState<ResearchPaper | null>(null);
   const id = useId();
   const overlayRef = useRef<HTMLDivElement>(null!);
@@ -266,9 +267,15 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
             transition={{ duration: 0.5 }}
             className="text-center my-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-              Research
-            </h2>
+            {isMainPage ? (
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                Research
+              </h1>
+            ) : (
+              <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                Research
+              </h2>
+            )}
           </motion.div>
         )}
         

@@ -19,13 +19,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   if (!category) {
     return {
-      title: "Category Not Found",
+      title: "Category Not Found | HeyShinde Blog",
     };
   }
 
   const pageUrl = `https://www.heyshinde.com/blog/category/${slug}`;
-  const title = `${category.title} | Blog`;
-  const description = category.description || `Posts categorized under ${category.title}.`;
+  const title = `${category.title} Articles | HeyShinde - Shinde Aditya's Blog`;
+  const description = category.description || `Explore ${category.title} articles and insights from Shinde Aditya's blog—covering Machine Learning, AI, and unique perspectives on technology.`;
   
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -76,6 +76,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             categorySlug={slug}
             title={`Category: ${category?.title || 'Posts'}`}
             description={category?.description}
+            isMainPage={true}
           />
         </Suspense>
       </main>

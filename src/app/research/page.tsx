@@ -54,11 +54,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   return {
-    title: "Research",
-    description: "A collection of my research papers.",
+    title: "Research Papers | HeyShinde - Shinde Aditya's Academic Publications",
+    description: "Discover Shinde Aditya's research in AI, ML, and related fields—featuring peer-reviewed papers, academic publications, and scholarly work.",
     openGraph: {
-      title: "Research",
-      description: "A collection of my research papers.",
+      title: "Research Papers | HeyShinde - Shinde Aditya's Academic Publications",
+      description: "Discover Shinde Aditya's research in AI, ML, and related fields—featuring peer-reviewed papers, academic publications, and scholarly work.",
     },
     other: {
       'application-ld+json': JSON.stringify([jsonLd, breadcrumbJsonLd]),
@@ -71,7 +71,7 @@ export default function ResearchPage() {
     <div>
       <NavBar />
       <main>
-        <Research paddingTop="10rem" showTitle={false} reverse={true} />
+        <Research paddingTop="10rem" showTitle={true} reverse={true} isMainPage={true} />
       </main>
       <Footer />
     </div>

@@ -6,9 +6,10 @@ interface ResearchProps {
   showTitle?: boolean;
   paddingTop?: string;
   reverse?: boolean;
+  isMainPage?: boolean;
 }
 
-export async function Research({ displayLimit, showTitle = true, paddingTop, reverse }: ResearchProps) {
+export async function Research({ displayLimit, showTitle = true, paddingTop, reverse, isMainPage = false }: ResearchProps) {
   const papers: ResearchPaper[] = await client.fetch(`*[_type == "research"]|order(year desc){
     title,
     url,
@@ -28,7 +29,8 @@ export async function Research({ displayLimit, showTitle = true, paddingTop, rev
       displayLimit={displayLimit} 
       showTitle={showTitle} 
       paddingTop={paddingTop}
-      reverse={reverse} 
+      reverse={reverse}
+      isMainPage={isMainPage}
     />
   );
 }

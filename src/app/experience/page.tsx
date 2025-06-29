@@ -55,10 +55,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: "Work Experience | HeyShinde - Shinde Aditya's Professional Journey",
-    description: "Explore Shinde Aditya's professional experience in Machine Learning, AI, and software development. A comprehensive timeline of career achievements and technical expertise.",
+    description: "Explore Shinde Aditya's timeline in AI, ML, and software development—featuring career milestones, achievements, and technical expertise.",
     openGraph: {
       title: "Work Experience | HeyShinde - Shinde Aditya's Professional Journey",
-      description: "Explore Shinde Aditya's professional experience in Machine Learning, AI, and software development. A comprehensive timeline of career achievements and technical expertise.",
+      description: "Explore Shinde Aditya's timeline in AI, ML, and software development—featuring career milestones, achievements, and technical expertise.",
     },
     other: {
       'application-ld+json': JSON.stringify([jsonLd, breadcrumbJsonLd]),
