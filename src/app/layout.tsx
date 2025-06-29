@@ -8,6 +8,7 @@ import {
 import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "@/components/providers"
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 
 const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
@@ -57,6 +58,8 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <GoogleAnalytics gaId="G-RRNDHMT5BP" />
+        <GoogleTagManager gtmId="GT-PJ5RLN2D" />
       </body>
     </html>
   )

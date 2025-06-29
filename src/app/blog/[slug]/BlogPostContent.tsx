@@ -5,7 +5,6 @@ import { PortableText, PortableTextComponents } from '@portabletext/react';
 import { NavBar } from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import ProcessedText from '@/components/ProcessedText';
 import TableOfContents from "@/components/TableOfContents";
 import ShareButtons from '@/components/ShareButtons';
@@ -194,9 +193,9 @@ function renderAuthorCard(author: Author) {
     };
 
     return (
-        <div className="relative">
+        <div className="relative group">
             <div className="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/20">
-                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0"
+                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                         backgroundSize: '200% 100%',
                         animation: 'gradientMove 3s linear infinite',
@@ -620,8 +619,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 </div>
             </div>
             <Footer />
-            <GoogleAnalytics gaId="G-FJVPQ93W3W" />
-            <GoogleTagManager gtmId="AW-16574029012" />
         </div>
     );
 }
