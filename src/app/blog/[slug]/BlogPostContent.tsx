@@ -391,17 +391,21 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             },
             strong: ({ children }) => {
                 const textContent = React.Children.toArray(children).join('');
+                // Don't render empty strong tags
+                if (!textContent.trim()) {
+                    return null;
+                }
                 const hasLatex = containsLatex(textContent);
                 
                 if (hasLatex) {
                     return (
-                        <span className="font-semibold text-purple-400">
-                            {processContentWithLatex(children, "font-semibold text-purple-400")}
-                        </span>
+                        <strong className="font-semibold text-white">
+                            {processContentWithLatex(children, "font-semibold text-white")}
+                        </strong>
                     );
                 }
                 
-                return <strong className="font-semibold text-purple-400">{children}</strong>;
+                return <strong className="font-semibold text-purple-200">{children}</strong>;
             },
             em: ({ children }) => {
                 const textContent = React.Children.toArray(children).join('');
@@ -433,20 +437,6 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             },
         },
         block: {
-            h1: ({ children }) => {
-                const text = React.Children.toArray(children).join('');
-                const id = text.replace(/\$.*?\$/g, '').toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')
-                    .replace(/-+/g, '-');
-                const hasLatex = containsLatex(text);
-                
-                return (
-                    <h1 id={id} className="font-heading text-2xl md:text-3xl font-bold mt-8 mb-6 text-white scroll-mt-24">
-                        {hasLatex ? processContentWithLatex(children, "font-heading text-2xl md:text-3xl font-bold text-white") : children}
-                </h1>
-                );
-            },
             h2: ({ children }) => {
                 const text = React.Children.toArray(children).join('');
                 const id = text.replace(/\$.*?\$/g, '').toLowerCase()

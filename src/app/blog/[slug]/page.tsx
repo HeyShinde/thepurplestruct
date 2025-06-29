@@ -90,6 +90,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : "";
     const homePageUrl = "https://www.heyshinde.com";
 
+    // Create SEO-friendly title by removing LaTeX syntax
+    const seoFriendlyTitle = post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim();
+
     const blogPostJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -102,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
                 '@id': `${homePageUrl}/#person`
             }
         },
-        headline: post.title,
+        headline: seoFriendlyTitle, // Use SEO-friendly title for structured data
         description: post.excerpt,
         articleBody: portableTextToPlainText(post.body),
         wordCount: post.wordCount,
@@ -146,21 +149,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         {
           '@type': 'ListItem',
           position: 3,
-          name: post.title,
+          name: seoFriendlyTitle, // Use SEO-friendly title for breadcrumbs
           item: postUrl,
         },
       ],
     };
 
     return {
-        title: post.title,
+        title: seoFriendlyTitle, // Use SEO-friendly title for search results
         description: post.excerpt,
         keywords: post.keywords || post.tags || [],
         alternates: {
             canonical: postUrl,
         },
         openGraph: {
-            title: post.title,
+            title: seoFriendlyTitle, // Use SEO-friendly title for social sharing
             description: post.excerpt,
             url: postUrl,
             images: [
@@ -168,7 +171,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
                     url: imageUrl,
                     width: 1200,
                     height: 630,
-                    alt: post.title,
+                    alt: seoFriendlyTitle, // Use SEO-friendly title for alt text
                 },
             ],
             type: 'article',
@@ -178,7 +181,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         },
         twitter: {
             card: 'summary_large_image',
-            title: post.title,
+            title: seoFriendlyTitle, // Use SEO-friendly title for Twitter
             description: post.excerpt,
             images: [imageUrl],
         },

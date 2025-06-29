@@ -54,6 +54,10 @@ export default function RootLayout({
       lang="en"
       className={`${chakraPetch.variable} ${ibmPlexMono.variable} ${firaCode.variable} ${rubikGlitch.variable}`}
     >
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
       <body className="antialiased bg-zinc-900 text-white" suppressHydrationWarning>
         <Providers>
           {children}

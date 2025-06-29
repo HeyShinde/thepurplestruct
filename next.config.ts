@@ -27,6 +27,8 @@ const nextConfig: NextConfig = {
       '@vercel/turbopack-next/internal/font/google/font': 'next/font/google',
     },
   },
+  // Remove X-Powered-By header for security
+  poweredByHeader: false,
   async headers() {
     return [
       {

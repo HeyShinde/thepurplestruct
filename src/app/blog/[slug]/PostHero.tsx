@@ -13,7 +13,34 @@ type PostHeroProps = {
   updatedAt?: string;
 };
 
+// LaTeX processing functions
+const containsLatex = (text: string): boolean => {
+  return /\$.*?\$/.test(text);
+};
+
+const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
+  if (typeof children === 'string') {
+    const parts = children.split(/(\$.*?\$)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('$') && part.endsWith('$')) {
+        const latex = part.slice(1, -1);
+        return (
+          <span key={index} className={`inline-block ${additionalClasses}`}>
+            <span className="font-mono text-purple-300 bg-purple-900/30 px-2 py-1 rounded border border-purple-500/30">
+              {latex}
+            </span>
+          </span>
+        );
+      }
+      return <span key={index} className={additionalClasses}>{part}</span>;
+    });
+  }
+  return children;
+};
+
 export default function PostHero({ title, categories, publishedAt, updatedAt }: PostHeroProps) {
+  const hasLatex = containsLatex(title);
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,7 +51,7 @@ export default function PostHero({ title, categories, publishedAt, updatedAt }: 
       <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-purple-700/20 blur-3xl -z-10" />
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl mt-16 lg:mt-20 text-white leading-tight">
-          {title}
+          {hasLatex ? processContentWithLatex(title, "font-heading text-4xl md:text-5xl lg:text-6xl text-white") : title}
         </h1>
         <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
           {(updatedAt || publishedAt) && (
