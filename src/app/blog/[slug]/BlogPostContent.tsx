@@ -31,6 +31,7 @@ interface SidebarPromo {
     code?: string;
     imageSource?: string;
     imageUrl?: string;
+    linkRel?: string;
 }
 
 interface SanityImage {
@@ -76,6 +77,8 @@ const processContentWithLatex = (children: React.ReactNode, additionalClasses: s
 const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
     if (!promo) return null;
 
+    const sidebarRel = promo.linkRel ? `${promo.linkRel} noopener noreferrer` : 'sponsored noopener noreferrer';
+
     return (
         <div className="relative group">
             <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-6 w-full">
@@ -90,7 +93,7 @@ const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
                 <div className="relative z-10">
                     <span className="text-center font-semibold text-purple-400">Advertisement</span>
                     {promo.promoType === "image" && (
-                        <a href={promo.imageLink || "#"} target="_blank" rel="noopener noreferrer">
+                        <a href={promo.imageLink || "#"} target="_blank" rel={sidebarRel}>
                             {(promo.imageSource === "link" && promo.imageUrl) ? (
                                 <Image
                                     src={promo.imageUrl}
@@ -304,7 +307,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
         },
         marks: {
             link: ({ children, value }) => {
-                const rel = value.linkRel || 'follow';
+                const bodyLinkRel = value.rel || 'nofollow';
                 const textContent = React.Children.toArray(children).join('');
                 const hasLatex = containsLatex(textContent);
                 
@@ -312,7 +315,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     <a
                         href={value.href}
                         target="_blank"
-                        rel={`${rel} noopener noreferrer`}
+                        rel={`${bodyLinkRel} noopener noreferrer`}
                         className="text-purple-400 hover:text-purple-300 transition-colors"
                     >
                         {hasLatex ? processContentWithLatex(children, "text-purple-400 hover:text-purple-300") : children}

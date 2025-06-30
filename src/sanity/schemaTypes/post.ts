@@ -114,7 +114,7 @@ const blogSchema = {
                                         title: "Open in new tab",
                                     },
                                     {
-                                        name: "rel",
+                                        name: "bodyLinkRel",
                                         type: "string",
                                         title: "Link Relationship",
                                         options: {
@@ -122,6 +122,7 @@ const blogSchema = {
                                                 { title: "Follow", value: "follow" },
                                                 { title: "No Follow", value: "nofollow" },
                                                 { title: "Sponsored", value: "sponsored" },
+                                                { title: "UGC", value: "ugc" },
                                             ],
                                         },
                                         description: "Choose the relationship for the link.",
@@ -290,6 +291,21 @@ const blogSchema = {
                     name: "imageLink",
                     type: "url",
                     title: "Image Link",
+                    hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
+                },
+                {
+                    name: "sidebarRel",
+                    type: "string",
+                    title: "Link Relationship (rel)",
+                    options: {
+                        list: [
+                            { title: "Follow", value: "follow" },
+                            { title: "No Follow", value: "nofollow" },
+                            { title: "Sponsored", value: "sponsored" },
+                            { title: "UGC", value: "ugc" },
+                        ],
+                    },
+                    description: "Choose the relationship for the sidebar promo link.",
                     hidden: ({ parent }: { parent: SidebarPromoParent }) => parent?.promoType !== "image",
                 },
                 {
