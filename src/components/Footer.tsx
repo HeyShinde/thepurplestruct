@@ -56,6 +56,9 @@ const Footer = () => {
             <form onSubmit={handleSubmit} className="flex flex-row items-center gap-2 w-full max-w-xl">
               <input
                 type="email"
+                id="footer-newsletter-email"
+                name="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"

@@ -1,28 +1,12 @@
 import React from 'react';
 import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
 import { Metadata } from 'next';
 import BlogPostContent from '@/app/blog/[slug]/BlogPostContent';
 import type { BlogPost } from '@/types/blog';
-import type { PortableTextBlock } from '@portabletext/types';
-
-interface PortableTextChild {
-  text: string;
-}
-
-function portableTextToPlainText(blocks: PortableTextBlock[]) {
-    if (!blocks) {
-      return '';
-    }
-    return blocks
-      .filter(block => block._type === 'block' && block.children)
-      .map(block => (block.children as PortableTextChild[]).map((child) => child.text).join(''))
-      .join('\n\n');
-}
+import { buildSeoData } from './seoHelpers';
 
 async function getPost(slug: string) {
-    console.log('Fetching post with slug:', slug);
-    
+    // console.log('Fetching post with slug:', slug);
     const query = `*[_type == "blog" && slug.current == $slug][0] {
         title,
         slug,
@@ -58,16 +42,13 @@ async function getPost(slug: string) {
             code
         }
     }`;
-
     try {
         const post = await client.fetch<BlogPost>(query, { slug });
-        console.log('Fetched post:', post);
-        
+        // console.log('Fetched post:', post);
         if (!post) {
-            console.log('No post found for slug:', slug);
+            // console.log('No post found for slug:', slug);
             return null;
         }
-        
         return post;
     } catch (error) {
         console.error('Error fetching post:', error);
@@ -78,92 +59,22 @@ async function getPost(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const post = await getPost(slug);
-    
     if (!post) {
         return {
             title: "Post Not Found",
             description: "The requested blog post could not be found.",
         };
     }
-
-    const postUrl = `https://www.heyshinde.com/blog/${post.slug.current}`;
-    const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : "";
-    const homePageUrl = "https://www.heyshinde.com";
-
-    // Create SEO-friendly title by removing LaTeX syntax
-    const seoFriendlyTitle = post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim();
-
-    const blogPostJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        '@id': `${postUrl}/#blogposting`,
-        'isPartOf': {
-            '@type': 'Blog',
-            '@id': `${homePageUrl}/blog/#blog`,
-            'name': 'HeyShinde Blog',
-            'publisher': {
-                '@id': `${homePageUrl}/#person`
-            }
-        },
-        headline: seoFriendlyTitle, // Use SEO-friendly title for structured data
-        description: post.excerpt,
-        articleBody: portableTextToPlainText(post.body),
-        wordCount: post.wordCount,
-        keywords: post.keywords || post.tags || [],
-        about: post.categories?.map(cat => ({ '@type': 'Thing', name: cat.title })) || [],
-        image: {
-            '@type': 'ImageObject',
-            url: imageUrl,
-            width: 1200,
-            height: 630
-        },
-        author: {
-            '@type': 'Person',
-            '@id': `${homePageUrl}/#person`,
-            name: post.author.name,
-        },
-        publisher: {
-            '@id': `${homePageUrl}/#person`
-        },
-        url: postUrl,
-        datePublished: post.publishedAt,
-        dateModified: post.updatedAt || post.publishedAt,
-    };
-    
-    const breadcrumbJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: homePageUrl,
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Blog',
-          item: `${homePageUrl}/blog`,
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: seoFriendlyTitle, // Use SEO-friendly title for breadcrumbs
-          item: postUrl,
-        },
-      ],
-    };
-
+    const { postUrl, imageUrl, seoFriendlyTitle } = buildSeoData(post);
     return {
-        title: seoFriendlyTitle, // Use SEO-friendly title for search results
+        title: seoFriendlyTitle,
         description: post.excerpt,
         keywords: post.keywords || post.tags || [],
         alternates: {
             canonical: postUrl,
         },
         openGraph: {
-            title: seoFriendlyTitle, // Use SEO-friendly title for social sharing
+            title: seoFriendlyTitle,
             description: post.excerpt,
             url: postUrl,
             images: [
@@ -171,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
                     url: imageUrl,
                     width: 1200,
                     height: 630,
-                    alt: seoFriendlyTitle, // Use SEO-friendly title for alt text
+                    alt: seoFriendlyTitle,
                 },
             ],
             type: 'article',
@@ -181,18 +92,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         },
         twitter: {
             card: 'summary_large_image',
-            title: seoFriendlyTitle, // Use SEO-friendly title for Twitter
+            title: seoFriendlyTitle,
             description: post.excerpt,
             images: [imageUrl],
         },
-        other: {
-            "application/ld+json": JSON.stringify([blogPostJsonLd, breadcrumbJsonLd]),
-        }
+        // Note: JSON-LD is now injected in the page, not here
     };
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const post = await getPost(slug);
-    return <BlogPostContent post={post} />;
+    if (!post) return <div>Post not found</div>;
+    const { blogPostJsonLd, breadcrumbJsonLd } = buildSeoData(post);
+    return (
+        <>
+            <BlogPostContent post={post} />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@graph": [blogPostJsonLd, breadcrumbJsonLd]
+                    }),
+                }}
+            />
+        </>
+    );
 }
