@@ -4,11 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 import { LinkPreview } from "@/components/ui/link-preview";
 import { Vortex } from "@/components/ui/vortex";
-import * as Collapsible from '@radix-ui/react-collapsible';
 import { FaGripfire } from "react-icons/fa";
-import { IoChevronDown } from "react-icons/io5";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import { CloseIcon } from "@/components/ProjectsClient"; // Reusing CloseIcon from Projects
+import { CloseIcon } from "@/components/ProjectsClient";
 
 // Define the type for research papers
 export interface ResearchPaper {
@@ -19,20 +17,20 @@ export interface ResearchPaper {
   year: number;
   venue: string;
   abstract?: string;
-  longDescription?: string; // Added long description field
-  bulletPoints?: string[]; // Added bullet points field
+  longDescription?: string;
+  bulletPoints?: string[];
 }
 
 // Component to display a single research paper card
-const ResearchCard = ({ paper }: { paper: ResearchPaper }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const ResearchCard = ({ paper, onSelect }: { paper: ResearchPaper; onSelect: (paper: ResearchPaper) => void }) => {
   return (
     <motion.div
+      id={`research-${paper.title}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 md:p-6 w-full max-w-3xl mx-auto mb-8"
+      onClick={() => onSelect(paper)}
+      className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 md:p-6 w-full max-w-3xl mx-auto mb-8 cursor-pointer hover:bg-black/60 transition-colors group"
     >
       <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
            style={{
@@ -43,92 +41,41 @@ const ResearchCard = ({ paper }: { paper: ResearchPaper }) => {
              padding: '1px',
            }} />
       <div className="relative z-10">
-        <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-          <div className="flex items-start justify-between">
-            <div 
-              className="flex-grow cursor-pointer"
-              onClick={() => setIsOpen(!isOpen)}
+        <LinkPreview
+          url={paper.url}
+          className="text-xl font-semibold text-purple-400 hover:text-purple-300 transition-colors"
+        >
+          {paper.title}
+        </LinkPreview>
+
+        <p className="text-neutral-300 mt-2 text-sm">
+          {paper.authors}
+        </p>
+
+        <div className="flex items-center gap-4 mt-2 text-sm">
+          <span className="text-neutral-400">
+            {paper.venue} • {paper.year}
+          </span>
+        </div>
+        {paper.doi && (
+          <p className="text-sm mt-1 text-neutral-400">
+            <a
+              href={`https://doi.org/${paper.doi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:text-purple-300 transition-colors"
+              onClick={(e) => e.stopPropagation()}
             >
-              <LinkPreview
-                url={paper.url}
-                className="text-xl font-semibold text-purple-400 hover:text-purple-300 transition-colors"
-              >
-                {paper.title}
-              </LinkPreview>
+              DOI: {paper.doi}
+            </a>
+          </p>
+        )}
 
-              <p className="text-neutral-300 mt-2 text-sm">
-                {paper.authors}
-              </p>
-
-              <div className="flex items-center gap-4 mt-2 text-sm">
-                <span className="text-neutral-400">
-                  {paper.venue} • {paper.year}
-                </span>
-              </div>
-              {paper.doi && (
-                <p className="text-sm mt-1 text-neutral-400">
-                  <a
-                    href={`https://doi.org/${paper.doi}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-purple-400 hover:text-purple-300 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    DOI: {paper.doi}
-                  </a>
-                </p>
-              )}
-
-              {paper.abstract && (
-                <p className="text-neutral-400 mt-4 text-sm leading-relaxed">
-                  {paper.abstract}
-                </p>
-              )}
-            </div>
-            <Collapsible.Trigger asChild>
-              <button className="ml-4 p-2 rounded-full hover:bg-purple-500/10 transition-colors">
-                <IoChevronDown 
-                  className={`w-6 h-6 text-purple-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                />
-              </button>
-            </Collapsible.Trigger>
-          </div>
-
-          <Collapsible.Content
-            className="mt-6 overflow-hidden transition-all duration-300 ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
-          >
-            {paper.longDescription && (
-              <p className="text-sm md:text-base leading-relaxed mb-6 text-neutral-300">
-                {paper.longDescription}
-              </p>
-            )}
-
-            {paper.bulletPoints && paper.bulletPoints.length > 0 && (
-              <div className="mb-6">
-                <h4 className="font-semibold text-neutral-300 mb-3">Key Findings:</h4>
-                <ul className="list-disc list-inside ml-4 flex flex-col gap-3 text-sm md:text-base leading-relaxed text-neutral-300">
-                  {paper.bulletPoints.map((point, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <FaGripfire size={16} strokeWidth={1.5} fill="currentColor" className="text-purple-400 mt-1 flex-shrink-0" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <div className="mt-6 pt-6 border-t border-neutral-700">
-              <a
-                href={paper.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-3 text-sm rounded-full font-bold bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                View Paper
-              </a>
-            </div>
-          </Collapsible.Content>
-        </Collapsible.Root>
+        {paper.abstract && (
+          <p className="text-neutral-400 mt-4 text-sm leading-relaxed line-clamp-2">
+            {paper.abstract}
+          </p>
+        )}
       </div>
     </motion.div>
   );
@@ -140,13 +87,33 @@ interface ResearchClientProps {
   showTitle?: boolean;
   paddingTop?: string;
   reverse?: boolean;
-  isMainPage?: boolean; // New prop to determine if this is the main research page
+  isMainPage?: boolean;
 }
 
 export function ResearchClient({ papers, displayLimit, showTitle = true, paddingTop, reverse, isMainPage = false }: ResearchClientProps) {
   const [activePaper, setActivePaper] = useState<ResearchPaper | null>(null);
   const id = useId();
   const overlayRef = useRef<HTMLDivElement>(null!);
+
+  // Handle URL hash for opening specific papers
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = decodeURIComponent(window.location.hash.slice(1));
+      if (hash && papers.length > 0) {
+        const paperToOpen = papers.find(paper => paper.title === hash);
+        if (paperToOpen) {
+          setActivePaper(paperToOpen);
+          // Scroll the paper into view
+          setTimeout(() => {
+            const element = document.getElementById(`research-${paperToOpen.title}`);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 100);
+        }
+      }
+    }
+  }, [papers]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -187,12 +154,12 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 h-full w-full z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black/80 h-full w-full z-50 flex items-start justify-center overflow-y-auto"
           >
             <motion.div
               layoutId={`research-card-${activePaper.title}-${id}`}
               ref={overlayRef}
-              className="w-full max-w-3xl max-h-[90vh] flex flex-col bg-black rounded-lg overflow-hidden relative p-4 md:p-8"
+              className="w-full max-w-3xl mt-28 md:mt-28 mb-8 flex flex-col bg-neutral-900 border border-purple-400/30 rounded-2xl shadow-2xl overflow-hidden relative p-2 sm:p-4 md:p-8"
               transition={{
                 type: "spring",
                 stiffness: 150,
@@ -203,26 +170,17 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
               <motion.button
                 key={`close-button-${activePaper.title}-${id}`}
                 layout
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                  transition: {
-                    duration: 0.05,
-                  },
-                }}
-                className="flex absolute top-4 right-4 items-center justify-center bg-white rounded-full h-8 w-8 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.05 } }}
+                className="flex absolute top-3 right-3 items-center justify-center rounded-full h-10 w-10 z-50 bg-black/70 hover:bg-black/90 border border-purple-400/30 shadow-lg"
                 onClick={() => setActivePaper(null)}
               >
                 <CloseIcon />
               </motion.button>
 
               {/* Expanded Content */}
-              <div className="flex flex-col flex-grow overflow-y-auto p-4 md:p-6 text-white">
+              <div className="flex flex-col flex-grow overflow-y-auto p-2 sm:p-4 md:p-6 text-white max-h-[70vh] md:max-h-[70vh]">
                 <motion.h3
                   layoutId={`research-title-${activePaper.title}-${id}`}
                   className="font-bold text-xl md:text-2xl text-purple-400 mb-2"
@@ -233,7 +191,7 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
                   {activePaper.authors} • {activePaper.venue} • {activePaper.year}
                 </p>
                 {activePaper.doi && (
-                    <p className="text-xs md:text-sm mt-1 text-neutral-300">
+                  <p className="text-xs md:text-sm mt-1 text-neutral-300">
                     <a
                       href={`https://doi.org/${activePaper.doi}`}
                       target="_blank"
@@ -242,17 +200,45 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
                     >
                       DOI: {activePaper.doi}
                     </a>
-                    </p>
-                  )}
+                  </p>
+                )}
+
+                {activePaper.abstract && (
+                  <p className="mt-4 text-sm leading-relaxed text-neutral-300">
+                    {activePaper.abstract}
+                  </p>
+                )}
 
                 {activePaper.longDescription && (
-                  <motion.p
-                    layoutId={`research-abstract-${activePaper.abstract}-${id}`}
-                    className="mt-4 text-sm leading-relaxed"
-                  >
+                  <p className="mt-4 text-sm leading-relaxed text-neutral-300">
                     {activePaper.longDescription}
-                  </motion.p>
+                  </p>
                 )}
+
+                {activePaper.bulletPoints && activePaper.bulletPoints.length > 0 && (
+                  <div className="mt-6">
+                    <h4 className="font-semibold text-neutral-300 mb-3">Key Findings:</h4>
+                    <ul className="flex flex-col gap-3">
+                      {activePaper.bulletPoints.map((point, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-neutral-300">
+                          <FaGripfire className="text-purple-400 mt-1 flex-shrink-0" />
+                          <span className="text-sm leading-relaxed">{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="mt-8 pt-6 border-t border-neutral-700">
+                  <a
+                    href={activePaper.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-6 py-3 text-sm rounded-full font-bold bg-purple-600 hover:bg-purple-700 text-white transition-colors"
+                  >
+                    View Paper
+                  </a>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -281,7 +267,11 @@ export function ResearchClient({ papers, displayLimit, showTitle = true, padding
         
         <div className="w-full">
           {displayedPapers.map((paper) => (
-            <ResearchCard key={paper.title} paper={paper} />
+            <ResearchCard 
+              key={paper.title} 
+              paper={paper} 
+              onSelect={setActivePaper}
+            />
           ))}
         </div>
         

@@ -37,6 +37,7 @@ export function NavBar() {
     const [navItems, setNavItems] = useState<NavItem[]>([]);
     const [hasMounted, setHasMounted] = useState(false);
     const [isCommandOpen, setCommandOpen] = useState(false)
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
 
     useEffect(() => {
         setHasMounted(true);
@@ -132,6 +133,37 @@ export function NavBar() {
             {/* Contact Modal */}
             <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
             <CommandPalette open={isCommandOpen} setOpen={setCommandOpen} />
+
+            {/* Mobile Search Overlay */}
+            <AnimatePresence>
+                {showMobileSearch && (
+                    <motion.div
+                        key="mobile-search"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 z-[100] bg-white/80 dark:bg-black/80 backdrop-blur-md flex flex-col p-2"
+                    >
+                        <div className="flex items-center justify-between w-full pt-4 px-2">
+                            <span className="sr-only">Search</span>
+                            <div className="w-full max-w-md">
+                                <SearchBox variant="mobile" />
+                            </div>
+                            <button
+                                aria-label="Close search"
+                                onClick={() => setShowMobileSearch(false)}
+                                className="ml-2 p-3 rounded-full bg-white/80 dark:bg-black/80 shadow-lg border border-gray-200 dark:border-gray-700 text-purple-600 hover:bg-gray-100 dark:hover:bg-gray-900 transition-all"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </button>
+                        </div>
+                        {/* Optional: Add spacing below search box */}
+                        <div className="h-6" />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <motion.header
                 initial={{ y: 0 }}
                 animate={{ y: showNav ? 0 : -120 }}
@@ -190,53 +222,65 @@ export function NavBar() {
                                 </span>
                             </Link>
                         </div>
-                        <button
-                            onClick={() => setIsMenuOpen((v) => !v)}
-                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                            className="relative z-50 flex items-center justify-center p-3 focus:outline-none"
-                        >
-                            <div className="relative w-[48px] md:w-[72px] h-8 flex flex-col items-center justify-center">
-                                {/* Top bar */}
-                                <motion.div
-                                    animate={isMenuOpen ? {
-                                        rotate: 45,
-                                        y: 14,
-                                    } : {
-                                        rotate: 0,
-                                        y: 0,
-                                    }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                                    className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
-                                    style={{ top: 8 }}
-                                />
-                                {/* Middle bar */}
-                                <motion.div
-                                    animate={isMenuOpen ? {
-                                        opacity: 0,
-                                        scaleX: 0.5,
-                                    } : {
-                                        opacity: 1,
-                                        scaleX: 1,
-                                    }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                                    className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
-                                    style={{ top: 16 }}
-                                />
-                                {/* Bottom bar */}
-                                <motion.div
-                                    animate={isMenuOpen ? {
-                                        rotate: -45,
-                                        y: -14,
-                                    } : {
-                                        rotate: 0,
-                                        y: 0,
-                                    }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                                    className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
-                                    style={{ top: 24 }}
-                                />
-                            </div>
-                        </button>
+                        <div className="flex items-center">
+                            {/* Search Icon for mobile */}
+                            {!isDesktop && (
+                                <button
+                                    onClick={() => setShowMobileSearch(true)}
+                                    aria-label="Open search"
+                                    className="relative z-50 flex items-center justify-center p-2 mr-2 text-gray-900 focus:outline-none"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                </button>
+                            )}
+                            <button
+                                onClick={() => setIsMenuOpen((v) => !v)}
+                                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                                className="relative z-50 flex  p-3 focus:outline-none"
+                            >
+                                <div className="relative w-[48px] md:w-[72px] h-8 flex flex-col items-center justify-center">
+                                    {/* Top bar */}
+                                    <motion.div
+                                        animate={isMenuOpen ? {
+                                            rotate: 45,
+                                            y: 14,
+                                        } : {
+                                            rotate: 0,
+                                            y: 0,
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                        className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
+                                        style={{ top: 8 }}
+                                    />
+                                    {/* Middle bar */}
+                                    <motion.div
+                                        animate={isMenuOpen ? {
+                                            opacity: 0,
+                                            scaleX: 0.5,
+                                        } : {
+                                            opacity: 1,
+                                            scaleX: 1,
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                        className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
+                                        style={{ top: 16 }}
+                                    />
+                                    {/* Bottom bar */}
+                                    <motion.div
+                                        animate={isMenuOpen ? {
+                                            rotate: -45,
+                                            y: -14,
+                                        } : {
+                                            rotate: 0,
+                                            y: 0,
+                                        }}
+                                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                        className="absolute w-[48px] md:w-[72px] h-[1px] bg-purple-600 rounded"
+                                        style={{ top: 24 }}
+                                    />
+                                </div>
+                            </button>
+                        </div>
                     </div>
                     {/* Animated Menu Content */}
                     <AnimatePresence initial={false}>
@@ -252,13 +296,6 @@ export function NavBar() {
                             >
                                 {/* Navigation Links */}
                                 <nav className="space-y-4 md:space-y-6 mb-6 md:mb-8 mt-4 md:mt-6">
-                                    {/* SearchBox for mobile */}
-                                    {!isDesktop && (
-                                        <div className="relative mb-4">
-                                            <SearchBox/>
-                                        </div>
-                                    )}
-                                    
                                     <div className="h-px bg-gray-200" />
                                     {navItems && navItems.filter(item =>
                                         isDesktop ? item.show === 'both' || item.show === 'desktop' : item.show === 'both' || item.show === 'mobile').map((item) => {

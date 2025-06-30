@@ -9,7 +9,7 @@ import ProcessedText from '@/components/ProcessedText';
 import TableOfContents from "@/components/TableOfContents";
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from "@/components/SubscribeForm";
-import type { BlogPost } from '@/types/blog';
+import type { BlogPost, SidebarPromo } from '@/types/blog';
 import { FaXTwitter } from 'react-icons/fa6';
 import { FaLinkedin, FaGithub, FaKaggle } from 'react-icons/fa';
 import { SiCodersrank } from 'react-icons/si';
@@ -22,37 +22,7 @@ import { processLatexSSR, containsLatex } from '@/utils/latexProcessor'; // Impo
 
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
 import TableComponent from "@/components/TableComponent";
-
-interface SidebarPromo {
-    promoType?: "image" | "code";
-    image?: SanityImage;
-    imageLink?: string;
-    altText?: string;
-    code?: string;
-    imageSource?: string;
-    imageUrl?: string;
-    linkRel?: string;
-}
-
-interface SanityImage {
-    asset: {
-        _ref: string;
-        _type: 'reference';
-    };
-    alt?: string;
-}
-
-interface SocialLink {
-    platform: string;
-    url: string;
-}
-
-interface Author {
-    name: string;
-    image: SanityImage | null;
-    bio?: string;
-    socialLinks?: SocialLink[];
-}
+import type { Author, SocialLink } from '@/types/author';
 
 // Helper function to process content recursively and preserve formatting
 const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
@@ -77,7 +47,7 @@ const processContentWithLatex = (children: React.ReactNode, additionalClasses: s
 const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
     if (!promo) return null;
 
-    const sidebarRel = promo.linkRel ? `${promo.linkRel} noopener noreferrer` : 'sponsored noopener noreferrer';
+    const sidebarRel = promo.sidebarRel ? `${promo.sidebarRel} noopener noreferrer` : 'sponsored noopener noreferrer';
 
     return (
         <div className="relative group">
@@ -91,7 +61,7 @@ const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
                         padding: '1px',
                     }} />
                 <div className="relative z-10">
-                    <span className="text-center font-semibold text-purple-400">Advertisement</span>
+                    <span className="text-center font-semibold text-purple-400">{promo.title || 'Advertisement'}</span>
                     {promo.promoType === "image" && (
                         <a href={promo.imageLink || "#"} target="_blank" rel={sidebarRel}>
                             {(promo.imageSource === "link" && promo.imageUrl) ? (
@@ -307,7 +277,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
         },
         marks: {
             link: ({ children, value }) => {
-                const bodyLinkRel = value.rel || 'nofollow';
+                const bodyLinkRel = value.bodyLinkRel || 'nofollow';
                 const textContent = React.Children.toArray(children).join('');
                 const hasLatex = containsLatex(textContent);
                 

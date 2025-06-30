@@ -264,3 +264,5 @@
 .katex-scroll-area::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
+
+body.hide-navbar .navbar-root-class { display: none !important; }

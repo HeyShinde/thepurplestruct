@@ -251,6 +251,13 @@ const blogSchema = {
             title: "Sidebar Promo",
             fields: [
                 {
+                    name: "title",
+                    type: "string",
+                    title: "Promo Title",
+                    description: "The text to display above the promo content.",
+                    initialValue: "Advertisement",
+                },
+                {
                     name: "promoType",
                     type: "string",
                     title: "Promo Type",

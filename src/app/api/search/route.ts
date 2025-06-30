@@ -17,7 +17,7 @@ const searchQuery = groq`
     _id,
     _type,
     title,
-    "slug": slug.current,
+    "slug": { "current": slug.current },
     "url": url,
   }
 `;

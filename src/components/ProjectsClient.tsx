@@ -55,6 +55,19 @@ export function ProjectsClient({
     );
   }, [initialProjects]);
 
+  // Handle URL hash for direct project opening
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = decodeURIComponent(window.location.hash.slice(1));
+      if (hash && cards.length > 0) {
+        const projectToOpen = cards.find(card => card.title === hash);
+        if (projectToOpen) {
+          setActive(projectToOpen);
+        }
+      }
+    }
+  }, [cards]);
+
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -97,27 +110,12 @@ export function ProjectsClient({
       </AnimatePresence>
       <AnimatePresence>
         {active ? (
-          <div className="fixed inset-0 flex items-center justify-center z-[100] p-4">
-            {active && (
-              <motion.button
-                key={`button-${active.title}-${id}`}
-                layout
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
-                style={{ zIndex: 120 }}
-                onClick={() => setActive(null)}
-              >
-                <CloseIcon />
-              </motion.button>
-            )}
+          <div className="fixed inset-0 flex items-center justify-center z-[100] p-4 md:p-8">
             {active && (
               <motion.div
                 layoutId={`card-${active.title}-${id}`}
                 ref={ref}
-                className="w-full max-w-[500px] h-full max-h-[95vh] md:max-h-[90%] flex flex-col bg-black sm:rounded-3xl overflow-hidden"
+                className="w-full max-w-4xl h-full md:h-auto md:max-h-[90vh] flex flex-col md:flex-row bg-[#101010] sm:rounded-2xl overflow-hidden relative"
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -128,132 +126,134 @@ export function ProjectsClient({
                   duration: 0.3,
                 }}
               >
-                {active && (
-                  <motion.div
-                    layoutId={`image-${active.title}-${id}`}
-                    className="h-80 lg:h-80 flex-shrink-0 z-0"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                  >
-                    <Image
-                      width={600}
-                      height={400}
-                      src={active.src}
-                      alt={active.title}
-                      className="w-full h-full object-cover object-top sm:rounded-tr-lg sm:rounded-tl-lg"
-                    />
-                  </motion.div>
-                )}
-
-                <div className="flex flex-col flex-grow overflow-hidden">
-                  {/* Header area with title, description, and CTA button */}
+                <motion.button
+                  key={`button-${active.title}-${id}`}
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="absolute top-4 right-4 text-white bg-black/50 backdrop-blur-sm rounded-full h-8 w-8 flex items-center justify-center z-20 hover:bg-black/70 transition-colors"
+                  onClick={() => setActive(null)}
+                >
+                  <CloseIcon />
+                </motion.button>
+                
+                <div className="md:w-2/5 flex flex-col">
                   {active && (
                     <motion.div
-                      className="flex justify-between items-start p-4 flex-shrink-0"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.3, delay: 0.2 }}
+                      layoutId={`image-${active.title}-${id}`}
+                      className="h-60 md:h-auto flex-shrink-0"
                     >
-                      <div className="">
-                        {active && (
-                          <motion.h3
-                            layoutId={`title-${active.title}-${id}`}
-                            className="font-medium text-purple-400 text-base"
-                          >
-                            {active.title}
-                          </motion.h3>
-                        )}
-                        {active && (
-                          <motion.p
-                            layoutId={`description-${active.description}-${id}`}
-                            className="text-purple-400/80 text-base"
-                          >
-                            {active.description}
-                          </motion.p>
-                        )}
-                      </div>
-
+                      <Image
+                        width={600}
+                        height={600}
+                        src={active.src}
+                        alt={active.title}
+                        className="w-full h-full object-cover md:rounded-tl-2xl"
+                      />
+                    </motion.div>
+                  )}
+                   <div className="p-6 md:p-8 flex flex-col flex-grow justify-between bg-[#1a1a1a] md:rounded-bl-2xl">
+                      {/* Tech Stack */}
+                      {active.techStack && active.techStack.length > 0 && (
+                        <div className="mt-0">
+                          <h4 className="font-semibold text-neutral-200 mb-3">
+                            Tech Stack
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {active.techStack.map(
+                              (tech: TechStackItem, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="px-3 py-1 rounded-full bg-purple-400/10 text-purple-400/90 text-xs md:text-sm border border-purple-400/20 flex items-center gap-2"
+                                >
+                                  {tech.icon && (
+                                    <Image
+                                      src={tech.icon}
+                                      alt={tech.name}
+                                      width={16}
+                                      height={16}
+                                      className="w-4 h-4"
+                                    />
+                                  )}
+                                  {tech.name}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* CTA Button */}
                       {active && (
                         <motion.a
                           layout
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.2, delay: 0.3 }}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.3 }}
                           href={active.ctaLink}
                           target="_blank"
-                          className="px-4 py-3 text-sm rounded-full font-bold bg-purple-600 hover:bg-purple-700 text-white transition-colors"
+                          className="mt-8 px-6 py-3 self-start text-sm md:text-base rounded-lg font-bold bg-purple-600 hover:bg-purple-700 text-white transition-colors flex items-center gap-2"
                         >
                           {active.ctaText}
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         </motion.a>
                       )}
-                    </motion.div>
-                  )}
+                   </div>
+                </div>
 
-                  {/* Scrollable detailed content area */}
+
+                <div className="md:w-3/5 flex flex-col flex-grow overflow-hidden">
                   <motion.div
                     layout
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.3, delay: 0.4 }}
-                    className="text-white text-xs md:text-sm lg:text-base flex-grow overflow-y-auto px-4 pb-10 flex flex-col items-start gap-4 [scrollbar-width:none] [-ms-overflow-style:none]"
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="flex flex-col flex-grow p-6 md:p-8 text-white overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#4f4f4f_#101010]"
                   >
+                    {active && (
+                      <motion.h3
+                        layoutId={`title-${active.title}-${id}`}
+                        className="font-bold text-2xl md:text-3xl text-purple-400"
+                      >
+                        {active.title}
+                      </motion.h3>
+                    )}
+                    {active && (
+                      <motion.p
+                        layoutId={`description-${active.description}-${id}`}
+                        className="text-purple-400/80 text-sm md:text-base mt-1"
+                      >
+                        {active.description}
+                      </motion.p>
+                    )}
+
+                    <div className="h-px bg-white/10 my-6"></div>
+
                     {/* Detailed Description */}
                     {active.longDescription && (
-                      <p className="text-sm md:text-base leading-relaxed">
+                      <p className="text-neutral-300 text-sm md:text-base leading-relaxed">
                         {active.longDescription}
                       </p>
                     )}
 
                     {/* Bullet Points */}
                     {active.bulletPoints && active.bulletPoints.length > 0 && (
-                      <ul className="list-none ml-4 flex flex-col gap-2">
+                      <ul className="list-none mt-4 flex flex-col gap-2">
                         {active.bulletPoints.map(
                           (point: string, idx: number) => (
                             <li
                               key={idx}
-                              className="text-sm md:text-base leading-relaxed flex items-center gap-2"
+                              className="text-neutral-300 text-sm md:text-base leading-relaxed flex items-start gap-3"
                             >
-                              <FaGripfire className="text-purple-400" />
-                              {point}
+                              <FaGripfire className="text-purple-400 mt-1 flex-shrink-0" />
+                              <span>{point}</span>
                             </li>
                           )
                         )}
                       </ul>
-                    )}
-
-                    {/* Tech Stack Icons/Badges */}
-                    {active.techStack && active.techStack.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold text-neutral-300 mb-2">
-                          Tech Stack:
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {active.techStack.map(
-                            (tech: TechStackItem, idx: number) => (
-                              <span
-                                key={idx}
-                                className="px-3 py-1 rounded-full bg-purple-400/10 text-purple-400/80 text-sm border border-purple-400/20 flex items-center gap-1"
-                              >
-                                {tech.icon && (
-                                  <Image
-                                    src={tech.icon}
-                                    alt={tech.name}
-                                    width={16}
-                                    height={16}
-                                    className="w-4 h-4"
-                                  />
-                                )}
-                                {tech.name}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
                     )}
                   </motion.div>
                 </div>
