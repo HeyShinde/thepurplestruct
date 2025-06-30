@@ -8,7 +8,7 @@ import {
 import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "@/components/providers"
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
+import Script from "next/script"
 
 const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
@@ -62,8 +62,24 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        <GoogleAnalytics gaId="G-RRNDHMT5BP" />
-        <GoogleTagManager gtmId="GT-PJ5RLN2D" />
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-RRNDHMT5BP"
+          strategy="lazyOnload"
+        />
+        <Script id="gtag-init" strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RRNDHMT5BP');
+          `}
+        </Script>
+        {/* Google Tag Manager */}
+        <Script
+          src="https://www.googletagmanager.com/gtm.js?id=GT-PJ5RLN2D"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   )

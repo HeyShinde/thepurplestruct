@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     // Check if the response is JSON before trying to parse it
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
-      console.error('Non-JSON response:', await response.text());
+      // console.error('Non-JSON response:', await response.text());
       return NextResponse.json(
         { error: 'Invalid response from subscription service' },
         { status: 500 }
@@ -68,8 +68,8 @@ export async function POST(request: Request) {
       { message: 'Successfully subscribed' },
       { status: 200 }
     );
-  } catch (error) {
-    console.error('Subscription error:', error);
+  } catch {
+    // console.error('Subscription error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

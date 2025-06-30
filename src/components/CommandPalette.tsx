@@ -73,8 +73,7 @@ export const CommandPalette = ({
         .then((data) => {
           setSearchResults(data);
         })
-        .catch((err) => {
-          console.error(err);
+        .catch(() => {
           setSearchResults([]);
         });
     } else {

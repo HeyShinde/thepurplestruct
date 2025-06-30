@@ -28,8 +28,8 @@ export async function GET(req: Request) {
       }
     })
     return NextResponse.json(progress)
-  } catch (error) {
-    console.error('Error fetching course progress:', error)
+  } catch {
+    // console.error('Error fetching course progress:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }
@@ -65,8 +65,8 @@ export async function POST(req: Request) {
       },
     })
     return NextResponse.json(progress)
-  } catch (error) {
-    console.error('Error updating course progress:', error)
+  } catch {
+    // console.error('Error updating course progress:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 } 

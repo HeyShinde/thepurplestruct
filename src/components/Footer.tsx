@@ -86,7 +86,7 @@ const Footer = () => {
           <div className="flex-1 w-full grid grid-cols-2 md:flex md:flex-row md:justify-between gap-y-8 gap-x-4 mt-8 md:mt-0">
             {/* SOCIAL */}
             <div className="mb-8 md:mb-0 min-w-[120px] flex-1">
-              <h4 className="text-purple-400/80 font-mono mb-3 tracking-widest">SOCIAL</h4>
+              <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">SOCIAL</p>
               <ul className="space-y-1 font-mono text-sm md:text-xs">
                 <li><a href="https://www.x.com/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">X(TWITTER)</a></li>
                 <li><a href="https://www.linkedin.com/in/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">LINKEDIN</a></li>
@@ -96,7 +96,7 @@ const Footer = () => {
             </div>
             {/* PAGES */}
             <div className="mb-8 md:mb-0 min-w-[120px] flex-1">
-              <h4 className="text-purple-400/80 font-mono mb-3 tracking-widest">PAGES</h4>
+              <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">PAGES</p>
               <ul className="space-y-1 font-mono text-sm md:text-xs">
                 <li><Link href="/" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">HOME</Link></li>
                 <li><Link href="/projects" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">PROJECTS</Link></li>
@@ -106,7 +106,7 @@ const Footer = () => {
             </div>
             {/* CONTACT (spans full width on mobile, right column in grid) */}
             <div className="col-span-2 md:col-span-1 mb-0 md:mb-0 min-w-[120px] flex-1">
-              <h4 className="text-purple-400/80 font-mono mb-3 tracking-widest">CONTACT</h4>
+              <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">CONTACT</p>
               <ul className="space-y-1 font-mono text-sm md:text-xs">
                 <li><button onClick={() => setIsContactOpen(true)} className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">REACH ME</button></li>
               </ul>

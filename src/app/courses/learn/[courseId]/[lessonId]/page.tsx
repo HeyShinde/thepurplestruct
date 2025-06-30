@@ -108,8 +108,8 @@ export default function LessonPage() {
         courseId,
         lessonId,
       });
-    } catch (error) {
-      console.error('Failed to track lesson view', error);
+    } catch {
+      // console.error('Failed to track lesson view');
     }
   }, [courseId, lessonId]);
 
@@ -120,8 +120,8 @@ export default function LessonPage() {
       const progressMap = new Map<string, boolean>(data.map((p: { lessonId: string, completed: boolean }) => [p.lessonId, p.completed]));
       setProgress(progressMap);
       setIsCompleted(progressMap.get(lessonId) || false);
-    } catch (error) {
-      console.error('Failed to fetch progress', error);
+    } catch {
+      // console.error('Failed to fetch progress');
     }
   }, [courseId, lessonId]);
 
@@ -157,8 +157,8 @@ export default function LessonPage() {
           router.push(`/courses/learn/${courseId}/${nextLesson._id}`);
         }
       }
-    } catch (error) {
-      console.error('Failed to update progress', error);
+    } catch {
+      // console.error('Failed to update progress');
     } finally {
       setIsLoading(false);
     }

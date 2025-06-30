@@ -63,8 +63,8 @@ export default function SettingsPage() {
             const data = await response.json()
             setConnectedProviders(data.connectedProviders)
           }
-        } catch (error) {
-          console.error('Failed to fetch connected accounts', error)
+        } catch {
+          // console.error('Failed to fetch connected accounts', error)
         } finally {
           setIsFetchingProviders(false)
         }
@@ -98,7 +98,7 @@ export default function SettingsPage() {
       }
 
       await signOut({ callbackUrl: '/' })
-    } catch (error) {
+    } catch (error){
       setMessage(error instanceof Error ? error.message : "An error occurred while deleting your account.")
       setShowDeleteConfirm(false)
       setDeleteConfirmation("")

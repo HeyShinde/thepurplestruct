@@ -50,8 +50,8 @@ async function getPost(slug: string) {
             return null;
         }
         return post;
-    } catch (error) {
-        console.error('Error fetching post:', error);
+    } catch {
+        // console.error('Error fetching post:', error);
         return null;
     }
 }

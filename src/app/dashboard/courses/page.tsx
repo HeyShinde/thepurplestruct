@@ -30,10 +30,10 @@ export default function EnrolledCoursesPage() {
             const data = await res.json()
             setCourses(data.courses)
           } else {
-            console.error("Failed to fetch courses")
+            // console.error("Failed to fetch courses")
           }
-        } catch (error) {
-          console.error("Error fetching courses:", error)
+        } catch {
+          // console.error("Error fetching courses:", error)
         } finally {
           setLoading(false)
         }

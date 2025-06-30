@@ -20,8 +20,8 @@ export async function GET() {
     const connectedProviders = accounts.map((account) => account.provider);
 
     return NextResponse.json({ connectedProviders });
-  } catch (error) {
-    console.error("Error fetching connected accounts:", error);
+  } catch {
+    // console.error("Error fetching connected accounts:", error);
     return NextResponse.json(
       { error: "Failed to fetch connected accounts" },
       { status: 500 }

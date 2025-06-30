@@ -35,8 +35,8 @@ export default function DashboardPage() {
         }
         const data = await response.json()
         setStats(data)
-      } catch (error) {
-        console.error("Failed to fetch dashboard stats:", error)
+      } catch {
+        // console.error("Failed to fetch dashboard stats:", error)
         setError("Could not load dashboard data.")
       } finally {
         setLoading(false)

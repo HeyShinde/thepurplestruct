@@ -71,8 +71,8 @@ const ProcessedText: React.FC<ProcessedTextProps> = ({ text, className = '', min
                                 (element as HTMLElement).className = 'katex-inline';
                                 (element as HTMLElement).setAttribute('style', 'background:none !important;border:none !important;padding:0 !important;');
                             }
-                        } catch (error) {
-                            console.warn('KaTeX rendering error:', error);
+                        } catch {
+                            // console.warn('KaTeX rendering error:', error);
                             (element as HTMLElement).textContent = `$${expression}$`;
                         }
                     }

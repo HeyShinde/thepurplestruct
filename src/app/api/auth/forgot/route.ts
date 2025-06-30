@@ -58,8 +58,8 @@ export async function POST(req: Request) {
         <p>If you didn't request this, you can safely ignore this email.</p>
       `,
     });
-  } catch (error) {
-    console.error('Failed to send reset email:', error);
+  } catch {
+    // console.error('Failed to send reset email:', error);
     // Still return success to prevent email enumeration
     return NextResponse.json({ success: true });
   }

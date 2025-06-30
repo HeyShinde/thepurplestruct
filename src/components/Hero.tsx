@@ -1,9 +1,19 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
 
+const systemFontStack = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif";
 
 const Hero = () => {
+  const [glitch, setGlitch] = useState(false);
+
+  useEffect(() => {
+    // Swap to Rubik Glitch and glitch effect after first paint
+    const timeout = setTimeout(() => setGlitch(true), 1200); // 1.2s after mount
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <div className="relative w-screen overflow-hidden overflow-x-hidden bg-gradient-to-b from-purple-500 to-black">
       <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:32px_32px] opacity-50" /> 
@@ -11,34 +21,25 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left column - Text Content */}
           <div className="flex flex-col justify-center space-y-4">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <p
               className="font-heading uppercase"
               style={{ fontSize: 'var(--font-size-xl)' }}
             >
               Between code and chaos,
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-glitch glitch-effect uppercase"
-              style={{ fontSize: 'var(--font-size-5xl)' }}
+            </p>
+            <h1
+              className={`uppercase${glitch ? " font-glitch glitch-effect" : ""}`}
+              style={{ fontSize: 'var(--font-size-5xl)', fontFamily: glitch ? undefined : systemFontStack, transition: "font-family 0.2s" }}
             >
               there&apos;s clarity.
-            </motion.h1>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+            </h1>
+            <h2
               className="font-heading uppercase"
               style={{ fontSize: 'var(--font-size-2xl)' }}
             >
               I am Aditya
               <span className="block text-yellow-400 font-semibold">and I engineer it with machine learning.</span>
-            </motion.h2>
+            </h2>
           </div>
 
           {/* Right column - Neural Network Visualization */}
@@ -204,24 +205,28 @@ const Hero = () => {
                     [0, 1, 2, 3].map((outputNode) => (
                       <motion.circle
                         key={`flow-${inputNode}-${hidden1Node}-${hidden2Node}-${outputNode}`}
-                        r="3"
+                        r={3}
                         fill="#ffffff"
-                        initial={{ opacity: 0 }}
+                        initial={{
+                          opacity: 0,
+                          cx: 60 + (inputNode ?? 0) * 0,
+                          cy: 80 + (inputNode ?? 0) * 60,
+                        }}
                         animate={{
                           opacity: [0, 0.8, 0.8, 0.8, 0],
                           cx: [
-                            60 + inputNode * 0,
-                            160 + hidden1Node * 0,
-                            260 + hidden2Node * 0,
-                            360 + outputNode * 0,
-                            360 + outputNode * 0,
+                            60 + (inputNode ?? 0) * 0,
+                            160 + (hidden1Node ?? 0) * 0,
+                            260 + (hidden2Node ?? 0) * 0,
+                            360 + (outputNode ?? 0) * 0,
+                            360 + (outputNode ?? 0) * 0,
                           ],
                           cy: [
-                            80 + inputNode * 60,
-                            60 + hidden1Node * 50,
-                            60 + hidden2Node * 50,
-                            100 + outputNode * 60,
-                            100 + outputNode * 60,
+                            80 + (inputNode ?? 0) * 60,
+                            60 + (hidden1Node ?? 0) * 50,
+                            60 + (hidden2Node ?? 0) * 50,
+                            100 + (outputNode ?? 0) * 60,
+                            100 + (outputNode ?? 0) * 60,
                           ],
                         }}
                         transition={{

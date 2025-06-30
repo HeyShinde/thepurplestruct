@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
   },
   // Remove X-Powered-By header for security
   poweredByHeader: false,
+  productionBrowserSourceMaps: true,
   async headers() {
     return [
       {

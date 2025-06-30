@@ -176,7 +176,7 @@
 .glitch-effect {
   position: relative;
   text-shadow: 0.05em 0 0 #00fffc, -0.05em 0 0 #ff00ff;
-  animation: glitch 500ms infinite;
+  animation: glitch 1.5s infinite;
 }
 
 .glitch-effect-font {
@@ -264,5 +264,3 @@
 .katex-scroll-area::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
-
-body.hide-navbar .navbar-root-class { display: none !important; }

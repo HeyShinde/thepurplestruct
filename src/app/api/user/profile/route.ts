@@ -24,8 +24,8 @@ export async function PUT(req: Request) {
     })
 
     return NextResponse.json(user)
-  } catch (error) {
-    console.error("Error updating profile:", error)
+  } catch {
+    // console.error("Error updating profile:", error)
     return NextResponse.json(
       { error: "Failed to update profile" },
       { status: 500 }

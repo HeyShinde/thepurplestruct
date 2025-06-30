@@ -97,8 +97,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               tags: ['source:ml-contact']
             }),
           });
-        } catch (err) {
-          console.error('Newsletter subscription failed:', err);
+        } catch {
+          // console.error('Newsletter subscription failed:', err);
           // Don't throw here, as the contact form submission was successful
         }
       }

@@ -202,22 +202,35 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
                 />
               </Link>
             }
-            description={<Link href={`/blog/${post.slug.current}`}><div className="hidden md:block text-white">{truncateText(post.excerpt)}</div></Link>}
+            description={
+              <Link
+                href={`/blog/${post.slug.current}`}
+                aria-label={`Read blog post: ${post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}`}
+              >
+                <span className="sr-only">{post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}</span>
+                <div className="hidden md:block text-white">{truncateText(post.excerpt)}</div>
+              </Link>
+            }
             header={
-              <div className="w-full h-full relative rounded-lg overflow-hidden">
-                <Link href={`/blog/${post.slug.current}`}>
-                {post.mainImage ? (
-                  <Image
-                    src={urlFor(post.mainImage).url()}
-                    alt={post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-neutral-900 flex items-center justify-center text-purple-400">
-                    No Image
+              <div className="w-full h-full rounded-lg overflow-hidden">
+                <Link 
+                  href={`/blog/${post.slug.current}`}
+                  aria-label={`Read blog post: ${post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}`}
+                >
+                  <div className="relative w-full h-full">
+                    {post.mainImage ? (
+                      <Image
+                        src={urlFor(post.mainImage).url()}
+                        alt={post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-neutral-900 flex items-center justify-center text-purple-400">
+                        No Image
+                      </div>
+                    )}
                   </div>
-                )}
                 </Link>
               </div>
             }

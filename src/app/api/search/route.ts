@@ -37,11 +37,11 @@ export async function GET(request: Request) {
     // The `pt::text()` function can be used for more comprehensive portable text searches
     // but requires a different query structure. The current approach is a good balance.
     const results = await client.fetch(searchQuery, { term: term });
-    console.log("Search results:", results);
+    // console.log("Search results:", results);
 
     return NextResponse.json(results);
-  } catch (error) {
-    console.error("Search API error:", error);
+  } catch {
+    // console.error("Search API error:", error);
     return NextResponse.json(
       { message: "An error occurred during search." },
       { status: 500 }

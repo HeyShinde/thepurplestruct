@@ -34,8 +34,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(url).then(() => {
                         alert("Link copied to clipboard!");
-                    }).catch(err => {
-                        console.error("Failed to copy: ", err);
+                    }).catch(() => {
                         alert("Failed to copy the link. Please try again.");
                     });
                 } else {
@@ -57,6 +56,11 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
                         rel="noopener noreferrer"
                         onClick={link.onClick}
                         className="flex items-center justify-center w-12 h-12 bg-black/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-black/90 transition-colors duration-200 border border-purple-400/20"
+                        aria-label={
+                            link.platform === "Copy Link"
+                                ? "Copy link to clipboard"
+                                : `Share on ${link.platform}`
+                        }
                     >
                         {link.icon}
                     </a>
@@ -72,6 +76,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-12 h-12 bg-black/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-black/90 transition-colors duration-200 border border-purple-400/20"
+                        aria-label={`Share on ${link.platform}`}
                     >
                         {link.icon}
                     </a>

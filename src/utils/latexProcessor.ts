@@ -27,8 +27,8 @@ export function processLatexSSR(text: string): string {
                     </div>
                 </div>
             </div>`;
-        } catch (error) {
-            console.warn('KaTeX SSR error:', error);
+        } catch {
+            // console.warn('KaTeX SSR error:', error);
             return match;
         }
     });
@@ -44,8 +44,8 @@ export function processLatexSSR(text: string): string {
                 output: 'html',
             });
             return `<span class="katex-inline">${rendered}</span>`;
-        } catch (error) {
-            console.warn('KaTeX SSR error:', error);
+        } catch {
+            // console.warn('KaTeX SSR error:', error);
             return match;
         }
     });

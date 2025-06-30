@@ -58,8 +58,8 @@ export const SearchBox = ({ variant = "default" }: SearchBoxProps) => {
           setResults(data);
           setIsLoading(false);
         })
-        .catch((err) => {
-          console.error(err);
+        .catch(() => {
+          // console.error(err);
           setIsLoading(false);
         });
     } else {
