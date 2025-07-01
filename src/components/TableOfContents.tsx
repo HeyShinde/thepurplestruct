@@ -51,7 +51,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                     animation: 'gradientMove 3s linear infinite',
                     mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                     maskComposite: 'exclude',
-                    padding: '1px',
+                    // padding: '1px',
                 }} 
             />
             
