@@ -57,6 +57,24 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="HeyShinde Blog RSS Feed"
+          href="https://www.heyshinde.com/rss.xml"
+        />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          title="HeyShinde Blog Atom Feed"
+          href="https://www.heyshinde.com/atom.xml"
+        />
+        <link
+          rel="alternate"
+          type="application/json"
+          title="HeyShinde Blog JSON Feed"
+          href="https://www.heyshinde.com/feed.json"
+        />
       </head>
       <body className="antialiased bg-zinc-900 text-white" suppressHydrationWarning>
         <Providers>
