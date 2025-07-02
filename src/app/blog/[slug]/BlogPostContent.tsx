@@ -23,6 +23,7 @@ import { processLatexSSR, containsLatex } from '@/utils/latexProcessor'; // Impo
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
 import TableComponent from "@/components/TableComponent";
 import type { Author, SocialLink } from '@/types/author';
+import SocialEmbedBlock from "@/components/SocialEmbedBlock";
 const BookmarkButton = React.lazy(() => import('@/components/BookmarkButton'));
 
 // Helper function to process content recursively and preserve formatting
@@ -275,6 +276,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     </div>
                 </div>
             ),
+            embed: ({ value }) => <SocialEmbedBlock value={value} />,
         },
         marks: {
             link: ({ children, value }) => {

@@ -1,23 +1,25 @@
 "use client";
 import { useSession, signIn } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import React from "react";
+import useSWR from 'swr';
 
-const BookmarkButton = React.memo(function BookmarkButton({ postId, postTitle }: { postId: string, postTitle: string }) {
+const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : { bookmarked: false });
+
+const BookmarkButton = React.memo(function BookmarkButton({ postId, postTitle, className = "" }: { postId: string, postTitle: string, className?: string }) {
   const { data: session } = useSession();
-  const [bookmarked, setBookmarked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (session && postId) {
-      fetch(`/api/bookmarks?postId=${postId}`)
-        .then(res => res.ok ? res.json() : Promise.resolve({ bookmarked: false }))
-        .then(data => setBookmarked(data.bookmarked));
-    }
-  }, [session, postId]);
+  // Use SWR for deduplication and caching
+  const { data, mutate } = useSWR(
+    session && postId ? `/api/bookmarks?postId=${postId}` : null,
+    fetcher,
+    { dedupingInterval: 60000 } // 1 minute deduplication
+  );
+  const bookmarked = !!data?.bookmarked;
 
   const handleBookmark = async () => {
     if (!postId) return;
@@ -32,7 +34,9 @@ const BookmarkButton = React.memo(function BookmarkButton({ postId, postTitle }:
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postId, postTitle }),
     });
-    if (res.ok) setBookmarked(!bookmarked);
+    if (res.ok) {
+      mutate({ bookmarked: !bookmarked }, false); // Optimistic update
+    }
     setLoading(false);
   };
 
@@ -41,7 +45,7 @@ const BookmarkButton = React.memo(function BookmarkButton({ postId, postTitle }:
       <button
         onClick={handleBookmark}
         disabled={loading}
-        className="flex items-center justify-center w-12 h-12 bg-black/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-black/90 transition-colors duration-200 border border-purple-400/20 cursor-pointer"
+        className={`flex items-center justify-center w-12 h-12 bg-black/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-black/90 transition-colors duration-200 border border-purple-400/20 cursor-pointer ${className}`}
         aria-label={session ? (bookmarked ? "Remove bookmark" : "Add bookmark") : "Log in to bookmark"}
         title={session ? (bookmarked ? "Remove bookmark" : "Add bookmark") : "Log in to bookmark"}
         type="button"

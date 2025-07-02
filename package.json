@@ -16,6 +16,7 @@
     "@next-auth/prisma-adapter": "^1.0.7",
     "@next/third-parties": "^15.3.3",
     "@portabletext/react": "^3.2.1",
+    "@portabletext/to-html": "^2.0.14",
     "@prisma/client": "^6.11.0",
     "@radix-ui/react-collapsible": "^1.1.11",
     "@radix-ui/react-hover-card": "^1.1.14",
@@ -49,11 +50,13 @@
     "react-icons": "^5.5.0",
     "react-is": "^19.1.0",
     "react-responsive": "^10.0.1",
+    "react-social-media-embed": "^2.5.18",
     "recharts": "^2.15.3",
     "resend": "^4.5.2",
     "sanity": "^3.91.0",
     "simplex-noise": "^4.0.3",
     "styled-components": "^6.1.18",
+    "swr": "^2.3.4",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {

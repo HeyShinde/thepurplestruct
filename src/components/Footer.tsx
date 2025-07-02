@@ -104,19 +104,27 @@ const Footer = () => {
                 <li><Link href="/blog" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">BLOG</Link></li>
               </ul>
             </div>
+            <div className="mb-8 min-w-[120px]">
+              <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">FEED</p>
+              <ul className="space-y-3 font-mono text-sm lg:text-xs">
+                  <li><Link href="/rss.xml" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">RSS</Link></li>
+                  <li><Link href="/atom.xml" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">ATOM</Link></li>
+                  <li><Link href="/feed.json" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">JSON</Link></li>
+                </ul>
+            </div>
             {/* CONTACT (spans full width on mobile, right column in grid) */}
-            <div className="mb-0 min-w-[120px]">
+            {/* <div className="mb-8 min-w-[120px]">
               <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">CONTACT</p>
               <ul className="space-y-3 font-mono text-sm lg:text-xs">
                 <li><button onClick={() => setIsContactOpen(true)} className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">REACH ME</button></li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* Bottom Section */}
         <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row lg:items-end lg:justify-between mt-8">
           {/* Crafted with Code, Driven by Data.: full width and center on mobile, right on desktop */}
-          <div className="w-full lg:w-auto order-1 lg:order-2 text-[clamp(1.5rem,8vw,4.2rem)] font-bold leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-sans tracking-tight text-center lg:text-right select-none mb-2 lg:mb-0">
+          <div className="w-full lg:w-auto order-1 lg:order-2 text-[clamp(1.5rem,8vw,3.5rem)] min-[1135px]:text-[clamp(1.5rem,8vw,4.2rem)] font-bold leading-none bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent font-sans tracking-tight text-center lg:text-right select-none mb-2 lg:mb-0">
           Crafted with Code, Driven by Data.
           </div>
           {/* Bottom row: left on desktop, full width on mobile */}

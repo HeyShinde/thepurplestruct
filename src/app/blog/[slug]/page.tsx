@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import BlogPostContent from '@/app/blog/[slug]/BlogPostContent';
 import type { BlogPost } from '@/types/blog';
 import { buildSeoData } from './seoHelpers';
+import { notFound } from 'next/navigation';
 
 async function getPost(slug: string) {
     // console.log('Fetching post with slug:', slug);
@@ -104,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const post = await getPost(slug);
-    if (!post) return <div>Post not found</div>;
+    if (!post) return notFound();
     const { blogPostJsonLd, breadcrumbJsonLd } = buildSeoData(post);
     return (
         <>

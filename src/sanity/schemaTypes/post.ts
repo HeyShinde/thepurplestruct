@@ -188,6 +188,47 @@ const blogSchema = {
                     ]
                 },
                 {
+                    name: "embed",
+                    type: "object",
+                    title: "Social Media Embed",
+                    fields: [
+                        {
+                            name: "platform",
+                            type: "string",
+                            title: "Platform",
+                            options: {
+                                list: [
+                                    { title: "X (Twitter)", value: "twitter" },
+                                    { title: "Facebook", value: "facebook" },
+                                    { title: "Instagram", value: "instagram" },
+                                    { title: "YouTube", value: "youtube" },
+                                    { title: "LinkedIn", value: "linkedin" },
+                                    { title: "Pinterest", value: "pinterest" },
+                                    { title: "Other", value: "other" },
+                                ],
+                            },
+                        },
+                        {
+                            name: "url",
+                            type: "url",
+                            title: "Embed URL",
+                            description: "Paste the full URL of the post/video/tweet to embed.",
+                        },
+                        {
+                            name: "width",
+                            type: "number",
+                            title: "Width (px)",
+                            description: "Optional. Leave blank for default.",
+                        },
+                        {
+                            name: "height",
+                            type: "number",
+                            title: "Height (px)",
+                            description: "Optional. Leave blank for default.",
+                        },
+                    ],
+                },
+                {
                     type: "image",
                     options: { hotspot: true },
                     fields: [
