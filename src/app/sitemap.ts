@@ -1,16 +1,4 @@
-import { client } from '@/sanity/lib/client';
 import { MetadataRoute } from 'next';
-
-type SanitySlug = {
-    slug: {
-        current: string;
-    };
-    updatedAt: string;
-};
-
-async function fetchSlugs(type: string): Promise<SanitySlug[]> {
-    return client.fetch(`*[_type == "${type}"]{ "slug": slug, "updatedAt": _updatedAt }`);
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.heyshinde.com';
