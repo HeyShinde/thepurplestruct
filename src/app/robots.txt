@@ -9,4 +9,11 @@ Disallow: /dashboard/
 Disallow: /auth/
 
 # Point crawlers to the sitemap
-Sitemap: https://www.heyshinde.com/sitemap.xml 
+Sitemap: https://www.heyshinde.com/sitemap.xml
+Sitemap: https://www.heyshinde.com/sitemap-blog.xml
+Sitemap: https://www.heyshinde.com/sitemap-courses.xml
+
+# Feeds for blog readers and aggregators
+Feed: https://www.heyshinde.com/rss.xml
+Feed: https://www.heyshinde.com/atom.xml
+Feed: https://www.heyshinde.com/feed.json 

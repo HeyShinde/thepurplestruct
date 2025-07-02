@@ -1,7 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 
-const SubscribeForm = ({ title = "Never miss what's next", description = "Subscribe to our newsletter for the latest updates." }) => {
+interface SubscribeFormProps {
+  title?: string;
+  description?: string;
+  onSuccess?: () => void;
+}
+
+const SubscribeForm = ({ title = "Never miss what's next", description = "Subscribe to our newsletter for the latest updates.", onSuccess }: SubscribeFormProps) => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
@@ -30,6 +36,7 @@ const SubscribeForm = ({ title = "Never miss what's next", description = "Subscr
                 setStatus('success');
                 setMessage('✅ Subscription successful! Check your email inbox or spam to confirm.');
                 setEmail('');
+                if (onSuccess) onSuccess();
             } else {
                 setStatus('error');
                 setMessage(`❌ ${data.error || 'Something went wrong. Please try again.'}`);

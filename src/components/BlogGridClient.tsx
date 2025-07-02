@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
 import { urlFor } from "../sanity/lib/image"
 import Image from "next/image";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import ProcessedText from "@/components/ProcessedText";
 import type { BlogPost } from './BlogGrid';
+import { useMediaQuery } from 'react-responsive';
 
 // Helper function to truncate text
 const truncateText = (text: string, maxLength: number = 150) => {
@@ -158,14 +159,23 @@ function MotifLayer() {
 }
 
 export function BlogGridClient({ posts, displayLimit, paddingTop, title, description, isMainPage = false }: BlogGridClientProps) {
+  const isTabletOrBelow = useMediaQuery({ maxWidth: 1023 });
   const [visibleItems, setVisibleItems] = useState(displayLimit ?? 7);
+
+  useEffect(() => {
+    if (isMainPage && displayLimit === 3 && isTabletOrBelow) {
+      setVisibleItems(2);
+    } else {
+      setVisibleItems(displayLimit ?? 7);
+    }
+  }, [isTabletOrBelow, isMainPage, displayLimit]);
 
   const loadMore = () => {
     setVisibleItems(prev => prev + 7);
   };
 
   return (
-    <div className={`min-h-screen ${displayLimit !== undefined ? 'bg-gradient-to-b from-black via-purple-950 to-black' : 'bg-gradient-to-b from-purple-950 to-black'} relative overflow-hidden`} style={{ paddingTop: paddingTop }}>
+    <div className={`min-h-[400px] md:min-h-[500px] lg:min-h-screen ${displayLimit !== undefined ? 'bg-gradient-to-b from-black via-purple-950 to-black' : 'bg-gradient-to-b from-purple-950 to-black pb-10'} relative overflow-hidden`} style={{ paddingTop: paddingTop }}>
       <MotifLayer />
 
       <div className="relative z-10">
@@ -223,6 +233,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
                         src={urlFor(post.mainImage).url()}
                         alt={post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim()}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
                       />
                     ) : (
@@ -242,9 +253,13 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
               </div>
             }
             className={
-              `${i % 7 === 3 || i % 7 === 6 ? "md:col-span-2" : ""} bg-black/80 border border-purple-400/20 shadow-none`
+              `${i % 7 === 3 || i % 7 === 6 ? "lg:col-span-2" : ""} bg-black/80 border border-purple-400/20 shadow-none`
             }
-            layoutType={i % 7 === 3 ? 'header-left' : i % 7 === 6 ? 'header-right' : 'default'}
+            layoutType={
+              i % 7 === 3 ? 'header-left'
+              : i % 7 === 6 ? 'header-right'
+              : 'default'
+            }
           />
         ))}
       </BentoGrid>

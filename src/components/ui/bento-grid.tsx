@@ -10,7 +10,7 @@ export const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-6 md:auto-rows-[25rem] md:grid-cols-3 px-4",
+        "grid grid-cols-1 gap-6 md:auto-rows-[25rem] md:grid-cols-2 lg:grid-cols-3 px-4",
         className,
       )}
     >
@@ -40,7 +40,7 @@ export const BentoGridItem = ({
     <div
       className={cn(
         "group/bento shadow-input row-span-1 flex justify-between space-y-4 rounded-xl border border-neutral-200 bg-white p-4 transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none",
-        isSideBySide ? 'flex-col md:flex-row md:space-y-0 md:space-x-4' : 'flex-col',
+        isSideBySide ? 'flex-col lg:flex-row lg:space-y-0 lg:space-x-4' : 'flex-col',
         "aspect-square md:aspect-auto",
         className,
       )}
@@ -49,7 +49,7 @@ export const BentoGridItem = ({
         // Side-by-side layout for header-left and header-right
         <>
           {layoutType === 'header-right' && (
-            <div className="w-full md:w-1/2 transition duration-200 group-hover/bento:translate-x-2 flex flex-col justify-center">
+            <div className="w-full lg:w-1/2 transition duration-200 group-hover/bento:translate-x-2 flex flex-col justify-center">
               {icon}
               <div className="mt-2 mb-2 font-sans font-bold text-neutral-600 dark:text-neutral-200">
                 {title}
@@ -60,12 +60,12 @@ export const BentoGridItem = ({
             </div>
           )}
 
-          <div className="w-full md:w-1/2 h-full">
+          <div className="w-full lg:w-1/2 h-full">
             {header}
           </div>
 
           {layoutType !== 'header-right' && ( // This will render for header-left
-            <div className="w-full md:w-1/2 transition duration-200 group-hover/bento:translate-x-2 flex flex-col justify-center">
+            <div className="w-full lg:w-1/2 transition duration-200 group-hover/bento:translate-x-2 flex flex-col justify-center">
               {icon}
               <div className="mt-2 mb-2 font-sans font-bold text-neutral-600 dark:text-neutral-200">
                 {title}

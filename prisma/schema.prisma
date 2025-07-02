@@ -20,6 +20,7 @@ model User {
   enrollments      Enrollment[]
   accounts         Account[]
   sessions         Session[]
+  bookmarks        Bookmark[]
 }
 
 model Course {
@@ -112,4 +113,14 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  postTitle String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  @@unique([userId, postId])
 }

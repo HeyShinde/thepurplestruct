@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import { PortableText, PortableTextComponents } from '@portabletext/react';
@@ -23,6 +23,7 @@ import { processLatexSSR, containsLatex } from '@/utils/latexProcessor'; // Impo
 import type { PortableTextSpan, ArbitraryTypedObject } from '@portabletext/types';
 import TableComponent from "@/components/TableComponent";
 import type { Author, SocialLink } from '@/types/author';
+const BookmarkButton = React.lazy(() => import('@/components/BookmarkButton'));
 
 // Helper function to process content recursively and preserve formatting
 const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
@@ -442,8 +443,11 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         {/* Left Sidebar - Share Buttons */}
                         <div className="hidden lg:block lg:col-span-1">
-                            <div className="sticky top-48">
+                            <div className="sticky top-48 flex flex-col space-y-4 z-20">
                                 <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} />
+                                <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
+                                  <BookmarkButton postId={post._id} postTitle={post.title} />
+                                </Suspense>
                             </div>
                         </div>
 
@@ -476,8 +480,14 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
 
                                 {/* Mobile Share Buttons and Table of Contents */}
                                 <div className="block lg:hidden mb-8">
-                                    <div className="flex flex-col gap-4">
-                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} />
+                                    <div className="flex items-center space-x-4 justify-center">
+                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} >
+                                        <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
+                                          <BookmarkButton postId={post._id} postTitle={post.title} />
+                                        </Suspense>
+                                        </ShareButtons>
+                                    </div>
+                                    <div className="mt-4">
                                         <TableOfContents headings={headings} />
                                     </div>
                                 </div>

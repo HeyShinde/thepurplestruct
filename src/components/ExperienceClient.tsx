@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaGripfire } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { useMediaQuery } from 'react-responsive';
 
 // Define Experience interface based on Sanity schema
 interface Experience {
@@ -44,12 +45,12 @@ const ExperienceCard = ({ date, title, company, description, skills, achievement
     displayDate = d.toLocaleString('default', { month: 'long', year: 'numeric' });
   }
   return (
-    <div className="flex justify-start pt-10 md:pt-40 md:gap-10">
-      <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
-        <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-black flex items-center justify-center">
-          <div className="h-4 w-4 rounded-full bg-purple-400 border-2 border-black" />
+    <div className="flex justify-start pt-10 lg:pt-40 lg:gap-10">
+      <div className="sticky flex flex-col lg:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm lg:w-full">
+        <div className="h-6 w-6 md:h-10 absolute left-1/2 -translate-x-1/2 top-0 md:w-10 rounded-full bg-black flex items-center justify-center lg:left-0">
+          <div className="h-3 w-3 md:h-4 md:w-4 rounded-full bg-purple-400 border-2 border-black" />
         </div>
-        <div className="hidden md:block md:pl-20">
+        <div className="hidden lg:block lg:pl-10">
           <h3 className="text-5xl font-bold text-purple-400 mb-2">
             {displayDate}
           </h3>
@@ -60,8 +61,8 @@ const ExperienceCard = ({ date, title, company, description, skills, achievement
         </div>
       </div>
 
-      <div className="relative pl-20 pr-4 md:pl-4 w-full">
-        <div className="md:hidden block mb-4">
+      <div className="relative pl-20 pr-4 lg:pl-4 w-full">
+        <div className="lg:hidden block mb-4">
           <h3 className="text-2xl font-bold text-purple-400 mb-2">
             {displayDate}
           </h3>
@@ -70,8 +71,8 @@ const ExperienceCard = ({ date, title, company, description, skills, achievement
             <span className="block text-base font-medium text-purple-300">{company}</span>
           </h4>
         </div>
-        <div className="relative group -mx-4 md:mx-0">
-          <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 md:p-6 w-full">
+        <div className="relative group -mx-4 lg:mx-0">
+          <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-4 lg:p-6 w-full">
             <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                  style={{
                    backgroundSize: '200% 100%',
@@ -353,12 +354,18 @@ const BackgroundEffect = () => {
 export function ExperienceClient({ experiences: initialExperiences, displayLimit, showBackground = true, isMainPage = false }: { experiences: Experience[], displayLimit?: number, showBackground?: boolean, isMainPage?: boolean }) {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isTabletOrBelow = useMediaQuery({ maxWidth: 1023 });
 
   useEffect(() => {
     setExperiences(initialExperiences);
   }, [initialExperiences]);
 
-  const experiencesToDisplay = displayLimit ? experiences.slice(0, displayLimit) : experiences;
+  let limit = displayLimit;
+  if (isMainPage) {
+    if (isTabletOrBelow) limit = 1;
+    else limit = 2;
+  }
+  const experiencesToDisplay = limit ? experiences.slice(0, limit) : experiences;
 
   return (
     <div className={showBackground ? "relative bg-gradient-to-b from-black via-purple-950 to-black text-white py-24" : "relative text-white py-24"}>
@@ -385,7 +392,7 @@ export function ExperienceClient({ experiences: initialExperiences, displayLimit
         </motion.div>
         <div ref={containerRef} className="relative">
           <TimelineLine />
-          <div className="space-y-16 md:space-y-0">
+          <div className="space-y-16 lg:space-y-0">
             {experiencesToDisplay.map((experience: Experience, index: number) => (
               <ExperienceCard
                 key={index}

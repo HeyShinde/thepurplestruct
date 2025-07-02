@@ -8,6 +8,7 @@ import { buildSeoData } from './seoHelpers';
 async function getPost(slug: string) {
     // console.log('Fetching post with slug:', slug);
     const query = `*[_type == "blog" && slug.current == $slug][0] {
+        _id,
         title,
         slug,
         author->{

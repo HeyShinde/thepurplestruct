@@ -177,7 +177,7 @@ export function AboutMe() {
   return (
     <div className="relative bg-black overflow-hidden">
       <BackgroundMotif />
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto px-4 py-8 md:py-12">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto px-4 py-8 lg:py-12">
         <div className="flex flex-col overflow-hidden">
           <ContainerScroll
             titleComponent={
@@ -251,7 +251,7 @@ export function AboutMe() {
                   </div>
 
                   <div className="flex flex-col space-y-6 pt-4">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                       <Badge variant="outline" className="font-body bg-purple-400/10 text-purple-400 border-purple-400/20 hover:bg-purple-400/20 flex items-center gap-2">
                         <FaMicrochip className="w-3 h-3" /> LLMs
                       </Badge>

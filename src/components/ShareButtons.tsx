@@ -6,9 +6,10 @@ import { FaTwitter, FaFacebook, FaLinkedin, FaLink } from 'react-icons/fa';
 interface ShareButtonsProps {
     url: string;
     title: string;
+    children?: React.ReactNode; // Accept children for extra icons
 }
 
-const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
+const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title, children }) => {
     const shareLinks = [
         {
             platform: "Twitter",
@@ -65,6 +66,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
                         {link.icon}
                     </a>
                 ))}
+                {children}
             </div>
 
             {/* Small Screen Layout */}
@@ -81,6 +83,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({ url, title }) => {
                         {link.icon}
                     </a>
                 ))}
+                {children}
             </div>
         </>
     );

@@ -24,9 +24,6 @@ export interface BlogPost {
     tags?: string[];
     keywords?: string[];
     mainImage: SanityImage;
-    /**
-     * Short summary of the post, used for meta description and SEO. Should be 150-160 chars.
-     */
     excerpt: string;
     body: PortableText;
     wordCount?: number;

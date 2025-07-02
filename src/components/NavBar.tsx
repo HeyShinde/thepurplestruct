@@ -33,7 +33,7 @@ export function NavBar() {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const userMenuRef = useRef<HTMLDivElement>(null);
     const { data: session, status } = useSession();
-    const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
     const [navItems, setNavItems] = useState<NavItem[]>([]);
     const [hasMounted, setHasMounted] = useState(false);
     const [isCommandOpen, setCommandOpen] = useState(false)
@@ -172,7 +172,7 @@ export function NavBar() {
             >
                 {/* Menu Card (always visible) */}
                 <motion.div
-                    className="absolute top-4 md:top-10 left-4 md:left-20 bg-white rounded-2xl px-4 md:px-8 py-2 shadow-lg w-[calc(100%-2rem)] md:w-[400px] flex flex-col items-stretch min-h-[48px]"
+                    className="absolute top-4 lg:top-10 left-4 lg:left-20 bg-white rounded-2xl px-4 lg:px-8 py-2 shadow-lg w-[calc(100%-2rem)] lg:w-[400px] flex flex-col items-stretch min-h-[48px]"
                 >
                     {/* Top Row: Logo + Profile Image + Hamburger/X */}
                     <div className="flex items-center justify-between">
@@ -379,7 +379,7 @@ export function NavBar() {
                 </motion.div>
                 {/* Contact button & desktop nav */}
                 {isDesktop && (
-                <div className="hidden md:flex items-center gap-4 absolute top-14 right-24">
+                <div className="hidden lg:flex items-center gap-4 absolute top-14 right-24">
                     {/* <button
                         onClick={() => setCommandOpen(true)}
                         className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-md transition-colors hover:bg-gray-700/80"

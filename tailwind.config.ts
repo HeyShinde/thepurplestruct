@@ -13,6 +13,9 @@ const config: Config = {
         'silkscreen-bold': ['var(--font-silkscreen)', 'Silkscreen', 'sans-serif'],
         'nabla': ['Nabla', 'system-ui'],
       },
+      screens: {
+        'tablet': '900px',
+      },
     },
     fontSize: {
       'nabla': ['1rem', {

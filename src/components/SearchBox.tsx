@@ -106,6 +106,8 @@ export const SearchBox = ({ variant = "default" }: SearchBoxProps) => {
         </button>
         <input
           type="search"
+          name="search"
+          id="search-input"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}

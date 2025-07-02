@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { FaTachometerAlt, FaBook, FaUser, FaCog, FaSignOutAlt, FaTimes, FaHome } from 'react-icons/fa'
+import { FaTachometerAlt, FaBook, FaUser, FaCog, FaSignOutAlt, FaTimes, FaHome, FaBookmark } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
@@ -9,6 +9,7 @@ const navLinks = [
   { name: 'Home', href: '/', icon: FaHome },
   { name: 'Dashboard', href: '/dashboard', icon: FaTachometerAlt },
   { name: 'My Courses', href: '/dashboard/courses', icon: FaBook },
+  { name: 'Bookmarks', href: '/dashboard/bookmarks', icon: FaBookmark },
   { name: 'My Profile', href: '/dashboard/profile', icon: FaUser },
   { name: 'Settings', href: '/dashboard/settings', icon: FaCog },
 ]
