@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 const FacebookEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.FacebookEmbed), { ssr: false });
 const InstagramEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.InstagramEmbed), { ssr: false });
@@ -90,7 +90,7 @@ export default function SocialEmbedBlock({ value }: { value: { platform: string,
         if (videoId) {
           ytUrl = `https://www.youtube.com/embed/${videoId}?controls=0&rel=0&modestbranding=1`;
         }
-      } catch (e) {
+      } catch {
         // Invalid URL, fallback to value.url
       }
       embed = <MemoizedYouTubeEmbed url={ytUrl} width={width} {...(height ? { height } : {})} />;

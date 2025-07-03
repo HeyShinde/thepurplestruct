@@ -2,6 +2,7 @@ import { client } from '@/sanity/lib/client';
 import { renderHTMLContent } from '@/utils/feedRenderers';
 import type { PortableTextBlock } from '@portabletext/types';
 import { urlFor } from '@/sanity/lib/image';
+import type { SanityImage } from '@/types/common';
 
 type BlogPost = {
   title: string;
@@ -10,10 +11,10 @@ type BlogPost = {
   body?: PortableTextBlock[];
   publishedAt?: string;
   _updatedAt?: string;
-  mainImage?: any;
+  mainImage?: SanityImage;
   author?: {
     name: string;
-    image?: any;
+    image?: SanityImage;
     bio?: string;
     socialLinks?: { platform: string; url: string }[];
   };

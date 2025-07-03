@@ -5,6 +5,10 @@ interface SidebarPromoParent {
     imageSource?: "upload" | "link";
 }
 
+interface EmbedBlockParent {
+    platform?: string;
+}
+
 // Assign schema to a variable before export
 const blogSchema = {
     name: "blog",
@@ -214,28 +218,28 @@ const blogSchema = {
                             type: "text",
                             title: "Embed Code (HTML)",
                             description: "Paste your full embed HTML code here (iframe, script, etc). This will be rendered as raw HTML.",
-                            hidden: (context: { parent: any }) => context.parent?.platform !== 'embed_code',
+                            hidden: (context: { parent: EmbedBlockParent }) => context.parent?.platform !== 'embed_code',
                         },
                         {
                             name: "url",
                             type: "url",
                             title: "Embed URL",
                             description: "Paste the full URL of the post/video/tweet to embed.",
-                            hidden: (context: { parent: any }) => context.parent?.platform === 'embed_code',
+                            hidden: (context: { parent: EmbedBlockParent }) => context.parent?.platform === 'embed_code',
                         },
                         {
                             name: "width",
                             type: "number",
                             title: "Width (px)",
                             description: "Optional. Leave blank for default.",
-                            hidden: (context: { parent: any }) => context.parent?.platform === 'embed_code',
+                            hidden: (context: { parent: EmbedBlockParent }) => context.parent?.platform === 'embed_code',
                         },
                         {
                             name: "height",
                             type: "number",
                             title: "Height (px)",
                             description: "Optional. Leave blank for default.",
-                            hidden: (context: { parent: any }) => context.parent?.platform === 'embed_code',
+                            hidden: (context: { parent: EmbedBlockParent }) => context.parent?.platform === 'embed_code',
                         },
                     ],
                 },
