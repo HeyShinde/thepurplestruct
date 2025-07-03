@@ -276,7 +276,9 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                     </div>
                 </div>
             ),
-            embed: ({ value }) => <SocialEmbedBlock value={value} />,
+            embed: ({ value }) => (
+                <SocialEmbedBlock value={value} />
+            ),
         },
         marks: {
             link: ({ children, value }) => {
@@ -446,10 +448,11 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                         {/* Left Sidebar - Share Buttons */}
                         <div className="hidden lg:block lg:col-span-1">
                             <div className="sticky top-48 flex flex-col space-y-4 z-20">
-                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} />
-                                <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
-                                  <BookmarkButton postId={post._id} postTitle={post.title} />
-                                </Suspense>
+                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle}>
+                                    <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
+                                        <BookmarkButton postId={post._id} postTitle={post.title} />
+                                    </Suspense>
+                                </ShareButtons>
                             </div>
                         </div>
 

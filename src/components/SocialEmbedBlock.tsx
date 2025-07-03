@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 const FacebookEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.FacebookEmbed), { ssr: false });
 const InstagramEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.InstagramEmbed), { ssr: false });
@@ -8,6 +8,7 @@ const XEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.
 const YouTubeEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.YouTubeEmbed), { ssr: false });
 const LinkedInEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.LinkedInEmbed), { ssr: false });
 const PinterestEmbed = dynamic(() => import('react-social-media-embed').then(mod => mod.PinterestEmbed), { ssr: false });
+const RawEmbed = dynamic(() => import("./RawEmbed"), { ssr: false });
 
 // Memoized versions to prevent unnecessary reloads
 const MemoizedFacebookEmbed = React.memo(FacebookEmbed);
@@ -17,8 +18,8 @@ const MemoizedYouTubeEmbed = React.memo(YouTubeEmbed);
 const MemoizedLinkedInEmbed = React.memo(LinkedInEmbed);
 const MemoizedPinterestEmbed = React.memo(PinterestEmbed);
 
-export default function SocialEmbedBlock({ value }: { value: { platform: string, url: string, width?: number, height?: number } }) {
-  if (!value?.url || !value?.platform) return null;
+export default function SocialEmbedBlock({ value }: { value: { platform: string, url?: string, code?: string, width?: number, height?: number } }) {
+  if (!value?.platform) return null;
   let embed = null;
   const platformLabel = {
     facebook: 'Facebook',
@@ -28,6 +29,7 @@ export default function SocialEmbedBlock({ value }: { value: { platform: string,
     youtube: 'YouTube',
     linkedin: 'LinkedIn',
     pinterest: 'Pinterest',
+    embed_code: 'Embed Code',
     other: 'Embed',
   }[value.platform] || 'Embed';
   const containerClass = `relative rounded-2xl border-2 border-purple-500/60 bg-gradient-to-br from-black via-purple-950 to-black shadow-xl overflow-hidden max-w-full w-[min(100%,500px)] group`;
@@ -36,19 +38,24 @@ export default function SocialEmbedBlock({ value }: { value: { platform: string,
   const height = value.height;
   switch (value.platform) {
     case 'facebook':
+      if (!value.url) return null;
       embed = <MemoizedFacebookEmbed url={value.url} width={width} {...(height ? { height } : {})} />;
       break;
     case 'instagram':
+      if (!value.url) return null;
       embed = <MemoizedInstagramEmbed url={value.url} width={width} {...(height ? { height } : {})} />;
       break;
     case 'twitter':
     case 'x':
+      if (!value.url) return null;
       embed = <MemoizedXEmbed key={value.url} url={value.url} width={width} {...(height ? { height } : {})} />;
       break;
     case 'linkedin':
+      if (!value.url) return null;
       embed = <MemoizedLinkedInEmbed url={value.url} width={width} {...(height ? { height } : {})} />;
       break;
     case 'pinterest':
+      if (!value.url) return null;
       embed = (
         <div
           className="pinterest-embed-wrapper rounded-2xl overflow-hidden"
@@ -70,21 +77,31 @@ export default function SocialEmbedBlock({ value }: { value: { platform: string,
       );
       break;
     case 'youtube': {
-      const url = new URL(value.url);
-      let videoId = '';
-      if (url.hostname === 'youtu.be') {
-        videoId = url.pathname.slice(1);
-      } else if (url.hostname.includes('youtube.com')) {
-        videoId = url.searchParams.get('v') || '';
-      }
+      if (!value.url) return null;
       let ytUrl = value.url;
-      if (videoId) {
-        ytUrl = `https://www.youtube.com/embed/${videoId}?controls=0&rel=0&modestbranding=1`;
+      try {
+        const url = new URL(value.url);
+        let videoId = '';
+        if (url.hostname === 'youtu.be') {
+          videoId = url.pathname.slice(1);
+        } else if (url.hostname.includes('youtube.com')) {
+          videoId = url.searchParams.get('v') || '';
+        }
+        if (videoId) {
+          ytUrl = `https://www.youtube.com/embed/${videoId}?controls=0&rel=0&modestbranding=1`;
+        }
+      } catch (e) {
+        // Invalid URL, fallback to value.url
       }
       embed = <MemoizedYouTubeEmbed url={ytUrl} width={width} {...(height ? { height } : {})} />;
       break;
     }
+    case 'embed_code':
+      if (!value.code) return null;
+      embed = <RawEmbed code={value.code} />;
+      break;
     case 'other':
+      if (!value.url) return null;
       embed = (
         <div className="flex flex-col items-center justify-center p-6">
           <iframe
@@ -101,6 +118,7 @@ export default function SocialEmbedBlock({ value }: { value: { platform: string,
       );
       break;
     default:
+      if (!value.url) return null;
       embed = <a href={value.url} className="text-purple-400 underline break-all" target="_blank" rel="noopener noreferrer">{value.url}</a>;
   }
   return (
