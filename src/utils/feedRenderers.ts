@@ -1,6 +1,6 @@
 import { toHTML } from '@portabletext/to-html';
 import { urlFor } from '@/sanity/lib/image';
-import { processLatexSVGSSR } from '@/utils/latexProcessor';
+import { processLatexSSR } from '@/utils/latexProcessor';
 import type { PortableTextBlock } from '@portabletext/types';
 
 export interface TableRow {
@@ -182,7 +182,7 @@ export function renderHTMLContent(
       },
     },
   });
-  let htmlWithMath = processLatexSVGSSR( categoriesHtml + readHere + html);
+  let htmlWithMath = processLatexSSR( categoriesHtml + readHere + html);
 
   // Author box
   if (author && author.name) {

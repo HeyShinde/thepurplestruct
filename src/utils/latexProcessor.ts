@@ -53,40 +53,6 @@ export function processLatexSSR(text: string): string {
     return result;
 }
 
-export function processLatexSVGSSR(text: string): string {
-    if (!text) return '';
-    let result = text;
-    // Block math $$...$$
-    result = result.replace(/\$\$([^$]+?)\$\$/g, (match, expression) => {
-        try {
-            const rendered = katex.renderToString(expression.trim(), {
-                throwOnError: false,
-                displayMode: true,
-                strict: false,
-                trust: true,
-            });
-            return `<div style="display:flex;justify-content:center;margin:1.5em 0;">${rendered}</div>`;
-        } catch {
-            return match;
-        }
-    });
-    // Inline math $...$
-    result = result.replace(/\$([^$\n]+?)\$/g, (match, expression) => {
-        try {
-            const rendered = katex.renderToString(expression.trim(), {
-                throwOnError: false,
-                displayMode: false,
-                strict: false,
-                trust: true,
-            });
-            return `<span style="vertical-align:middle;">${rendered}</span>`;
-        } catch {
-            return match;
-        }
-    });
-    return result;
-}
-
 export function containsLatex(text: string): boolean {
     return /\$.*?\$/.test(text);
 }
