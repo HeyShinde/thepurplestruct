@@ -10,6 +10,8 @@ import "./globals.css"
 import { Providers } from "@/components/providers"
 import Script from "next/script"
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -98,6 +100,7 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtm.js?id=GT-PJ5RLN2D"
           strategy="lazyOnload"
         />
+        <SpeedInsights/>
       </body>
     </html>
   )
