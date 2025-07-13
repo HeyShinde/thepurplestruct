@@ -138,34 +138,54 @@ const blogSchema = {
                 },
                 {
                     name: "codeBlock",
-                    type: "object", // Fix: Use an object instead of 'code'
+                    type: "object",
                     title: "Code Block",
                     fields: [
                         {
-                            name: "language",
-                            type: "string",
-                            title: "Language",
-                            options: {
-                                list: [
-                                    { title: "JavaScript", value: "javascript" },
-                                    { title: "HTML", value: "html" },
-                                    { title: "CSS", value: "css" },
-                                    { title: "Python", value: "python" },
-                                    { title: "Other", value: "other" },
-                                ],
-                            },
+                            name: "codes",
+                            type: "array",
+                            title: "Code Snippets",
+                            of: [
+                                {
+                                    type: "object",
+                                    fields: [
+                                        {
+                                            name: "language",
+                                            type: "string",
+                                            title: "Language",
+                                            options: {
+                                                list: [
+                                                    { title: "Python", value: "python" },
+                                                    { title: "C++", value: "cpp" },
+                                                    { title: "C", value: "c" },
+                                                    { title: "Java", value: "java" },
+                                                    { title: "JS", value: "javascript" },
+                                                    { title: "Other", value: "other" },
+                                                ],
+                                            },
+                                        },
+                                        {
+                                            name: "customLanguage",
+                                            type: "string",
+                                            title: "Custom Language Name",
+                                            description: "Enter the name of the programming language",
+                                            hidden: ({ parent }: { parent: { language?: string } }) => parent?.language !== "other",
+                                        },
+                                        {
+                                            name: "code",
+                                            type: "text",
+                                            title: "Code",
+                                        },
+                                    ],
+                                },
+                            ],
                         },
                         {
                             name: 'showCopyButton',
                             title: 'Show Copy Button',
                             type: 'boolean',
                             description: 'Enable or disable the copy button for this code block.',
-                            initialValue: true, // Default to enabled
-                        },
-                        {
-                            name: "code",
-                            type: "text",
-                            title: "Code",
+                            initialValue: true,
                         },
                     ],
                 },
