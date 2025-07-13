@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
   try {
     // Next.js 15 App Router: Use the experimental revalidatePath API
     // See: https://nextjs.org/docs/app/api-reference/functions/revalidatePath
-    // @ts-ignore
+    // @ts-expect-error revalidatePath is experimental and not typed yet
     if (typeof revalidatePath === 'function') {
-      // @ts-ignore
+      // @ts-expect-error revalidatePath is experimental and not typed yet
       revalidatePath('/blog');
       if (slug) {
-        // @ts-ignore
+        // @ts-expect-error revalidatePath is experimental and not typed yet
         revalidatePath(`/blog/${slug}`);
       }
       return NextResponse.json({ revalidated: true, now: Date.now(), slug });
