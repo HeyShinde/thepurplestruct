@@ -264,3 +264,7 @@
 .katex-scroll-area::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
+
+.shiki {
+  background: transparent !important;
+}

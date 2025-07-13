@@ -156,8 +156,8 @@ const blogSchema = {
                                             options: {
                                                 list: [
                                                     { title: "Python", value: "python" },
-                                                    { title: "C++", value: "cpp" },
                                                     { title: "C", value: "c" },
+                                                    { title: "C++", value: "cpp" },
                                                     { title: "Java", value: "java" },
                                                     { title: "JS", value: "javascript" },
                                                     { title: "Other", value: "other" },

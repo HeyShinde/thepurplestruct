@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import ProcessedText from './ProcessedText';
 
 interface TableRow {
     cells: string[];
@@ -46,7 +47,7 @@ const TableComponent: React.FC<{ value: TableValue }> = ({ value }) => {
                                                     viewport={{ once: true }}
                                                 >
                                                     <div className="flex items-center space-x-1 md:space-x-2">
-                                                        <span>{header}</span>
+                                                        <span><ProcessedText text={header} minimal /></span>
                                                         <div className="w-0.5 h-0.5 md:w-1 md:h-1 bg-purple-400/50 rounded-full flex-shrink-0"></div>
                                                     </div>
                                                 </motion.th>
@@ -75,7 +76,7 @@ const TableComponent: React.FC<{ value: TableValue }> = ({ value }) => {
                                                     className="px-2 py-2 md:px-4 md:py-3 text-neutral-200 text-xs md:text-sm group-hover:text-white transition-colors"
                                                 >
                                                     <div className="flex items-center">
-                                                        <span>{cell}</span>
+                                                        <span><ProcessedText text={cell} minimal /></span>
                                                     </div>
                                                 </td>
                                             ))}
@@ -95,7 +96,7 @@ const TableComponent: React.FC<{ value: TableValue }> = ({ value }) => {
                                 viewport={{ once: true }}
                             >
                                 <p className="text-center text-xs md:text-sm text-purple-400/70 italic">
-                                    {caption}
+                                    <ProcessedText text={caption} minimal />
                                 </p>
                             </motion.div>
                         )}
