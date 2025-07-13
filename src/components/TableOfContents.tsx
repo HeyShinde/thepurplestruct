@@ -2,6 +2,7 @@
 import React from "react";
 import classNames from "classnames";
 import '@/app/globals.css';
+import ProcessedText from './ProcessedText';
 
 interface Heading {
     level: number;
@@ -86,7 +87,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings }) => {
                                 }
                             )}
                         >
-                            {heading.text}
+                            <ProcessedText text={heading.text} minimal />
                         </a>
                     </li>
                 ))}
