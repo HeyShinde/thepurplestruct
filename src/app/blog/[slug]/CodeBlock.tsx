@@ -89,7 +89,8 @@ const CodeBlock = ({ value }: { value: CodeBlockValue }) => {
   
       setHtml(htmlOutput);
     })();
-  }, [current]);
+  }, [current.code, current.language]);
+
 
   if (!codes.length) return null;
 
