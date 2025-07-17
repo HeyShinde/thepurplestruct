@@ -34,7 +34,7 @@ const query = groq`
     "lessons": count(sections[]->lessons[]),
   }
 `
-const pageUrl = "https://www.heyshinde.com/courses";
+const pageUrl = "https://www.thepurplestruct.com/courses";
 
 export async function generateMetadata(): Promise<Metadata> {
   const courses = await client.fetch(query);
@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       provider: {
         '@type': 'Person',
         name: course.tutor.name,
-        '@id': 'https://www.heyshinde.com/#person'
+        '@id': 'https://www.thepurplestruct.com/#person'
       },
       educationalLevel: course.educationalLevel,
       teaches: course.whatYouWillLearn,

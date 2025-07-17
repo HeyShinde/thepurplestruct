@@ -42,8 +42,8 @@ const rubikGlitch = Rubik_Glitch({
 })
 
 export const metadata: Metadata = {
-  title: "HeyShinde | Shinde Aditya",
-  description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer, AI Researcher, and Author. Learn from the best.",
+  title: "The Purple Struct",
+  description: "Visual tech tutorials on data structures, ML, and systems by Shinde Aditya."
 };
 
 export default function RootLayout({
@@ -62,20 +62,20 @@ export default function RootLayout({
         <link
           rel="alternate"
           type="application/rss+xml"
-          title="HeyShinde Blog RSS Feed"
-          href="https://www.heyshinde.com/rss.xml"
+          title="The Purple Struct Blog RSS Feed"
+          href="https://www.thepurplestruct.com/rss.xml"
         />
         <link
           rel="alternate"
           type="application/atom+xml"
-          title="HeyShinde Blog Atom Feed"
-          href="https://www.heyshinde.com/atom.xml"
+          title="The Purple Struct Blog Atom Feed"
+          href="https://www.thepurplestruct.com/atom.xml"
         />
         <link
           rel="alternate"
           type="application/json"
-          title="HeyShinde Blog JSON Feed"
-          href="https://www.heyshinde.com/feed.json"
+          title="The Purple Struct Blog JSON Feed"
+          href="https://www.thepurplestruct.com/feed.json"
         />
       </head>
       <body className="antialiased bg-zinc-900 text-white" suppressHydrationWarning>

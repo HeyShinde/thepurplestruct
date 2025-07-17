@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   if (!category) {
     return {
-      title: "Category Not Found | HeyShinde Blog",
+      title: "Category Not Found | The Purple Struct Blog",
     };
   }
 
-  const pageUrl = `https://www.heyshinde.com/blog/category/${slug}`;
-  const title = `${category.title} Articles | HeyShinde - Shinde Aditya's Blog`;
+  const pageUrl = `https://www.thepurplestruct.com/blog/category/${slug}`;
+  const title = `${category.title} Articles | The Purple Struct`;
   const description = category.description || `Explore ${category.title} articles and insights from Shinde Aditya's blog—covering Machine Learning, AI, and unique perspectives on technology.`;
   
   const jsonLd = {
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     'description': description,
     'isPartOf': {
       '@type': 'Blog',
-      '@id': 'https://www.heyshinde.com/blog/#blog'
+      '@id': 'https://www.thepurplestruct.com/blog/#blog'
     }
   };
 

@@ -131,7 +131,7 @@ const Footer = () => {
           <div className="w-full lg:w-auto order-2 lg:order-1 flex flex-row justify-between lg:justify-start items-center text-xs font-mono text-purple-400/80 gap-x-4 lg:gap-x-16 mb-2 lg:mb-0">
             <span>©2025</span>
             <Link href="/privacy" className="hover:underline hover:text-purple-400 transition-colors">PRIVACY</Link>
-            <a href="mailto:hello@heyshinde.com" className="hover:underline hover:text-purple-400 transition-colors">EMAIL</a>
+            <a href="mailto:hello@thepurplestruct.com" className="hover:underline hover:text-purple-400 transition-colors">EMAIL</a>
           </div>
         </div>
       </footer>

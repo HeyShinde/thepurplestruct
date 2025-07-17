@@ -448,7 +448,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                         {/* Left Sidebar - Share Buttons */}
                         <div className="hidden lg:block lg:col-span-1">
                             <div className="sticky top-48 flex flex-col space-y-4 z-20">
-                                <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle}>
+                                <ShareButtons url={`https://www.thepurplestruct.com/blog/${post.slug.current}`} title={seoFriendlyTitle}>
                                     <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
                                         <BookmarkButton postId={post._id} postTitle={post.title} />
                                     </Suspense>
@@ -486,7 +486,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 {/* Mobile Share Buttons and Table of Contents */}
                                 <div className="block lg:hidden mb-8">
                                     <div className="flex items-center space-x-4 justify-center">
-                                        <ShareButtons url={`https://www.heyshinde.com/blog/${post.slug.current}`} title={seoFriendlyTitle} >
+                                        <ShareButtons url={`https://www.thepurplestruct.com/blog/${post.slug.current}`} title={seoFriendlyTitle} >
                                         <Suspense fallback={<div style={{ width: 48, height: 48 }} />}> 
                                           <BookmarkButton postId={post._id} postTitle={post.title} />
                                         </Suspense>

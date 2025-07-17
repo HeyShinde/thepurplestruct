@@ -5,19 +5,19 @@ import { Suspense } from "react";
 import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const pageUrl = "https://www.heyshinde.com/blog";
-  const title = "Blog | HeyShinde";
+  const pageUrl = "https://www.thepurplestruct.com/blog";
+  const title = "Blog | The Purple Struct";
   const description = "Explore articles on Machine Learning, MLOps, AI, and modern web development from Shinde Aditya's perspective.";
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
     '@id': `${pageUrl}/#blog`,
-    'name': 'HeyShinde Blog',
+    'name': 'The Purple Struct',
     'url': pageUrl,
     'publisher': {
       '@type': 'Person',
-      '@id': 'https://www.heyshinde.com/#person'
+      '@id': 'https://www.thepurplestruct.com/#person'
     },
     'description': description
   };

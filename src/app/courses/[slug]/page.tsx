@@ -44,9 +44,9 @@ export async function generateMetadata({ params }: { params: ParamsType }): Prom
         }
     }
     
-    const pageUrl = `https://www.heyshinde.com/courses/${course.slug.current}`;
+    const pageUrl = `https://www.thepurplestruct.com/courses/${course.slug.current}`;
     const imageUrl = course.image ? urlFor(course.image).url() : '';
-    const homePageUrl = "https://www.heyshinde.com";
+    const homePageUrl = "https://www.thepurplestruct.com";
     
     const courseJsonLd = {
         '@context': 'https://schema.org',
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: { params: ParamsType }): Prom
         educationalCredentialAwarded: course.educationalCredentialAwarded,
         provider: {
             '@type': 'Person',
-            '@id': 'https://www.heyshinde.com/#person',
+            '@id': 'https://www.thepurplestruct.com/#person',
             name: course.tutor?.name,
         },
         hasCourseInstance: {
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: { params: ParamsType }): Prom
             courseMode: course.courseMode || ['online', 'self-paced'],
             instructor: {
                 '@type': 'Person',
-                '@id': 'https://www.heyshinde.com/#person',
+                '@id': 'https://www.thepurplestruct.com/#person',
                 name: course.tutor?.name,
             }
         },

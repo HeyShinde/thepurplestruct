@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://www.heyshinde.com';
+    const baseUrl = 'https://www.thepurplestruct.com';
 
     // 3. Define static routes
     const staticUrls: MetadataRoute.Sitemap = [

@@ -4,7 +4,7 @@ type BlogPost = { slug: string; updatedAt?: string; };
 type Category = { slug: string; updatedAt?: string; };
 
 export async function GET() {
-  const baseUrl = 'https://www.heyshinde.com';
+  const baseUrl = 'https://www.thepurplestruct.com';
   const postSlugs: BlogPost[] = await client.fetch(`*[_type == "blog"]{ "slug": slug.current, "updatedAt": _updatedAt }`);
   const categorySlugs: Category[] = await client.fetch(`*[_type == "category"]{ "slug": slug.current, "updatedAt": _updatedAt }`);
 

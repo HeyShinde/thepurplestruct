@@ -22,7 +22,7 @@ type BlogPost = {
   categories?: { title: string }[];
 };
 export async function GET() {
-  const baseUrl = 'https://www.heyshinde.com';
+  const baseUrl = 'https://www.thepurplestruct.com';
   const posts: BlogPost[] = await client.fetch(`*[_type == "blog"]|order(publishedAt desc)[0...20]{ title, slug, excerpt, body, publishedAt, _updatedAt, mainImage, author->{name, image, bio, socialLinks}, categories[]->{title} }`);
 
   const items = posts.map((post) => {

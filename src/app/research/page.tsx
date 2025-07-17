@@ -42,13 +42,13 @@ export async function generateMetadata(): Promise<Metadata> {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://www.heyshinde.com',
+        item: 'https://www.thepurplestruct.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Research',
-        item: 'https://www.heyshinde.com/research',
+        item: 'https://www.thepurplestruct.com/research',
       },
     ],
   };

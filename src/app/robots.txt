@@ -9,6 +9,6 @@ Disallow: /dashboard/
 Disallow: /auth/
 
 # Point crawlers to the sitemap
-Sitemap: https://www.heyshinde.com/sitemap.xml
-Sitemap: https://www.heyshinde.com/sitemap-blog.xml
-Sitemap: https://www.heyshinde.com/sitemap-courses.xml
+Sitemap: https://www.thepurplestruct.com/sitemap.xml
+Sitemap: https://www.thepurplestruct.com/sitemap-blog.xml
+Sitemap: https://www.thepurplestruct.com/sitemap-courses.xml

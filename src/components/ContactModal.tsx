@@ -148,7 +148,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
               {/* Contact Details */}
               <div className="flex flex-col items-center gap-5 mt-24">
-                <a href="mailto:hello@heyshinde.com" className="text-white hover:text-purple-300 transition" title="Email">
+                <a href="mailto:hello@thepurplestruct.com" className="text-white hover:text-purple-300 transition" title="Email">
                   <MdEmail size={22} />
                 </a>
                 <a href="https://github.com/heyshinde" target="_blank" rel="noopener noreferrer" className="text-white hover:text-purple-300 transition" title="GitHub">

@@ -119,12 +119,12 @@ export function renderHTMLContent(
     categoriesHtml = `<div style=\"margin-bottom:0.5em;\">Categories: ` +
       categories.map(cat => {
         const slug = slugify(cat.title);
-        return `<a href=\"https://www.heyshinde.com/blog/category/${slug}\" style=\"color:#a78bfa;text-decoration:none;\">${cat.title}</a>`;
+        return `<a href=\"https://www.thepurplestruct.com/blog/category/${slug}\" style=\"color:#a78bfa;text-decoration:none;\">${cat.title}</a>`;
       }).join(', ') +
       `</div>`;
   }
-  const subscribeLink = `<div style=\"margin:1.5em 0;text-align:center;\"><a href=\"https://www.heyshinde.com/subscribe\" style=\"display:inline-block;padding:0.75em 2em;background:#a78bfa;color:#181825;font-weight:bold;border-radius:8px;text-decoration:none;font-size:1.1em;box-shadow:0 2px 8px #0002;transition:background 0.2s;\" target=\"_blank\">Subscribe to the Newsletter</a></div>`;
-  const readHere = `<p><a href=\"${url}\">Read this post on HeyShinde.com for the best experience (with math, images, and formatting).</a></p>`;
+  const subscribeLink = `<div style=\"margin:1.5em 0;text-align:center;\"><a href=\"https://www.thepurplestruct.com/subscribe\" style=\"display:inline-block;padding:0.75em 2em;background:#a78bfa;color:#181825;font-weight:bold;border-radius:8px;text-decoration:none;font-size:1.1em;box-shadow:0 2px 8px #0002;transition:background 0.2s;\" target=\"_blank\">Subscribe to the Newsletter</a></div>`;
+  const readHere = `<p><a href=\"${url}\">Read this post on ThePurpleStruct.com for the best experience (with math, images, and formatting).</a></p>`;
   const html = toHTML(body, {
     components: {
       types: {

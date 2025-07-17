@@ -22,13 +22,13 @@ type BlogPost = {
 };
 
 export async function GET() {
-  const baseUrl = 'https://www.heyshinde.com';
+  const baseUrl = 'https://www.thepurplestruct.com';
   const posts: BlogPost[] = await client.fetch(`*[_type == "blog"]|order(publishedAt desc)[0...20]{ title, slug, excerpt, body, publishedAt, _updatedAt, mainImage, author->{name, image, bio, socialLinks}, categories[]->{title} }`);
 
   let xml = `<?xml version="1.0" encoding="utf-8"?>\n`;
   xml += `<feed xmlns="http://www.w3.org/2005/Atom">\n`;
   xml += `<title>ML x Dev by Shinde</title>\n<link href="${baseUrl}/blog"/>\n<icon>${baseUrl}/favicon.ico</icon>\n<updated>${new Date(posts[0]?.publishedAt || Date.now()).toISOString()}</updated>\n<id>${baseUrl}/atom.xml</id>\n`;
-  xml += `<icon>https://www.heyshinde.com/favicon.ico</icon>\n`;
+  xml += `<icon>https://www.thepurplestruct.com/favicon.ico</icon>\n`;
 
   posts.forEach((post) => {
     const url = `${baseUrl}/blog/${post.slug.current}`;

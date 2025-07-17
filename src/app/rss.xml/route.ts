@@ -22,13 +22,13 @@ type BlogPost = {
 };
 
 export async function GET() {
-  const baseUrl = 'https://www.heyshinde.com';
+  const baseUrl = 'https://www.thepurplestruct.com';
   const posts: BlogPost[] = await client.fetch(`*[_type == "blog"]|order(publishedAt desc)[0...20]{ title, slug, excerpt, body, publishedAt, _updatedAt, mainImage, author->{name, image, bio, socialLinks}, categories[]->{title} }`);
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
   xml += `<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">\n<channel>\n`;
-  xml += `<title>ML x Dev by Shinde</title>\n<link>${baseUrl}/blog</link>\n<image>\n<url>${baseUrl}/favicon.ico</url>\n<title>HeyShinde Blog</title>\n<link>${baseUrl}/blog</link>\n</image>\n<description>Latest posts from HeyShinde</description>\n`;
-  xml += `<icon>https://www.heyshinde.com/favicon.ico</icon>\n`;
+  xml += `<title>ML x Dev by Shinde</title>\n<link>${baseUrl}/blog</link>\n<image>\n<url>${baseUrl}/favicon.ico</url>\n<title>The Purple Struct Blog</title>\n<link>${baseUrl}/blog</link>\n</image>\n<description>Latest posts from The Purple Struct</description>\n`;
+  xml += `<icon>https://www.thepurplestruct.com/favicon.ico</icon>\n`;
 
   posts.forEach((post) => {
     const url = `${baseUrl}/blog/${post.slug.current}`;

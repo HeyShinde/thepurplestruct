@@ -17,9 +17,9 @@ export function portableTextToPlainText(blocks: PortableTextBlock[]) {
 }
 
 export function buildSeoData(post: BlogPost) {
-  const postUrl = `https://www.heyshinde.com/blog/${post.slug.current}`;
+  const postUrl = `https://www.thepurplestruct.com/blog/${post.slug.current}`;
   const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : "";
-  const homePageUrl = "https://www.heyshinde.com";
+  const homePageUrl = "https://www.thepurplestruct.com";
   const seoFriendlyTitle = post.title.replace(/\$.*?\$/g, '').replace(/\s+/g, ' ').trim();
 
   const blogPostJsonLd = {
@@ -28,7 +28,7 @@ export function buildSeoData(post: BlogPost) {
     'isPartOf': {
       '@type': 'Blog',
       '@id': `${homePageUrl}/blog/#blog`,
-      'name': 'HeyShinde Blog',
+      'name': 'The Purple Struct Blog',
       'publisher': {
         '@id': `${homePageUrl}/#person`
       }

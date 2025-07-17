@@ -24,7 +24,7 @@ const coursesQuery = groq`
 `
 
 export async function generateMetadata(): Promise<Metadata> {
-  const pageUrl = "https://www.heyshinde.com";
+  const pageUrl = "https://www.thepurplestruct.com";
   const imageUrl = `${pageUrl}/images/profile-img.webp`; // Ensure this is the correct path to your image
   const name = "Shinde Aditya";
   const jobTitle = "Machine Learning Engineer";
@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
     name: name,
     givenName: "Aditya",
     familyName: "Shinde",
-    alternateName: "HeyShinde",
+    alternateName: "Hey Shinde",
     url: pageUrl,
     image: imageUrl,
     jobTitle: jobTitle,
@@ -64,11 +64,11 @@ export async function generateMetadata(): Promise<Metadata> {
       "https://www.kaggle.com/heyshinde",
       "https://www.instagram.com/heyshinde",
       "https://www.goodreads.com/author/show/52899939.Shinde_Aditya",
-      "https://www.youtube.com/@heyshinde" // Add your YouTube channel
+      "https://www.youtube.com/@thepurplestruct" // Add your YouTube channel
     ],
     worksFor: {
       '@type': 'Organization',
-      name: 'Self Employed',
+      name: 'The Purple Struct',
     },
     parent: [
       { "@type": "Person", "name": "Shinde Ghanshyam" },
@@ -122,7 +122,7 @@ export async function generateMetadata(): Promise<Metadata> {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     url: pageUrl,
-    name: 'HeyShinde',
+    name: 'The Purple Struct',
     potentialAction: {
       '@type': 'SearchAction',
       target: `${pageUrl}/search?q={search_term_string}`,
@@ -131,29 +131,29 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 
   return {
-    title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
-    description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer, AI Researcher, and Author. Specializing in LLMs, MLOps, and AI development.",
+    title: `The Purple Struct`,
+    description: "The Purple Struct – Visual tech tutorials on data structures, ML, and systems by Shinde Aditya.",
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
-      title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
-      description: "HeyShinde (Shinde Aditya) - Explore the work and thoughts of a dedicated ML Engineer and AI researcher.",
+      title: `The Purple Struct`,
+      description: "The Purple Struct – Visual tech tutorials on data structures, ML, and systems by Shinde Aditya.",
       url: pageUrl,
       images: [
         {
           url: imageUrl,
           width: 800,
           height: 600,
-          alt: "HeyShinde - Shinde Aditya",
+          alt: "The Purple Struct",
         },
       ],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `HeyShinde | Shinde Aditya - ${jobTitle}`,
-      description: "HeyShinde (Shinde Aditya) - Machine Learning Engineer and AI Researcher.",
+      title: `The Purple Struct`,
+      description: "Visual tech tutorials on data structures, ML, and systems by Shinde Aditya.",
       images: [imageUrl],
     },
     other: {

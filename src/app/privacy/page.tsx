@@ -126,7 +126,7 @@ export default function PrivacyPage() {
                   If you have any questions about this Privacy Policy or my data practices, please contact me:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 mt-3">
-                  <li>Email: hello@heyshinde.com</li>
+                  <li>Email: hello@thepurplestruct.com</li>
                   <li>Through the contact form on my website</li>
                   <li>LinkedIn: <a href="https://www.linkedin.com/in/heyshinde" className="text-purple-400 hover:text-purple-300 transition-colors">linkedin.com/in/heyshinde</a></li>
                 </ul>

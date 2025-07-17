@@ -39,8 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       await resend.emails.send({
-        from: 'Contact Form <contactmodal@heyshinde.com>',
-        to: 'hello@heyshinde.com', // <-- change to your email
+        from: 'Contact Form <contactmodal@thepurplestruct.com>',
+        to: 'hello@thepurplestruct.com', // <-- change to your email
         subject: 'New Contact Form Submission',
         text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
         attachments,

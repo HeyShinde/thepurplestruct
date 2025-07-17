@@ -3,7 +3,7 @@ import { client } from '@/sanity/lib/client';
 type Course = { slug: string; updatedAt?: string; };
 
 export async function GET() {
-  const baseUrl = 'https://www.heyshinde.com';
+  const baseUrl = 'https://www.thepurplestruct.com';
   const courseSlugs: Course[] = await client.fetch(`*[_type == "course"]{ "slug": slug.current, "updatedAt": _updatedAt }`);
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';

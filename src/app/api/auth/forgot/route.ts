@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   
   try {
     await resend.emails.send({
-      from: 'HeyShinde <noreply@heyshinde.com>',
+      from: 'The Purple Struct <noreply@thepurplestruct.com>',
       to: email,
       subject: 'Reset your password',
       html: `
