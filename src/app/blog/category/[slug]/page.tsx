@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const pageUrl = `https://www.thepurplestruct.com/blog/category/${slug}`;
   const title = `${category.title} Articles | The Purple Struct`;
-  const description = category.description || `Explore ${category.title} articles and insights from Shinde Aditya's blog—covering Machine Learning, AI, and unique perspectives on technology.`;
+  const description = category.description || `Explore ${category.title} articles and insights from The Purple Struct's blog—covering Machine Learning, AI, and unique perspectives on technology.`;
   
   const jsonLd = {
     '@context': 'https://schema.org',

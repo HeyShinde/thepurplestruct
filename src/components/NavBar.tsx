@@ -189,8 +189,8 @@ export function NavBar() {
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
                             >
                                 <Image
-                                    src="/images/profile-img.webp"
-                                    alt="Profile"
+                                    src="/images/thepurplestruct.webp"
+                                    alt="Logo"
                                     width={48}
                                     height={48}
                                     className="rounded-full object-cover"
@@ -218,7 +218,7 @@ export function NavBar() {
                             </Link>
                             <Link href="/" className="z-50">
                                 <span className="font-heading glitch-effect text-base md:text-lg text-black">
-                                    Hey<span style={{ fontWeight: 700 }}>Shinde</span>
+                                    The <span className="text-purple-400" style={{ fontWeight: 700 }}>Purple </span>Struct
                                 </span>
                             </Link>
                         </div>

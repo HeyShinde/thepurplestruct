@@ -3,8 +3,8 @@ import Footer from '@/components/Footer'
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Shinde Aditya",
-  description: "Privacy policy for Shinde Aditya's personal portfolio, courses, and blog.",
+  title: "Privacy Policy | The Purple Struct",
+  description: "Privacy policy for The Purple Struct, including information about data collection, courses, and blog.",
   alternates: {
     canonical: "/privacy",
   },
@@ -38,8 +38,8 @@ export default function PrivacyPage() {
               <section>
                 <h2 className="text-2xl font-semibold text-purple-400 mb-4">Introduction</h2>
                 <p>
-                  Welcome to my personal portfolio website. I&apos;m Shinde Aditya, a Machine Learning Engineer, and this is my personal website where I share my projects, courses, blog posts, and professional experience.
-                </p>
+                  Welcome to The Purple Struct&apos;s website. I&apos;m Shinde Aditya, a Machine Learning Engineer, and this is my personal website where I share courses, blog posts, and professional experience.
+                </p>```
                 <p>
                   This Privacy Policy explains how I collect, use, and protect your information when you visit my website, subscribe to my newsletter, or interact with my content.
                 </p>

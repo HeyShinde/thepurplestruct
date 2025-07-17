@@ -71,7 +71,7 @@ export default defineType({
       initialValue: [
         {
           platform: 'linkedin',
-          url: 'https://linkedin.com/in/heyshinde',
+          url: 'https://www.linkedin.com/in/heyshinde',
         },
         {
           platform: 'github',

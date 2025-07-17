@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { CourseCard } from './CourseCard';
+import React from "react";
 
 interface Course {
   _id: string;
@@ -55,21 +56,28 @@ export function CoursesList({ courses, displayLimit, showTitle = true, isMainPag
           {displayLimit !== undefined && courses.length > displayLimit && (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center">
               <div className="w-full h-full rounded-xl relative group flex items-center justify-center">
-                <Link
-                  href="/courses"
-                  className="w-[260px] h-[70px] flex items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/60 via-purple-400/40 to-blue-500/40 backdrop-blur-md border-4 border-transparent [background-clip:padding-box] relative shadow-2xl group"
-                  style={{
-                    boxShadow: '0 4px 32px 0 rgba(168,85,247,0.25), 0 1.5px 0 0 #fff inset',
-                  }}
-                >
-                                    <span className="font-heading text-white font-bold text-lg drop-shadow-lg tracking-wide pr-2">
-                    View All Courses
-                  </span>
-                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-1 text-purple-200 group-hover:text-white transition-colors duration-200">
-                                        <path d="M7 14h14M15 10l6 4-6 4" />
-                  </svg>
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none border-4 border-transparent group-hover:border-purple-400 group-hover:shadow-[0_0_24px_4px_rgba(168,85,247,0.5)] transition-all duration-200" />
-                </Link>
+                  <Link href="/blog">
+                      <button
+                          className="relative inline-flex h-[48px] w-[16rem] overflow-hidden rounded-2xl p-[2px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+                      >
+                          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-2xl bg-white px-6 py-2 text-lg font-semibold text-purple-700 backdrop-blur-3xl">
+                                View All Blogs
+                    <svg
+                        width="28"
+                        height="28"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="ml-1"
+                    >
+                      <path d="M7 14h14M15 10l6 4-6 4" />
+                    </svg>
+                    </span>
+                      </button>
+                  </Link>
               </div>
             </div>
           )}
