@@ -166,7 +166,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             <div className="flex-1 flex flex-col px-0 py-0">
               {/* Terminal-style heading */}
               <div className="w-full bg-[#2d0a4a] px-6 py-3 flex items-center rounded-tr-2xl" style={{ fontFamily: 'var(--font-silkscreen, monospace)' }}>
-                <span className="text-purple-200 text-base font-mono tracking-wide">hello@heyshinde</span>
+                <span className="text-purple-200 text-base font-mono tracking-wide">hello@thepurplestruct.com</span>
               </div>
               <div className="flex-1 flex flex-col px-10 py-8">
                 <form className="flex flex-col gap-4 mb-6 items-center" onSubmit={handleSubmit}>
