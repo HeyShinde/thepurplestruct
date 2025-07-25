@@ -88,10 +88,10 @@ const Footer = () => {
             <div className="mb-8 min-w-[120px]">
               <p className="text-purple-400/80 font-bold font-mono mb-3 tracking-widest">SOCIAL</p>
               <ul className="space-y-3 font-mono text-sm lg:text-xs">
+                <li><a href="https://github.com/thepurplestruct" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">GITHUB</a></li>
+                <li><a href="https://discord.gg/F5Y66NABvU" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">DISCORD</a></li>
+                <li><a href="https://www.linkedin.com/company/thepurplestruct" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">LINKEDIN</a></li>
                 <li><a href="https://www.x.com/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">X(TWITTER)</a></li>
-                <li><a href="https://www.linkedin.com/in/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">LINKEDIN</a></li>
-                <li><a href="https://github.com/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">GITHUB</a></li>
-                <li><a href="https://www.instagram.com/heyshinde" className="hover:underline text-purple-400/80 hover:text-purple-400 transition-colors">INSTAGRAM</a></li>
               </ul>
             </div>
             {/* PAGES */}
