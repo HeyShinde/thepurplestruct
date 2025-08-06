@@ -30,6 +30,18 @@ export interface BlogPost {
     publishedAt: string;
     updatedAt?: string;
     sidebarPromo?: SidebarPromo;
+    previousPost?: {
+        _id: string;
+        title: string;
+        slug: { current: string };
+        excerpt?: string;
+    };
+    nextPost?: {
+        _id: string;
+        title: string;
+        slug: { current: string };
+        excerpt?: string;
+    };
 }
 
 export type { SanityImage }; 

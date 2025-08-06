@@ -25,6 +25,7 @@ import TableComponent from "@/components/TableComponent";
 import type { Author, SocialLink } from '@/types/author';
 import SocialEmbedBlock from "@/components/SocialEmbedBlock";
 const BookmarkButton = React.lazy(() => import('@/components/BookmarkButton'));
+import PostPagination from '@/components/PostPagination';
 
 // Helper function to process content recursively and preserve formatting
 const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
@@ -501,6 +502,10 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 <div className="prose prose-lg prose-invert max-w-none">
                                     <PortableText value={post.body} components={components} />
                                 </div>
+                                <PostPagination
+                                    previousPost={post.previousPost}
+                                    nextPost={post.nextPost}
+                                />
                             </article>
                         </div>
                         {/* Right Sidebar */}

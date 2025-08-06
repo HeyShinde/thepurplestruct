@@ -42,6 +42,18 @@ async function getPost(slug: string) {
             imageLink,
             altText,
             code
+        },
+        previousPost->{
+        _id,
+        title,
+        slug,
+        excerpt
+        },
+        nextPost->{
+            _id,
+            title,
+            slug,
+            excerpt
         }
     }`;
     try {

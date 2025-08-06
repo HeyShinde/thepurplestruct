@@ -413,6 +413,20 @@ const blogSchema = {
             of: [{ type: "string" }],
             description: "Keywords for SEO (e.g., \"machine learning\", \"next.js\").",
         },
+        {
+            name: "previousPost",
+            type: "reference",
+            to: [{ type: "blog" }],
+            title: "Previous Post",
+            description: "Link to the previous post (optional)",
+        },
+        {
+            name: "nextPost",
+            type: "reference",
+            to: [{ type: "blog" }],
+            title: "Next Post",
+            description: "Link to the next post (optional)",
+        },
     ],
 };
 
