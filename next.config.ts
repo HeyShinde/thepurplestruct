@@ -30,6 +30,15 @@ const nextConfig: NextConfig = {
   // Remove X-Powered-By header for security
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
+  async redirects() {
+    return [
+      {
+        source: '/blog/cpu-vs-gpu-vs-tpu-vs-npu-ai-hardware-architecture-guide-2025',
+        destination: 'https://www.eigenstate.dev/essay/cpu-vs-gpu-vs-tpu-vs-npu-ai-hardware-architecture-guide-2026',
+        permanent: true, // 301 redirect — transfers SEO authority
+      },
+    ];
+  },
   async headers() {
     return [
       {
