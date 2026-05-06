@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import ProcessedText from "@/components/ProcessedText";
 import type { BlogPost } from './BlogGrid';
 import { useMediaQuery } from 'react-responsive';
+import AdSense from "./AdSense";
 
 // Helper function to truncate text
 const truncateText = (text: string, maxLength: number = 150) => {
@@ -175,7 +176,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
   };
 
   return (
-    <div className={`min-h-[400px] md:min-h-[500px] lg:min-h-screen ${displayLimit !== undefined ? 'bg-gradient-to-b from-black via-purple-950 to-black' : 'bg-gradient-to-b from-purple-950 to-black pb-10'} relative overflow-hidden`} style={{ paddingTop: paddingTop }}>
+    <div className={`min-h-[400px] md:min-h-[500px] lg:min-h-screen ${displayLimit !== undefined ? 'bg-linear-to-b from-black via-purple-950 to-black' : 'bg-linear-to-b from-purple-950 to-black pb-10'} relative overflow-hidden`} style={{ paddingTop: paddingTop }}>
       <MotifLayer />
 
       <div className="relative z-10">
@@ -186,11 +187,11 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
           className="text-center pb-12 md:pb-20 px-4"
         >
           {isMainPage ? (
-            <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
+            <h1 className="text-3xl md:text-6xl font-bold bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
               {title || 'Blog Posts'}
             </h1>
           ) : (
-            <h2 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
+            <h2 className="text-3xl md:text-6xl font-bold bg-linear-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent md:mb-12">
               {title || 'Blog Posts'}
             </h2>
           )}
@@ -202,6 +203,7 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
     <div className="space-y-8">
       <BentoGrid className="">
         {posts.slice(0, visibleItems).map((post, i) => (
+          <React.Fragment key={post._id}>
           <BentoGridItem
             key={post._id}
             title={
@@ -261,6 +263,18 @@ export function BlogGridClient({ posts, displayLimit, paddingTop, title, descrip
               : 'default'
             }
           />
+          {i === 3 && (
+            <div className="lg:col-span-2 col-span-1 bg-black/80 border border-purple-400/20 rounded-xl overflow-hidden min-h-[300px] flex flex-col items-center justify-center">
+              <span className="text-xs text-purple-400/50 uppercase tracking-widest mb-4">Advertisement</span>
+              <AdSense 
+                adSlot="6846925623" 
+                adFormat="fluid" 
+                layoutKey="-6s+eg+1g-3d+2z"
+                className="w-full"
+              />
+            </div>
+          )}
+          </React.Fragment>
         ))}
       </BentoGrid>
       

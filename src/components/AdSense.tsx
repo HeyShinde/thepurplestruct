@@ -9,6 +9,7 @@ interface AdSenseProps {
   className?: string;
   style?: React.CSSProperties;
   layout?: string;
+  layoutKey?: string;
 }
 
 export default function AdSense({ 
@@ -17,14 +18,15 @@ export default function AdSense({
   fullWidthResponsive = true, 
   className, 
   style,
-  layout 
+  layout,
+  layoutKey
 }: AdSenseProps) {
   useEffect(() => {
     try {
-      // @ts-ignore
+      // @ts-expect-error AdSense script is loaded globally
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error('AdSense error:', e);
+    } catch {
+      // AdSense initialization failed
     }
   }, []);
 
@@ -38,6 +40,7 @@ export default function AdSense({
         data-ad-format={adFormat}
         data-full-width-responsive={fullWidthResponsive ? 'true' : 'false'}
         {...(layout ? { 'data-ad-layout': layout } : {})}
+        {...(layoutKey ? { 'data-ad-layout-key': layoutKey } : {})}
       />
     </div>
   );

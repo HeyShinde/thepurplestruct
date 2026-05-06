@@ -218,12 +218,12 @@ function renderAuthorCard(author: Author) {
 
 function injectAds(body: BlogPost['body']) {
     if (!body) return body;
-    const newBody: any[] = [];
+    const newBody: (BlogPost['body'][number] | { _type: string; _key: string })[] = [];
     let paragraphCount = 0;
 
-    body.forEach((block: any, index: number) => {
+    body.forEach((block, index: number) => {
         newBody.push(block);
-        if (block._type === 'block' && block.style === 'normal') {
+        if (block._type === 'block' && 'style' in block && block.style === 'normal') {
             paragraphCount++;
             // Inject ad after every 3rd paragraph, but not if it's the last block
             if (paragraphCount % 3 === 0 && index < body.length - 1) {
@@ -234,7 +234,7 @@ function injectAds(body: BlogPost['body']) {
             }
         }
     });
-    return newBody;
+    return newBody as unknown as BlogPost['body'];
 }
 
 export default function BlogPostContent({ post }: { post: BlogPost | null }) {
@@ -304,7 +304,11 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             ),
             adInsertion: () => (
                 <div className="my-12">
-                    <AdSense adSlot="8214251724" />
+                    <AdSense 
+                        adSlot="2495021187" 
+                        layout="in-article"
+                        adFormat="fluid"
+                    />
                 </div>
             ),
         },
