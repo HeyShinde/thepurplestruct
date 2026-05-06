@@ -26,6 +26,7 @@ import type { Author, SocialLink } from '@/types/author';
 import SocialEmbedBlock from "@/components/SocialEmbedBlock";
 const BookmarkButton = React.lazy(() => import('@/components/BookmarkButton'));
 import PostPagination from '@/components/PostPagination';
+import AdSense from '@/components/AdSense';
 
 // Helper function to process content recursively and preserve formatting
 const processContentWithLatex = (children: React.ReactNode, additionalClasses: string = ''): React.ReactNode => {
@@ -55,7 +56,7 @@ const SidebarPromo = ({ promo }: { promo?: SidebarPromo }) => {
     return (
         <div className="relative group">
             <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-6 w-full">
-                <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                <div className="absolute -inset-px rounded-lg bg-linear-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                         backgroundSize: '200% 100%',
                         animation: 'gradientMove 3s linear infinite',
@@ -157,7 +158,7 @@ function renderAuthorCard(author: Author) {
     return (
         <div className="relative group">
             <div className="relative bg-black/80 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/20">
-                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                <div className="absolute -inset-px rounded-2xl bg-linear-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                         backgroundSize: '200% 100%',
                         animation: 'gradientMove 3s linear infinite',
@@ -169,7 +170,7 @@ function renderAuthorCard(author: Author) {
                     <div className="flex flex-col items-center text-center mb-6">
                         {author.image ? (
                             <div className="relative mb-4">
-                                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
+                                <div className="absolute -inset-1 rounded-full bg-linear-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
                                 <Image
                                     src={urlFor(author.image).url()}
                                     alt={author.name}
@@ -180,8 +181,8 @@ function renderAuthorCard(author: Author) {
                             </div>
                         ) : (
                             <div className="relative mb-4">
-                                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
-                                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center relative z-10">
+                                <div className="absolute -inset-1 rounded-full bg-linear-to-r from-purple-400 to-purple-600 opacity-50 blur-sm"></div>
+                                <div className="w-24 h-24 rounded-full bg-linear-to-r from-purple-400 to-purple-600 flex items-center justify-center relative z-10">
                                     <span className="text-white text-2xl font-semibold">
                                         {author.name?.charAt(0) || '?'}
                                     </span>
@@ -215,10 +216,31 @@ function renderAuthorCard(author: Author) {
     );
 }
 
+function injectAds(body: BlogPost['body']) {
+    if (!body) return body;
+    const newBody: any[] = [];
+    let paragraphCount = 0;
+
+    body.forEach((block: any, index: number) => {
+        newBody.push(block);
+        if (block._type === 'block' && block.style === 'normal') {
+            paragraphCount++;
+            // Inject ad after every 3rd paragraph, but not if it's the last block
+            if (paragraphCount % 3 === 0 && index < body.length - 1) {
+                newBody.push({
+                    _type: 'adInsertion',
+                    _key: `ad-${paragraphCount}-${index}`,
+                });
+            }
+        }
+    });
+    return newBody;
+}
+
 export default function BlogPostContent({ post }: { post: BlogPost | null }) {
     if (!post) {
         return (
-            <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-950 via-black to-black">
+            <div className="min-h-screen flex flex-col bg-linear-to-b from-purple-950 via-black to-black">
                 <NavBar />
                 <div className="flex-1 flex flex-col justify-center items-center w-full px-[12%]">
                     <h4 className="text-center mb-2 text-lg font-heading text-purple-400">Blog</h4>
@@ -257,7 +279,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                 <div className="my-6 flex justify-center">
                     <div className="relative group">
                         <div className="relative bg-black/80 backdrop-blur-sm rounded-lg p-2 w-full">
-                            <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            <div className="absolute -inset-px rounded-lg bg-linear-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                 style={{
                                     backgroundSize: '200% 100%',
                                     animation: 'gradientMove 3s linear infinite',
@@ -279,6 +301,11 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
             ),
             embed: ({ value }) => (
                 <SocialEmbedBlock value={value} />
+            ),
+            adInsertion: () => (
+                <div className="my-12">
+                    <AdSense adSlot="8214251724" />
+                </div>
             ),
         },
         marks: {
@@ -431,7 +458,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b via-black to-black">
+        <div className="min-h-screen bg-linear-to-b via-black to-black">
             <NavBar />
             <div className="w-full px-4 md:px-8 lg:px-12 py-10 pb-32">
                 <div className="max-w-[2000px] mx-auto">
@@ -464,7 +491,7 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
                                 <figure className="mb-6 md:mb-12">
                                     <div className="relative group">
                                         <div className="relative bg-black/80 backdrop-blur-sm rounded-2xl p-2 w-full">
-                                            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                            <div className="absolute -inset-px rounded-2xl bg-linear-to-r from-purple-400/0 via-purple-400/80 to-purple-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                                 style={{
                                                     backgroundSize: '200% 100%',
                                                     animation: 'gradientMove 3s linear infinite',
@@ -500,12 +527,19 @@ export default function BlogPostContent({ post }: { post: BlogPost | null }) {
 
                                 {/* Article Content */}
                                 <div className="prose prose-lg prose-invert max-w-none">
-                                    <PortableText value={post.body} components={components} />
+                                    <PortableText value={injectAds(post.body)} components={components} />
                                 </div>
                                 <PostPagination
                                     previousPost={post.previousPost}
                                     nextPost={post.nextPost}
                                 />
+                                {/* Multiplex Ad */}
+                                <div className="mt-12">
+                                    <AdSense 
+                                        adSlot="8413562270" 
+                                        adFormat="autorelaxed"
+                                    />
+                                </div>
                             </article>
                         </div>
                         {/* Right Sidebar */}
