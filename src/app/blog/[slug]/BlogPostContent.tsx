@@ -223,7 +223,7 @@ function injectAds(body: BlogPost['body']) {
 
     body.forEach((block, index: number) => {
         newBody.push(block);
-        if (block._type === 'block' && 'style' in block && block.style === 'normal') {
+        if (block._type === 'block' && 'style' in block && block.style === 'normal' && !('listItem' in block)) {
             paragraphCount++;
             // Inject ad after every 3rd paragraph, but not if it's the last block
             if (paragraphCount % 3 === 0 && index < body.length - 1) {
