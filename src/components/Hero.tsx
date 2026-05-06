@@ -15,8 +15,8 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative w-screen overflow-hidden overflow-x-hidden bg-gradient-to-b from-purple-500 to-black">
-      <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:32px_32px] opacity-50" /> 
+    <div className="relative w-screen overflow-hidden overflow-x-hidden bg-linear-to-b from-purple-500 to-black">
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[32px_32px] opacity-50" />
       <div className="relative z-10 flex items-center max-w-7xl mx-auto px-4 pt-[calc(var(--navbar-height,80px)+2rem)] pb-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left column - Text Content */}

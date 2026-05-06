@@ -100,6 +100,13 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtm.js?id=GT-PJ5RLN2D"
           strategy="lazyOnload"
         />
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7772989208876183"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <SpeedInsights/>
       </body>
     </html>
