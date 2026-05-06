@@ -223,14 +223,33 @@ function injectAds(body: BlogPost['body']) {
 
     body.forEach((block, index: number) => {
         newBody.push(block);
-        if (block._type === 'block' && 'style' in block && block.style === 'normal' && !('listItem' in block)) {
+        
+        // Identify if this is a genuine text paragraph
+        const blockObj = block as { style?: string; listItem?: string; children?: { text?: string }[] };
+        const isParagraph = block._type === 'block' && 
+                           blockObj.style === 'normal' && 
+                           !blockObj.listItem &&
+                           blockObj.children?.some((child) => (child.text?.trim()?.length ?? 0) > 0);
+
+        if (isParagraph) {
             paragraphCount++;
-            // Inject ad after every 3rd paragraph, but not if it's the last block
+            
+            // Inject ad after every 3rd paragraph
             if (paragraphCount % 3 === 0 && index < body.length - 1) {
-                newBody.push({
-                    _type: 'adInsertion',
-                    _key: `ad-${paragraphCount}-${index}`,
-                });
+                // Peek at the NEXT block to see if it's a "sensitive" element
+                const nextBlock = body[index + 1] as { _type: string; style?: string; listItem?: string };
+                const isNextBlockSensitive = 
+                    nextBlock._type !== 'block' || // Images, code blocks, etc.
+                    (nextBlock.style && nextBlock.style !== 'normal') || // Headings, quotes
+                    nextBlock.listItem; // Lists
+
+                // Only inject if the next block is a safe, standard paragraph
+                if (!isNextBlockSensitive) {
+                    newBody.push({
+                        _type: 'adInsertion',
+                        _key: `ad-${paragraphCount}-${index}`,
+                    });
+                }
             }
         }
     });
